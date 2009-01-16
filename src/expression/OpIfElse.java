@@ -1,7 +1,11 @@
 package expression;
 
+import value.BoolValue;
+import value.IdValue;
 import value.Value;
+import value.VoidValue;
 import Interpreter.Environment;
+import Interpreter.ReturnException;
 
 public class OpIfElse implements Expression {
 	
@@ -17,9 +21,45 @@ public class OpIfElse implements Expression {
 	}
 
 	@Override
-	public Value getValue(Environment environment) {
-		// TODO Auto-generated method stub
-		return null;
+	public Environment getValue(Environment environment) throws ReturnException {
+		// Test the expression to see if its true or false
+		Environment tempEnv = test.getValue(environment);
+		Value check = tempEnv.value;
+		tempEnv = tempEnv.next;
+		
+		// check for ID
+		if (check instanceof IdValue)
+		{
+			String name = ((IdValue)check).getInternalValue();
+			Environment environ = Environment.findIDInList(name, tempEnv);
+			// check for null
+			if (environ != null)
+			{
+				check = environ.value;
+			}
+			else
+			{
+				// TODO: Exception, type not found
+			}
+		}
+		
+		// now do if check
+		if (((BoolValue)check).getInternalValue())
+		{
+			tempEnv = first.getValue(tempEnv);
+			tempEnv = tempEnv.next;
+		}
+		else
+		{
+			// if the second seq is a null, only and if check
+			if (second != null)
+			{
+				tempEnv = second.getValue(tempEnv);
+				tempEnv = tempEnv.next;
+			}
+		}
+		
+		return new Environment(tempEnv, null, new VoidValue());
 	}
 
 }

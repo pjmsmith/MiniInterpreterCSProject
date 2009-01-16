@@ -1,8 +1,28 @@
 package value;
 
+import java.util.List;
+
+import expression.Sequence;
+
 import Interpreter.Environment;
+import Interpreter.ReturnException;
 
 public class ClosureValue implements Value{
+	
+	private Environment environ;
+	private Function func;
+	
+	public ClosureValue(Function func)
+	{
+		environ = null;
+		this.func = func;
+	}
+	
+	
+	public void setEnvironment(Environment env)
+	{
+		environ = env;
+	}
 	
 	@Override
 	public boolean isType(Value val) {
@@ -10,8 +30,9 @@ public class ClosureValue implements Value{
 	}
 
 	@Override
-	public Value getValue(Environment environment) {
-		// TODO Auto-generated method stub
+	public Environment getValue(Environment environment) throws ReturnException {
+
+		
 		return null;
 	}
 
