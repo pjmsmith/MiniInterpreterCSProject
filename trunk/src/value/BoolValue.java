@@ -2,27 +2,32 @@ package value;
 
 import Interpreter.Environment;
 import expression.Expression;
+import test.Testable;
 
 public class BoolValue implements Value {
 	private boolean value;
-	
-	public BoolValue(boolean val)
+
+    @Testable
+    public BoolValue(boolean val)
 	{
 		value = val;
 	}
-	
-	public boolean getInternalValue()
+
+    @Testable
+    public boolean getInternalValue()
 	{
 		return value;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) {
 		// TODO Auto-generated method stub
 		return new Environment(environment, null, this);
 	}
 
-	@Override
+    @Testable
+    @Override
 	public boolean isType(Value val) {
 		// TODO Auto-generated method stub
 		return val instanceof BoolValue;

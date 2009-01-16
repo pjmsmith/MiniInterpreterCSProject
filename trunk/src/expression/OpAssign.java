@@ -5,18 +5,20 @@ import value.IdValue;
 import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class OpAssign implements Expression{
 	
 	private Expression left;
 	private Expression right;
-	
-	public OpAssign(Expression left, Expression right)
+
+    @Testable
+    public OpAssign(Expression left, Expression right)
 	{
 		this.left = left;
 		this.right = right;
 	}
-
+    @Testable
 	@Override
 	public Environment getValue(Environment environment) throws ReturnException {
 		// the returned value for the left should be an ID

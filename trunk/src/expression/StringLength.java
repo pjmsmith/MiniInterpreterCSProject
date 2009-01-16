@@ -4,17 +4,20 @@ import value.IntValue;
 import value.StringValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class StringLength implements Expression {
 	
 	private Expression string;
-	
-	public StringLength(Expression exp)
+
+    @Testable
+    public StringLength(Expression exp)
 	{
 		string = exp;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) throws ReturnException {
 		
 		Environment nEnv = string.getValue(environment);

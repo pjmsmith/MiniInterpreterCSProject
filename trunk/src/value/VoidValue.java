@@ -1,20 +1,24 @@
 package value;
 
 import Interpreter.Environment;
+import test.Testable;
 
 public class VoidValue implements Value {
-	
-	public VoidValue()
+
+    @Testable
+    public VoidValue()
 	{
 		
 	}
-	
-	@Override
+
+    @Testable
+    @Override
 	public boolean isType(Value val) {
 		return val instanceof VoidValue;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) {
 		// TODO Auto-generated method stub
 		return new Environment(environment, null, this);

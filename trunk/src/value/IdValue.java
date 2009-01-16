@@ -1,33 +1,39 @@
 package value;
 
 import Interpreter.Environment;
+import test.Testable;
 
 public class IdValue implements Value {
 	
 	private String value;
-	
-	public IdValue()
+
+    @Testable
+    public IdValue()
 	{
 		value = "";
 	}
-	
-	public IdValue(String val)
+
+    @Testable
+    public IdValue(String val)
 	{
 		value = val;
 	}
-	
-	public String getInternalValue()
+
+    @Testable
+    public String getInternalValue()
 	{
 		return value;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) {
 		// TODO Auto-generated method stub
 		return new Environment(environment, value, this);
 	}
 
-	@Override
+    @Testable
+    @Override
 	public boolean isType(Value val) {
 		return val instanceof IdValue;
 	}

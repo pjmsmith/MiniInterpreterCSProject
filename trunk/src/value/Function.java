@@ -5,30 +5,34 @@ import java.util.List;
 import expression.Sequence;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class Function implements Value{
 	private List<String> params;
 	private Sequence sequence;
-	
-	public Function(List<String> params, Sequence seq)
+
+    @Testable
+    public Function(List<String> params, Sequence seq)
 	{
 		this.params = params;
 		sequence = seq;
 	}
-	
-	public List<String> getParamList()
+
+    @Testable
+    public List<String> getParamList()
 	{
 		return params;
 	}
 	
-
+    @Testable
 	@Override
 	public boolean isType(Value val) {
 		// TODO Auto-generated method stub
 		return val instanceof Function;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) throws ReturnException  {
 		Environment newEnv = null;
 		// run the function

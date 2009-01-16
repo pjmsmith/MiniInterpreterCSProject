@@ -7,18 +7,20 @@ import value.IntValue;
 import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class And implements Expression {
 	
 	private Expression one;
 	private Expression two;
-	
-	public And(Expression one, Expression two)
+
+    @Testable
+    public And(Expression one, Expression two)
 	{
 		this.one = one;
 		this.two = two;
 	}
-
+    @Testable
 	@Override
 	public Environment getValue(Environment environment) throws ReturnException {
 		Environment nEnv = one.getValue(environment);

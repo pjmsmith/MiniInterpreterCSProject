@@ -6,17 +6,20 @@ import value.Value;
 import value.VoidValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class Sequence implements Expression {
 	
 	private List<Expression> expressions;
-	
-	public Sequence(List<Expression> expr)
+
+    @Testable
+    public Sequence(List<Expression> expr)
 	{
 		expressions = expr;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) throws ReturnException  {
 		Environment tempEnv = environment;
 		for (int i=0; i < expressions.size(); i++)

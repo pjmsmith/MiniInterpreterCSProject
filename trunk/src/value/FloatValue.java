@@ -1,32 +1,38 @@
 package value;
 
 import Interpreter.Environment;
+import test.Testable;
 
 public class FloatValue implements Value {
 	
 	private float value;
-	
-	public FloatValue()
+
+    @Testable
+    public FloatValue()
 	{
 		value = 0;
 	}
-	
-	public FloatValue(float val)
+
+    @Testable
+    public FloatValue(float val)
 	{
 		value = val;
 	}
-	
-	public float getInternalValue()
+
+    @Testable
+    public float getInternalValue()
 	{
 		return value;
 	}
-	
-	@Override
+
+    @Testable
+    @Override
 	public boolean isType(Value val) {
 		return val instanceof FloatValue;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) {
 		// TODO Auto-generated method stub
 		return new Environment(environment, null, this);
