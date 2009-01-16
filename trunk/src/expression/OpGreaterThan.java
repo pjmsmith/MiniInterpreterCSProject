@@ -98,14 +98,14 @@ public class OpGreaterThan implements Expression {
 				ls = (float)((IntValue)rightSide).getInternalValue();
 			}
 
-			return new Environment(environment, null, new BoolValue(ls < rs));
+			return new Environment(environment, null, new BoolValue(ls > rs));
 		}
 		else if (leftSide instanceof IntValue && rightSide instanceof IntValue)
 		{
 			int ls = ((IntValue)leftSide).getInternalValue();
 			int rs = ((IntValue)rightSide).getInternalValue();
 
-			return new Environment(environment, null, new BoolValue(ls < rs));
+			return new Environment(environment, null, new BoolValue(ls > rs));
 		}
 
 
