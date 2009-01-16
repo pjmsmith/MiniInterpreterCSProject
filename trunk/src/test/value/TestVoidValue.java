@@ -4,14 +4,10 @@ import value.VoidValue;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:51:14 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestVoidValue {
+    private VoidValue vv1;
+    private VoidValue vv2;
+    private VoidValue vv3;
 
     public TestVoidValue() {
     } // constructor

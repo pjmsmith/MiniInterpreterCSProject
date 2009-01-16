@@ -4,14 +4,10 @@ import value.IntValue;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:51:13 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestIntValue {
+    private IntValue iv1;
+    private IntValue iv2;
+    private IntValue iv3;
 
     public TestIntValue() {
     } // constructor

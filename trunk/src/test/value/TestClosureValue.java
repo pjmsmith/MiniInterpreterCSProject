@@ -4,14 +4,10 @@ import value.ClosureValue;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:51:09 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestClosureValue {
+    private ClosureValue cv1;
+    private ClosureValue cv2;
+    private ClosureValue cv3;
 
     public TestClosureValue() {
     } // constructor

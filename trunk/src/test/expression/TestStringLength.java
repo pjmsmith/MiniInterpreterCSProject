@@ -4,14 +4,10 @@ import expression.StringLength;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:51:01 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestStringLength {
+    private StringLength sl1;
+    private StringLength sl2;
+    private StringLength sl3;
 
     public TestStringLength() {
     } // constructor

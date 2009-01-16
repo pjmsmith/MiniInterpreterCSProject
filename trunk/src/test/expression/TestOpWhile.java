@@ -4,14 +4,10 @@ import expression.OpWhile;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:50:59 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestOpWhile {
+    private OpWhile ow1;
+    private OpWhile ow2;
+    private OpWhile ow3;
 
     public TestOpWhile() {
     } // constructor

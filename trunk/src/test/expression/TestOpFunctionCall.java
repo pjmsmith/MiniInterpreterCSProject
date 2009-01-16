@@ -4,14 +4,10 @@ import expression.OpFunctionCall;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:50:56 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestOpFunctionCall {
+    private OpFunctionCall ofc1;
+    private OpFunctionCall ofc2;
+    private OpFunctionCall ofc3;
 
     public TestOpFunctionCall() {
     } // constructor
