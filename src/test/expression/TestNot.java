@@ -55,7 +55,7 @@ public class TestNot {
         assertTrue(!b);
         //exception
         ((BoolValue)(n1.getValue(null)).value).getInternalValue();
-        //TODO: exception not yet implemented in And class for non-boolean id bindings
+        //TODO: exception not yet implemented in Not class for non-boolean id bindings
         ((BoolValue)(n3.getValue(new Environment(null, "testVal", new IntValue(4)))).value).getInternalValue();
     } // testGetValue()
 }
