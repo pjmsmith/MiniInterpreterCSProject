@@ -2,6 +2,7 @@ package expression;
 
 import java.util.List;
 
+import value.ClosureValue;
 import value.Function;
 import value.IdValue;
 import value.Value;
@@ -30,13 +31,23 @@ public class OpFunctionCall implements Expression {
 			// TODO: add exception
 		}
 		// check to make sure its a function
-		if (!(func.value instanceof Function))
+		if (!(func.value instanceof Function) || !(func.value instanceof ClosureValue))
 		{
 			// TODO: add an exception
 		}
-		Function function = (Function)func.value;
+		Function function = null;
+		Environment nEnv = null;
+		if (func.value instanceof ClosureValue)
+		{
+			function = ((ClosureValue)func.value).getIntFunc();
+			nEnv = ((ClosureValue)func.value).getEnvironment();
+		}
+		else
+		{
+			function = (Function)func.value;
+			nEnv = environment;
+		}
 		// Add args to environment
-		Environment nEnv = environment;
 		List<String> argNames = function.getParamList();
 		for (int i = 0; i < args.size(); i++)
 		{

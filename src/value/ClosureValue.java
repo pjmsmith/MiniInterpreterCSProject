@@ -24,6 +24,16 @@ public class ClosureValue implements Value{
 		environ = env;
 	}
 	
+	public Environment getEnvironment()
+	{
+		return environ;
+	}
+	
+	public Function getIntFunc()
+	{
+		return func;
+	}
+	
 	@Override
 	public boolean isType(Value val) {
 		return val instanceof ClosureValue;
