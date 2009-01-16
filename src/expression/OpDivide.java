@@ -3,24 +3,28 @@ package expression;
 import value.*;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class OpDivide implements Expression {
 	
 	private Expression one;
 	private Expression two;
-	
+
+    @Testable
 	public OpDivide()
 	{
 		
 	}
-	
-	public OpDivide(Expression one, Expression two)
+
+    @Testable
+    public OpDivide(Expression one, Expression two)
 	{
 		this.one = one;
 		this.two = two;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) throws ReturnException {
 		Environment nEnv = one.getValue(environment);
 		Value leftSide = nEnv.value;

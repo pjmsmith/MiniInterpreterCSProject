@@ -8,18 +8,21 @@ import value.Value;
 import value.VoidValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class OpWhile implements Expression {
 	
 	private Expression test;
 	private Sequence sequence;
-	
-	public OpWhile(Expression exp, Sequence seq)
+
+    @Testable
+    public OpWhile(Expression exp, Sequence seq)
 	{
 		test = exp;
 		sequence = seq;
 	}
 
+    @Testable
 	@Override
 	public Environment getValue(Environment environment) throws ReturnException  {
 		

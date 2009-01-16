@@ -3,18 +3,21 @@ package expression;
 import value.*;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class OpMult implements Expression {
 	
 	private Expression one;
 	private Expression two;
-	
-	public OpMult()
+
+    @Testable
+    public OpMult()
 	{
 		
 	}
-	
-	public OpMult(Expression one, Expression two)
+
+    @Testable
+    public OpMult(Expression one, Expression two)
 	{
 		this.one = one;
 		this.two = two;

@@ -6,40 +6,46 @@ import expression.Sequence;
 
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class ClosureValue implements Value{
 	
 	private Environment environ;
 	private Function func;
-	
-	public ClosureValue(Function func)
+
+    @Testable
+    public ClosureValue(Function func)
 	{
 		environ = null;
 		this.func = func;
 	}
 	
-	
+	@Testable
 	public void setEnvironment(Environment env)
 	{
 		environ = env;
 	}
-	
-	public Environment getEnvironment()
+
+    @Testable
+    public Environment getEnvironment()
 	{
 		return environ;
 	}
-	
-	public Function getIntFunc()
+
+    @Testable
+    public Function getIntFunc()
 	{
 		return func;
 	}
-	
-	@Override
+
+    @Testable
+    @Override
 	public boolean isType(Value val) {
 		return val instanceof ClosureValue;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) throws ReturnException {
 
 		

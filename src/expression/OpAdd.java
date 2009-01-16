@@ -3,23 +3,25 @@ package expression;
 import value.*;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class OpAdd implements Expression {
 	
 	private Expression one;
 	private Expression two;
-	
-	public OpAdd()
+
+    @Testable
+    public OpAdd()
 	{
 		
 	}
-	
+	@Testable
 	public OpAdd(Expression one, Expression two)
 	{
 		this.one = one;
 		this.two = two;
 	}
-
+    @Testable
 	@Override
 	public Environment getValue(Environment environment) throws ReturnException {
 		Environment nEnv = one.getValue(environment);
@@ -61,14 +63,14 @@ public class OpAdd implements Expression {
 		}
 		
 		// now check to make sure both are bool types
-		if (!(leftSide instanceof IntValue) 
+		if (!(leftSide instanceof IntValue)
 			|| !(rightSide instanceof IntValue)
-			|| !(leftSide instanceof FloatValue) 
+			|| !(leftSide instanceof FloatValue)
 			|| !(rightSide instanceof FloatValue))
 		{
 			// TODO: throw an exception here
 		}
-		
+
 		// now do the op
 		if (leftSide instanceof FloatValue || rightSide instanceof FloatValue)
 		{

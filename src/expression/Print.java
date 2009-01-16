@@ -3,17 +3,20 @@ package expression;
 import value.*;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class Print implements Expression {
 	
 	private Expression value;
-	
-	public Print(Expression one)
+
+    @Testable
+    public Print(Expression one)
 	{
 		value = one;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) throws ReturnException {
 		// print the value and return a new void pushed on top
 		Environment nEnv = value.getValue(environment);

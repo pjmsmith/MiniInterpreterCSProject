@@ -6,21 +6,24 @@ import value.Value;
 import value.VoidValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class OpIfElse implements Expression {
 	
 	private Expression test;
 	private Sequence first;  // if clause
 	private Sequence second; // else clause
-	
-	public OpIfElse(Expression test, Sequence first, Sequence sec)
+
+    @Testable
+    public OpIfElse(Expression test, Sequence first, Sequence sec)
 	{
 		this.test = test;
 		this.first = first;
 		this.second = sec;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) throws ReturnException {
 		// Test the expression to see if its true or false
 		Environment tempEnv = test.getValue(environment);

@@ -8,19 +8,22 @@ import value.IdValue;
 import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import test.Testable;
 
 public class OpFunctionCall implements Expression {
 	
 	private IdValue name;
 	private List<Expression> args;
-	
-	public OpFunctionCall(IdValue name, List<Expression> args)
+
+    @Testable
+    public OpFunctionCall(IdValue name, List<Expression> args)
 	{
 		this.name = name;
 		this.args = args;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment) throws ReturnException {
 		// Get Function
 		Environment func = Environment.findIDInList(name.getInternalValue(), 
