@@ -4,14 +4,10 @@ import expression.OpAssign;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:50:53 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestOpAssign {
+    private OpAssign oass1;
+    private OpAssign oass2;
+    private OpAssign oass3;
 
     public TestOpAssign() {
     } // constructor

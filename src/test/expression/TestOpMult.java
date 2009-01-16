@@ -4,14 +4,10 @@ import expression.OpMult;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:50:58 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestOpMult {
+    private OpMult om1;
+    private OpMult om2;
+    private OpMult om3;
 
     public TestOpMult() {
     } // constructor

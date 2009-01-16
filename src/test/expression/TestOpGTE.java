@@ -4,14 +4,10 @@ import expression.OpGTE;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:50:56 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestOpGTE {
+    private OpGTE ogte1;
+    private OpGTE ogte2;
+    private OpGTE ogte3;
 
     public TestOpGTE() {
     } // constructor

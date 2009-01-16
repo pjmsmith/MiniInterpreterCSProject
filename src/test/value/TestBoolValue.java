@@ -4,14 +4,10 @@ import value.BoolValue;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:51:08 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestBoolValue {
+    private BoolValue bv1;
+    private BoolValue bv2;
+    private BoolValue bv3;
 
     public TestBoolValue() {
     } // constructor

@@ -4,14 +4,10 @@ import expression.OpDivide;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:50:54 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestOpDivide {
+    private OpDivide od1;
+    private OpDivide od2;
+    private OpDivide od3;
 
     public TestOpDivide() {
     } // constructor

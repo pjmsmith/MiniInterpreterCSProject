@@ -4,14 +4,10 @@ import expression.OpSub;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:50:58 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestOpSub {
+    private OpSub os1;
+    private OpSub os2;
+    private OpSub os3;
 
     public TestOpSub() {
     } // constructor

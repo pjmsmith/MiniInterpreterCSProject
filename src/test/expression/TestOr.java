@@ -4,14 +4,10 @@ import expression.Or;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:50:59 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestOr {
+    private Or o1;
+    private Or o2;
+    private Or o3;
 
     public TestOr() {
     } // constructor

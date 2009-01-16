@@ -4,14 +4,10 @@ import expression.Sequence;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:51:01 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestSequence {
+    private Sequence s1;
+    private Sequence s2;
+    private Sequence s3;
 
     public TestSequence() {
     } // constructor

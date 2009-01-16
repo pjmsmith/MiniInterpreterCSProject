@@ -4,14 +4,10 @@ import expression.Print;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Patrick
- * Date: Jan 16, 2009
- * Time: 12:51:00 PM
- * To change this template use File | Settings | File Templates.
- */
 public class TestPrint {
+    private Print p1;
+    private Print p2;
+    private Print p3;
 
     public TestPrint() {
     } // constructor
