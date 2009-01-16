@@ -7,6 +7,7 @@ import value.IntValue;
 import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import Interpreter.TypeException;
 import test.Testable;
 
 public class Not implements Expression {
@@ -20,7 +21,7 @@ public class Not implements Expression {
 	}
     @Testable
 	@Override
-	public Environment getValue(Environment environment) throws ReturnException {
+	public Environment getValue(Environment environment) throws ReturnException, TypeException {
 		Environment nEnv = one.getValue(environment);
 		Value leftSide = nEnv.value;
 		nEnv = nEnv.next;
@@ -43,7 +44,7 @@ public class Not implements Expression {
 		// now check to make sure its a bool
 		if (!(leftSide instanceof BoolValue))
 		{
-			// TODO: throw an exception here
+			throw new TypeException();
 		}
 		
 		boolean ls = ((BoolValue)leftSide).getInternalValue();
