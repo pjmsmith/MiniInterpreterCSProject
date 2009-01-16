@@ -1,20 +1,19 @@
 package expression;
 
-import value.*;
+import value.BoolValue;
+import value.FloatValue;
+import value.IdValue;
+import value.IntValue;
+import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 
-public class OpMult implements Expression {
+public class OpLessThan implements Expression {
 	
 	private Expression one;
 	private Expression two;
 	
-	public OpMult()
-	{
-		
-	}
-	
-	public OpMult(Expression one, Expression two)
+	public OpLessThan(Expression one, Expression two)
 	{
 		this.one = one;
 		this.two = two;
@@ -95,14 +94,14 @@ public class OpMult implements Expression {
 				ls = (float)((IntValue)rightSide).getInternalValue();
 			}
 			
-			return new Environment(environment, null, new FloatValue(ls * rs));
+			return new Environment(environment, null, new BoolValue(ls < rs));
 		}
 		else if (leftSide instanceof IntValue && rightSide instanceof IntValue)
 		{
 			int ls = ((IntValue)leftSide).getInternalValue();
 			int rs = ((IntValue)rightSide).getInternalValue();
 			
-			return new Environment(environment, null, new IntValue(ls * rs));
+			return new Environment(environment, null, new BoolValue(ls < rs));
 		}
 		
 		

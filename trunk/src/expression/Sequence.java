@@ -3,7 +3,9 @@ package expression;
 import java.util.List;
 
 import value.Value;
+import value.VoidValue;
 import Interpreter.Environment;
+import Interpreter.ReturnException;
 
 public class Sequence implements Expression {
 	
@@ -15,14 +17,16 @@ public class Sequence implements Expression {
 	}
 
 	@Override
-	public Value getValue(Environment environment) {
-
+	public Environment getValue(Environment environment) throws ReturnException  {
+		Environment tempEnv = environment;
 		for (int i=0; i < expressions.size(); i++)
 		{
-			expressions.get(i).getValue(environment);
+			tempEnv = expressions.get(i).getValue(tempEnv);
+			// pop top off
+			tempEnv = tempEnv.next;
 		}
 
-		return null;
+		return new Environment(tempEnv, null, new VoidValue());
 	}
 
 }

@@ -27,9 +27,9 @@ public class IntValue implements Value {
 	}
 	
 	@Override
-	public Value getValue(Environment environment) {
+	public Environment getValue(Environment environment) {
 		// TODO Auto-generated method stub
-		return this;
+		return new Environment(environment, null, this);
 	}
 	
 }

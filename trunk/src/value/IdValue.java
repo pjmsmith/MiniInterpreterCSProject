@@ -22,9 +22,9 @@ public class IdValue implements Value {
 	}
 
 	@Override
-	public Value getValue(Environment environment) {
+	public Environment getValue(Environment environment) {
 		// TODO Auto-generated method stub
-		return this;
+		return new Environment(environment, value, this);
 	}
 
 	@Override

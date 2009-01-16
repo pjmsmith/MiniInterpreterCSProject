@@ -1,31 +1,75 @@
 package expression;
 
-import value.FloatValue;
-import value.IntValue;
-import value.Value;
+import value.*;
 import Interpreter.Environment;
+import Interpreter.ReturnException;
 
-public class OpSub implements Expression{
-	private Expression left;
-	private Expression right;
+public class OpSub implements Expression {
+	
+	private Expression one;
+	private Expression two;
 	
 	public OpSub()
 	{
-		left = right = null;
+		
 	}
 	
-	public OpSub(Expression l, Expression r)
+	public OpSub(Expression one, Expression two)
 	{
-		left = l;
-		right = r;
+		this.one = one;
+		this.two = two;
 	}
 
 	@Override
-	public Value getValue(Environment environment) {
-		// if one value is a float, we must do it as a float
-		Value leftSide = left.getValue(environment);
-		Value rightSide = right.getValue(environment);
+	public Environment getValue(Environment environment) throws ReturnException {
+		Environment nEnv = one.getValue(environment);
+		Value leftSide = nEnv.value;
+		nEnv = nEnv.next;
 		
+		nEnv = two.getValue(nEnv);
+		Value rightSide = nEnv.value;
+		nEnv = nEnv.next;
+		
+		// check to see if one of them is an ID
+		if (leftSide instanceof IdValue)
+		{
+			String name = ((IdValue)leftSide).getInternalValue();
+			Environment environ = Environment.findIDInList(name, nEnv);
+			// check for null
+			if (environ != null)
+			{
+				leftSide = environ.value;
+			}
+			else
+			{
+				// TODO: Exception, type not found
+			}
+		}
+		if (rightSide instanceof IdValue)
+		{
+			String name = ((IdValue)rightSide).getInternalValue();
+			Environment environ = Environment.findIDInList(name, nEnv);
+			// check for null
+			if (environ != null)
+			{
+				rightSide = environ.value;
+			}
+			else
+			{
+				// TODO: Exception, type not found
+			}
+		}
+		
+		// now check to make sure both are bool types
+		if (!(leftSide instanceof IntValue) 
+			|| !(rightSide instanceof IntValue)
+			|| !(leftSide instanceof FloatValue) 
+			|| !(rightSide instanceof FloatValue))
+		{
+			// TODO: throw an exception here
+		}
+		
+		// now do the op
 		if (leftSide instanceof FloatValue || rightSide instanceof FloatValue)
 		{
 			float ls = 0;
@@ -51,19 +95,16 @@ public class OpSub implements Expression{
 				ls = (float)((IntValue)rightSide).getInternalValue();
 			}
 			
-			return new FloatValue(ls - rs);
+			return new Environment(environment, null, new FloatValue(ls - rs));
 		}
 		else if (leftSide instanceof IntValue && rightSide instanceof IntValue)
 		{
 			int ls = ((IntValue)leftSide).getInternalValue();
 			int rs = ((IntValue)rightSide).getInternalValue();
 			
-			return new IntValue(ls - rs);
+			return new Environment(environment, null, new IntValue(ls - rs));
 		}
-		else
-		{
-			// TODO:: Need to throw an error
-		}
+		
 		
 		return null;
 	}
