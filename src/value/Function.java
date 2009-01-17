@@ -6,6 +6,7 @@ import expression.Sequence;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 import test.Testable;
 
 public class Function implements Value{
@@ -34,7 +35,7 @@ public class Function implements Value{
 
     @Testable
     @Override
-	public Environment getValue(Environment environment) throws ReturnException, TypeException  {
+	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException  {
 		Environment newEnv = null;
 		// run the function
 		try
