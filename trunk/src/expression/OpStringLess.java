@@ -7,19 +7,22 @@ import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
+import test.Testable;
 
 public class OpStringLess implements Expression {
 	
 	private Expression left;
 	private Expression right;
-	
-	public OpStringLess(Expression left, Expression right)
+
+    @Testable
+    public OpStringLess(Expression left, Expression right)
 	{
 		this.left = left;
 		this.right = right;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		Environment nEnv = left.getValue(environment);

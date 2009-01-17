@@ -1,15 +1,16 @@
 package test.expression;
 
-import expression.OpField;
+import expression.OpNew;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-public class TestOpField {
-    OpField of1;
-    OpField of2;
-    OpField of3;
 
-    public TestOpField() {
+public class TestOpNew {
+    OpNew on1;
+    OpNew on2;
+    OpNew on3;
+
+    public TestOpNew() {
     } // constructor
 
     @BeforeClass
@@ -30,9 +31,9 @@ public class TestOpField {
     } // methodCleanup()
 
     @Test
-    public void testOpField() {
-        assertTrue((of1!=null)&&(of2!=null)&&(of3!=null));
-    } // testOpField()
+    public void testOpNew() {
+        assertTrue((on1!=null)&&(on2!=null)&&(on3!=null));
+    } // testOpNew()
 
     @Test
     public void testGetValue() {
