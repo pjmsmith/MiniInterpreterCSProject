@@ -9,6 +9,7 @@ import value.VoidValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 import test.Testable;
 
 public class OpWhile implements Expression {
@@ -25,7 +26,8 @@ public class OpWhile implements Expression {
 
     @Testable
 	@Override
-	public Environment getValue(Environment environment) throws ReturnException, TypeException  {
+	public Environment getValue(Environment environment) throws ReturnException, 
+		TypeException, UnboundIdentifierException  {
 		
 		// Test the expression to see if its true or false
 		Environment tempEnv = test.getValue(environment);

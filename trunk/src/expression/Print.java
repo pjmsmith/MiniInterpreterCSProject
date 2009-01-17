@@ -4,6 +4,7 @@ import value.*;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 import test.Testable;
 
 public class Print implements Expression {
@@ -18,7 +19,8 @@ public class Print implements Expression {
 
     @Testable
     @Override
-	public Environment getValue(Environment environment) throws ReturnException, TypeException {
+	public Environment getValue(Environment environment) throws ReturnException, 
+		TypeException, UnboundIdentifierException {
 		// print the value and return a new void pushed on top
 		Environment nEnv = value.getValue(environment);
 		Value printVal = nEnv.value;
