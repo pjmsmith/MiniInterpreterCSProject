@@ -6,19 +6,22 @@ import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
+import test.Testable;
 
 public class IsType implements Expression {
 	
 	private Class<Value> type;
 	private Expression value;
-	
-	public IsType(Class<Value> type, Expression exp)
+
+    @Testable
+    public IsType(Class<Value> type, Expression exp)
 	{
 		this.type = type;
 		this.value = exp;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		

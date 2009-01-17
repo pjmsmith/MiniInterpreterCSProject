@@ -33,7 +33,7 @@ public class TestOpLessThan {
     public void methodSetup() {
         IntValue i1 = new IntValue(4);
         IntValue i2 = new IntValue(2);
-        FloatValue f1 = new FloatValue((float)6.3);
+        FloatValue f1 = new FloatValue((float) 6.3);
         BoolValue b1 = new BoolValue(true);
         IdValue idval = new IdValue("testVal");
 
@@ -49,24 +49,29 @@ public class TestOpLessThan {
 
     @Test
     public void testOpAdd() {
-        assertTrue((olt1!=null)&&(olt2!=null)&&(olt3!=null));
+        assertTrue((olt1 != null) && (olt2 != null) && (olt3 != null));
     } // testOpAdd()
 
-    @Test(expected= TypeException.class)
+    @Test(expected = TypeException.class)
     public void testGetValue() throws ReturnException, TypeException, UnboundIdentifierException {
         //correct integer <   2<4
-        boolean res = ((BoolValue)(olt1.getValue(null)).value).getInternalValue();
+        boolean res = ((BoolValue) (olt1.getValue(null)).value).getInternalValue();
         assertTrue(res);
         //correct float 5 < 6.3
-        res = ((BoolValue)(olt2.getValue(new Environment(null, "testVal", new IntValue(5)))).value).getInternalValue();
+        res = ((BoolValue) (olt2.getValue(new Environment(null, "testVal", new IntValue(5)))).value).getInternalValue();
         assertTrue(res);
         //exception
-        ((BoolValue)(olt3.getValue(null)).value).getInternalValue();
+        ((BoolValue) (olt3.getValue(null)).value).getInternalValue();
     } // testGetValue()
 
-    @Test(expected= UnboundIdentifierException.class)
+    @Test(expected = UnboundIdentifierException.class)
     public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
-        ((BoolValue)(olt2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
+        ((BoolValue) (olt2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
+
+    @Test
+    public void testOpLessThan() {
+        fail(); // @todo - implement
+    } // testOpLessThan()
 }
 

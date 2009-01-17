@@ -31,7 +31,7 @@ public class TestEnvironment {
 
     @Test
     public void testEnvironment() {
-        assertTrue((e1!=null)&&(e2!=null)&&(e3!=null));
+        assertTrue((e1 != null) && (e2 != null) && (e3 != null));
     } // testEnvironment()
 
     @Test
@@ -43,4 +43,9 @@ public class TestEnvironment {
     public void testFindID() {
         //TODO: write test
     } // testFindID()
+
+    @Test
+    public void testCheckForID() {
+        fail(); // @todo - implement
+    } // testCheckForID()
 }

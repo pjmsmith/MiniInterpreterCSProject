@@ -44,25 +44,30 @@ public class TestOr {
     @After
     public void methodCleanup() {
     } // methodCleanup()
+
     @Test
     public void testAnd() {
-        assertTrue((o1!=null)&&(o2!=null)&&(o3!=null));
+        assertTrue((o1 != null) && (o2 != null) && (o3 != null));
     } // testAnd()
 
-    @Test(expected= TypeException.class)
+    @Test(expected = TypeException.class)
     public void testGetValue() throws TypeException, ReturnException, UnboundIdentifierException {
         //correct And
-        boolean b = ((BoolValue)(o2.getValue(null)).value).getInternalValue();
+        boolean b = ((BoolValue) (o2.getValue(null)).value).getInternalValue();
         assertTrue(b);
-        b = ((BoolValue)(o3.getValue(new Environment(null, "testVal", new BoolValue(true)))).value).getInternalValue();
+        b = ((BoolValue) (o3.getValue(new Environment(null, "testVal", new BoolValue(true)))).value).getInternalValue();
         assertTrue(b);
         //exception
-        ((BoolValue)(o1.getValue(null)).value).getInternalValue();
+        ((BoolValue) (o1.getValue(null)).value).getInternalValue();
     } // testGetValue()
 
-    @Test(expected= UnboundIdentifierException.class)
+    @Test(expected = UnboundIdentifierException.class)
     public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
-        ((BoolValue)(o3.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
+        ((BoolValue) (o3.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 
+    @Test
+    public void testOr() {
+        fail(); // @todo - implement
+    } // testOr()
 }
