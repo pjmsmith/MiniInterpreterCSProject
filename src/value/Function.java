@@ -29,7 +29,6 @@ public class Function implements Value{
     @Testable
 	@Override
 	public boolean isType(Value val) {
-		// TODO Auto-generated method stub
 		return val instanceof Function;
 	}
 

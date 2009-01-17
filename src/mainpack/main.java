@@ -156,12 +156,11 @@ public class main {
                         RunWhileTest();
                         RunTestFunction();
                 } catch (ReturnException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                 } catch (UnboundIdentifierException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 } catch (TypeException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace(); 
                 }
 
         }
