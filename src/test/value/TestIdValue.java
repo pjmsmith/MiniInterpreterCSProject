@@ -6,8 +6,6 @@ import value.IdValue;
 
 public class TestIdValue {
     private IdValue idv1;
-    private IdValue idv2;
-    private IdValue idv3;
 
     public TestIdValue() {
     } // constructor
@@ -22,7 +20,7 @@ public class TestIdValue {
 
     @Before
     public void methodSetup() {
-        //TODO: set up fixture
+        idv1 = new IdValue("testVal");
     } // methodSetup()
 
     @After
@@ -31,21 +29,21 @@ public class TestIdValue {
 
     @Test
     public void testIdValue() {
-        assertTrue((idv1!=null)&&(idv2!=null)&&(idv3!=null));
+        assertTrue(idv1!=null);
     } // testIdValue()
 
     @Test
     public void testGetInternalValue() {
-        //TODO: write tests
+        assertEquals("testVal", idv1.getInternalValue());
     } // testGetInternalValue()
 
     @Test
     public void testGetValue() {
-        //TODO: write tests
+        assertTrue(idv1.getValue(null)!=null);
     } // testGetValue()
 
     @Test
     public void testIsType() {
-        //TODO: write tests
+        assertTrue(idv1.isType(idv1));
     } // testIsType()
 }

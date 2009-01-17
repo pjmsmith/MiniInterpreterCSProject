@@ -1,13 +1,12 @@
 package test.value;
 
 import value.StringValue;
-        import org.junit.*;
+import value.IntValue;
+import org.junit.*;
         import static org.junit.Assert.*;
 
 public class TestStringValue {
     private StringValue sv1;
-    private StringValue sv2;
-    private StringValue sv3;
 
     public TestStringValue() {
     } // constructor
@@ -22,7 +21,7 @@ public class TestStringValue {
 
     @Before
     public void methodSetup() {
-        //TODO: set up fixture
+        sv1 = new StringValue("testVal");
     } // methodSetup()
 
     @After
@@ -31,21 +30,28 @@ public class TestStringValue {
 
     @Test
     public void testStringValue() {
-        assertTrue((sv1!=null)&&(sv2!=null)&&(sv3!=null));
+        assertTrue(sv1!=null);
     } // testStringValue()
 
     @Test
     public void testGetInternalValue() {
-        //TODO: write tests
+        assertEquals("testVal", sv1.getInternalValue());
     } // testGetInternalValue()
 
     @Test
     public void testIsType() {
-        //TODO: write tests
+        assertTrue(sv1.isType(sv1));
     } // testIsType()
 
     @Test
     public void testGetValue() {
-        //TODO: write tests
+        assertTrue(sv1.getValue(null)!=null);
     } // testGetValue()
+
+    @Test
+    public void testObjectMethods() {
+        sv1.addField("length", new IntValue(7));
+        assertTrue(sv1.doesFieldExist("length"));
+        assertTrue((sv1.getField("length"))!=null);
+    }
 }

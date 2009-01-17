@@ -1,13 +1,16 @@
 package test.value;
 
 import value.PlainObject;
-        import org.junit.*;
+import value.IntValue;
+import value.BoolValue;
+import org.junit.*;
         import static org.junit.Assert.*;
+import Interpreter.UnboundIdentifierException;
+import Interpreter.ReturnException;
+import Interpreter.TypeException;
 
 public class TestPlainObject {
     PlainObject po1;
-    PlainObject po2;
-    PlainObject po3;
 
     public TestPlainObject() {
     } // constructor
@@ -22,7 +25,8 @@ public class TestPlainObject {
 
     @Before
     public void methodSetup() {
-        //TODO: set up fixture
+        po1 = new PlainObject();
+
     } // methodSetup()
 
     @After
@@ -31,16 +35,24 @@ public class TestPlainObject {
 
     @Test
     public void testPlainObject() {
-        assertTrue((po1!=null)&&(po2!=null)&&(po3!=null));
+        assertTrue(po1!=null);
     } // testPlainObject()
 
     @Test
     public void testIsType() {
-        //TODO: write tests
+        assertTrue(po1.isType(po1));
     } // testIsType()
 
     @Test
-    public void testGetValue() {
-        //TODO: write tests
+    public void testGetValue() throws UnboundIdentifierException, ReturnException, TypeException {
+        assertTrue(po1.getValue(null)!=null);
     } // testGetValue()
+
+    @Test
+    public void testObjectMethods() {
+        po1.addField("a", new IntValue(3));
+        po1.addField("b", new BoolValue(false));
+        assertTrue(po1.getField("a")!=null);
+        assertTrue(po1.doesFieldExist("b"));
+    }
 }

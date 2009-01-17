@@ -6,8 +6,6 @@ import value.FloatValue;
 
 public class TestFloatValue {
     private FloatValue fv1;
-    private FloatValue fv2;
-    private FloatValue fv3;
     
     public TestFloatValue() {
     } // constructor
@@ -22,6 +20,7 @@ public class TestFloatValue {
 
     @Before
     public void methodSetup() {
+        fv1 = new FloatValue((float)4.3);
     } // methodSetup()
 
     @After
@@ -30,21 +29,21 @@ public class TestFloatValue {
 
     @Test
     public void testFloatValue() {
-        assertTrue((fv1!=null)&&(fv2!=null)&&(fv3!=null));
+        assertTrue(fv1!=null);
     } // testFloatValue()
 
     @Test
     public void testGetInternalValue() {
-        //TODO: write tests
+        assertEquals(4.3, fv1.getInternalValue());
     } // testGetInternalValue()
 
     @Test
     public void testIsType() {
-        //TODO: write tests
+        assertTrue(fv1.isType(fv1));
     } // testIsType()
 
     @Test
     public void testGetValue() {
-        //TODO: write tests
+        assertTrue(fv1.getValue(null)!=null);
     } // testGetValue()
 }
