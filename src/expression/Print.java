@@ -3,6 +3,7 @@ package expression;
 import value.*;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import Interpreter.TypeException;
 import test.Testable;
 
 public class Print implements Expression {
@@ -17,7 +18,7 @@ public class Print implements Expression {
 
     @Testable
     @Override
-	public Environment getValue(Environment environment) throws ReturnException {
+	public Environment getValue(Environment environment) throws ReturnException, TypeException {
 		// print the value and return a new void pushed on top
 		Environment nEnv = value.getValue(environment);
 		Value printVal = nEnv.value;

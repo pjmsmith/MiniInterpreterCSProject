@@ -1,9 +1,12 @@
 package expression;
 
+import value.IdValue;
 import value.IntValue;
 import value.StringValue;
+import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import Interpreter.TypeException;
 import test.Testable;
 
 public class StringLength implements Expression {
@@ -18,9 +21,14 @@ public class StringLength implements Expression {
 
     @Testable
     @Override
-	public Environment getValue(Environment environment) throws ReturnException {
+	public Environment getValue(Environment environment) throws ReturnException, TypeException {
 		
 		Environment nEnv = string.getValue(environment);
+		Value val = nEnv.value;
+		nEnv = nEnv.next;
+		
+		// check for an ID
+		val = Environment.checkForID(val, environment);
 		
 		// check to see if its a string type
 		if (nEnv != null && nEnv.value instanceof StringValue)

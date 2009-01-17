@@ -6,6 +6,7 @@ import value.Value;
 import value.VoidValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import Interpreter.TypeException;
 import test.Testable;
 
 public class OpIfElse implements Expression {
@@ -24,7 +25,7 @@ public class OpIfElse implements Expression {
 
     @Testable
     @Override
-	public Environment getValue(Environment environment) throws ReturnException {
+	public Environment getValue(Environment environment) throws ReturnException, TypeException {
 		// Test the expression to see if its true or false
 		Environment tempEnv = test.getValue(environment);
 		Value check = tempEnv.value;
