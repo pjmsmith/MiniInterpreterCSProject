@@ -52,7 +52,7 @@ public class OpAdd implements Expression {
 		if (rightSide instanceof IdValue)
 		{
 			String name = ((IdValue)rightSide).getInternalValue();
-			Environment environ = Environment.findIDInList(name, nEnv);
+            Environment environ = Environment.findIDInList(name, nEnv);
 			// check for null
 			if (environ != null)
 			{
@@ -79,8 +79,12 @@ public class OpAdd implements Expression {
 			{
 				ls = (float)((IntValue)leftSide).getInternalValue();
 			}
+            else
+            {
+                throw new TypeException();
+            }
 
-			// pull right side as a float
+            // pull right side as a float
 			if (rightSide instanceof FloatValue)
 			{
 				rs = ((FloatValue)rightSide).getInternalValue();
@@ -89,8 +93,12 @@ public class OpAdd implements Expression {
 			{
 				rs = (float)((IntValue)rightSide).getInternalValue();
 			}
-			
-			return new Environment(environment, null, new FloatValue(ls + rs));
+            else
+            {
+                throw new TypeException();
+            }
+
+            return new Environment(environment, null, new FloatValue(ls + rs));
 		}
 		else if (leftSide instanceof IntValue && rightSide instanceof IntValue)
 		{
