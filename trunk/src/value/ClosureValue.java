@@ -8,7 +8,7 @@ import Interpreter.Environment;
 import Interpreter.ReturnException;
 import test.Testable;
 
-public class ClosureValue implements Value{
+public class ClosureValue extends Object {
 	
 	private Environment environ;
 	private Function func;
