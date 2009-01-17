@@ -49,7 +49,7 @@ public class ClosureValue extends Object {
 	public Environment getValue(Environment environment) throws ReturnException {
 
 		
-		return null;
+		return new Environment(environment, null, this);
 	}
 
 }
