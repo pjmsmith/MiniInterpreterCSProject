@@ -6,21 +6,24 @@ import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
 import value.Object;
+import test.Testable;
 
 public class OpField implements Expression {
 	
 	private Expression object;
 	private String name;
 	private Expression assign;
-	
-	public OpField(Expression obj, String name, Expression assign)
+
+    @Testable
+    public OpField(Expression obj, String name, Expression assign)
 	{
 		object = obj;
 		this.name = name;
 		this.assign = assign;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		
