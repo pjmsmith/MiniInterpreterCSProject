@@ -7,19 +7,22 @@ import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
+import test.Testable;
 
 public class OpEquals implements Expression {
 
 	private Expression left;
 	private Expression right;
-	
-	public OpEquals(Expression one, Expression two)
+
+    @Testable
+    public OpEquals(Expression one, Expression two)
 	{
 		left = one;
 		right = two;
 	}
-	
-	@Override
+
+    @Testable
+    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		
@@ -27,7 +30,7 @@ public class OpEquals implements Expression {
 		Value leftVal = nEnv.value;
 		nEnv = nEnv.next;
 		
-		nEnv = left.getValue(environment);
+		nEnv = right.getValue(environment);
 		Value rightVal = nEnv.value;
 		nEnv = nEnv.next;
 		

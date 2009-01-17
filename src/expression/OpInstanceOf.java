@@ -6,19 +6,22 @@ import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
+import test.Testable;
 
 public class OpInstanceOf implements Expression {
 	
 	private value.Object obj;
 	private Value val;
-	
-	public OpInstanceOf(value.Object obj, Value val)
+
+    @Testable
+    public OpInstanceOf(value.Object obj, Value val)
 	{
 		this.obj = obj;
 		this.val = val;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		

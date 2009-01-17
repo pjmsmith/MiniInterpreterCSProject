@@ -1,15 +1,15 @@
 package test.expression;
 
-import expression.OpField;
+import expression.OpStringLess;
         import org.junit.*;
         import static org.junit.Assert.*;
 
-public class TestOpField {
-    OpField of1;
-    OpField of2;
-    OpField of3;
+public class TestOpStringLess {
+    OpStringLess osl1;
+    OpStringLess osl2;
+    OpStringLess osl3;
 
-    public TestOpField() {
+    public TestOpStringLess() {
     } // constructor
 
     @BeforeClass
@@ -30,9 +30,9 @@ public class TestOpField {
     } // methodCleanup()
 
     @Test
-    public void testOpField() {
-        assertTrue((of1!=null)&&(of2!=null)&&(of3!=null));
-    } // testOpField()
+    public void testOpStringLess() {
+        assertTrue((osl1!=null)&&(osl2!=null)&&(osl3!=null));
+    } // testOpStringLess()
 
     @Test
     public void testGetValue() {

@@ -10,19 +10,22 @@ import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
+import test.Testable;
 
 public class OpNew implements Expression {
 	
 	private List<Expression> args;
 	private Function func;
-	
-	public OpNew(Function func, List<Expression> args)
+
+    @Testable
+    public OpNew(Function func, List<Expression> args)
 	{
 		this.func = func;
 		this.args = args;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		
