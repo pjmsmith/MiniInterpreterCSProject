@@ -34,7 +34,6 @@ public class StringValue extends Object {
     @Testable
     @Override
 	public Environment getValue(Environment environment) {
-		// TODO Auto-generated method stub
 		return new Environment(environment, null, this);
 	}
 }

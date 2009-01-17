@@ -20,7 +20,6 @@ public class VoidValue implements Value {
     @Testable
     @Override
 	public Environment getValue(Environment environment) {
-		// TODO Auto-generated method stub
 		return new Environment(environment, null, this);
 	}
 
