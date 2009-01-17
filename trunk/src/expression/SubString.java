@@ -6,6 +6,7 @@ import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 
 public class SubString implements Expression {
 	
@@ -22,7 +23,7 @@ public class SubString implements Expression {
 
 	@Override
 	public Environment getValue(Environment environment)
-			throws ReturnException, TypeException {
+			throws ReturnException, TypeException, UnboundIdentifierException {
 		
 		Environment nEnv = string.getValue(environment);
 		Value val = nEnv.value;

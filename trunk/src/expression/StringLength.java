@@ -7,6 +7,7 @@ import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 import test.Testable;
 
 public class StringLength implements Expression {
@@ -21,7 +22,7 @@ public class StringLength implements Expression {
 
     @Testable
     @Override
-	public Environment getValue(Environment environment) throws ReturnException, TypeException {
+	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		
 		Environment nEnv = string.getValue(environment);
 		Value val = nEnv.value;
