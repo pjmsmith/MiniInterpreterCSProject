@@ -4,6 +4,7 @@ import value.*;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 import test.Testable;
 
 public class OpAdd implements Expression {
@@ -24,7 +25,7 @@ public class OpAdd implements Expression {
 	}
     @Testable
 	@Override
-	public Environment getValue(Environment environment) throws ReturnException, TypeException {
+	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		Environment nEnv = one.getValue(environment);
 		Value leftSide = nEnv.value;
 		nEnv = nEnv.next;
@@ -45,7 +46,7 @@ public class OpAdd implements Expression {
             }
 			else
 			{
-				// TODO: Exception, type not found
+				throw new UnboundIdentifierException();
 			}
 		}
 		if (rightSide instanceof IdValue)
@@ -59,7 +60,7 @@ public class OpAdd implements Expression {
             }
 			else
 			{
-				// TODO: Exception, type not found
+				throw new UnboundIdentifierException();
 			}
 		}
 
@@ -78,7 +79,7 @@ public class OpAdd implements Expression {
 			{
 				ls = (float)((IntValue)leftSide).getInternalValue();
 			}
-			
+
 			// pull right side as a float
 			if (rightSide instanceof FloatValue)
 			{

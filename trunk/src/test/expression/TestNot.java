@@ -9,6 +9,7 @@ import value.IdValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 
 public class TestNot {
     private Not n1;
@@ -47,7 +48,7 @@ public class TestNot {
     } // testNot()
 
     @Test(expected= TypeException.class)
-    public void testGetValue() throws ReturnException, TypeException {
+    public void testGetValue() throws ReturnException, TypeException, UnboundIdentifierException {
         //correct And
         boolean b = ((BoolValue)(n2.getValue(null)).value).getInternalValue();
         assertTrue(!b);
@@ -55,7 +56,10 @@ public class TestNot {
         assertTrue(!b);
         //exception
         ((BoolValue)(n1.getValue(null)).value).getInternalValue();
-        //TODO: exception not yet implemented in Not class for non-boolean id bindings
-        ((BoolValue)(n3.getValue(new Environment(null, "testVal", new IntValue(4)))).value).getInternalValue();
+    } // testGetValue()
+
+    @Test(expected= UnboundIdentifierException.class)
+    public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
+        ((BoolValue)(n3.getValue(null)).value).getInternalValue();
     } // testGetValue()
 }

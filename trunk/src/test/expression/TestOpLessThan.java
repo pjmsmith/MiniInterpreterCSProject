@@ -11,6 +11,7 @@ import value.IdValue;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.Environment;
+import Interpreter.UnboundIdentifierException;
 
 public class TestOpLessThan {
     private OpLessThan olt1;
@@ -52,7 +53,7 @@ public class TestOpLessThan {
     } // testOpAdd()
 
     @Test(expected= TypeException.class)
-    public void testGetValue() throws ReturnException, TypeException {
+    public void testGetValue() throws ReturnException, TypeException, UnboundIdentifierException {
         //correct integer <   2<4
         boolean res = ((BoolValue)(olt1.getValue(null)).value).getInternalValue();
         assertTrue(res);
@@ -61,8 +62,11 @@ public class TestOpLessThan {
         assertTrue(res);
         //exception
         ((BoolValue)(olt3.getValue(null)).value).getInternalValue();
-        //TODO: exception not yet implemented in And class for non-boolean id bindings
-        ((BoolValue)(olt2.getValue(new Environment(null, "testVal", new BoolValue(false)))).value).getInternalValue();
+    } // testGetValue()
+
+    @Test(expected= UnboundIdentifierException.class)
+    public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
+        ((BoolValue)(olt2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 }
 

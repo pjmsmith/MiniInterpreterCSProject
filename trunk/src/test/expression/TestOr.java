@@ -6,6 +6,7 @@ import org.junit.*;
 import Interpreter.TypeException;
 import Interpreter.ReturnException;
 import Interpreter.Environment;
+import Interpreter.UnboundIdentifierException;
 import value.BoolValue;
 import value.IntValue;
 import value.IdValue;
@@ -49,7 +50,7 @@ public class TestOr {
     } // testAnd()
 
     @Test(expected= TypeException.class)
-    public void testGetValue() throws TypeException, ReturnException {
+    public void testGetValue() throws TypeException, ReturnException, UnboundIdentifierException {
         //correct And
         boolean b = ((BoolValue)(o2.getValue(null)).value).getInternalValue();
         assertTrue(b);
@@ -57,8 +58,11 @@ public class TestOr {
         assertTrue(b);
         //exception
         ((BoolValue)(o1.getValue(null)).value).getInternalValue();
-        //TODO: exception not yet implemented in Or class for non-boolean id bindings
-        ((BoolValue)(o3.getValue(new Environment(null, "testVal", new IntValue(4)))).value).getInternalValue();
+    } // testGetValue()
+
+    @Test(expected= UnboundIdentifierException.class)
+    public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
+        ((BoolValue)(o3.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 
 }

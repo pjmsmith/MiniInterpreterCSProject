@@ -11,6 +11,7 @@ import value.IdValue;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.Environment;
+import Interpreter.UnboundIdentifierException;
 
 public class TestOpDivide {
     private OpDivide od1;
@@ -51,7 +52,7 @@ public class TestOpDivide {
     } // testOpAdd()
 
     @Test(expected= TypeException.class)
-    public void testGetValue() throws ReturnException, TypeException {
+    public void testGetValue() throws ReturnException, TypeException, UnboundIdentifierException {
         //correct integer add 4/4
         int ires = ((IntValue)(od1.getValue(null)).value).getInternalValue();
         assertEquals(ires, 1);
@@ -60,7 +61,10 @@ public class TestOpDivide {
         assertEquals(fres, 6.3/5, 0.001);
         //exception
         ((FloatValue)(od3.getValue(null)).value).getInternalValue();
-        //TODO: exception not yet implemented in And class for non-boolean id bindings
-        ((FloatValue)(od2.getValue(new Environment(null, "testVal", new BoolValue(false)))).value).getInternalValue();
+    } // testGetValue()
+
+    @Test(expected= UnboundIdentifierException.class)
+    public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
+        ((FloatValue)(od2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 }

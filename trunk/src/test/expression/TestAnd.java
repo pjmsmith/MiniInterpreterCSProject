@@ -9,6 +9,7 @@ import value.IdValue;
 import Interpreter.ReturnException;
 import Interpreter.Environment;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 
 public class TestAnd {
     private And a1;
@@ -50,7 +51,7 @@ public class TestAnd {
     } // testAnd()
 
     @Test(expected= TypeException.class)
-    public void testGetValue() throws TypeException, ReturnException {
+    public void testGetValue() throws TypeException, ReturnException, UnboundIdentifierException {
         //correct And
         boolean b = ((BoolValue)(a2.getValue(null)).value).getInternalValue();
         assertTrue(b);
@@ -58,7 +59,10 @@ public class TestAnd {
         assertTrue(b);
         //exception
         ((BoolValue)(a1.getValue(null)).value).getInternalValue();
-        //TODO: exception not yet implemented in And class for non-boolean id bindings
-        ((BoolValue)(a3.getValue(new Environment(null, "testVal", new IntValue(4)))).value).getInternalValue();
+    } // testGetValue()
+
+    @Test(expected= UnboundIdentifierException.class)
+    public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
+        ((BoolValue)(a3.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 }
