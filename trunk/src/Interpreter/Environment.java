@@ -1,4 +1,5 @@
 package Interpreter;
+import value.IdValue;
 import value.Value;
 import test.Testable;
 
@@ -46,4 +47,27 @@ public class Environment {
 			return null;
 		}
 	}
+    
+    @Testable
+    public static Value checkForID(Value val, Environment env)
+    {
+    	// check for an ID
+		if (val instanceof IdValue)
+		{
+			String name = ((IdValue)val).getInternalValue();
+			Environment environ = Environment.findIDInList(name, env);
+			// check for null
+			if (environ != null)
+			{
+				return environ.value;
+			}
+			else
+			{
+				// TODO: Exception, type not found
+			}
+		}
+		
+		// return the default value
+		return val;
+    }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import Interpreter.TypeException;
 import value.BoolValue;
 import value.Function;
 import value.IdValue;
