@@ -49,7 +49,7 @@ public class TestOpAdd {
         assertTrue((oa1!=null)&&(oa2!=null)&&(oa3!=null));
     } // testOpAdd()
 
-    @Test
+    @Test(expected= TypeException.class)
     public void testGetValue() throws ReturnException, TypeException {
         //correct integer add 4+4
         int ires = ((IntValue)(oa1.getValue(null)).value).getInternalValue();

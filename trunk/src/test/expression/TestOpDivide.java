@@ -50,7 +50,7 @@ public class TestOpDivide {
         assertTrue((od1!=null)&&(od2!=null)&&(od3!=null));
     } // testOpAdd()
 
-    @Test
+    @Test(expected= TypeException.class)
     public void testGetValue() throws ReturnException, TypeException {
         //correct integer add 4/4
         int ires = ((IntValue)(od1.getValue(null)).value).getInternalValue();

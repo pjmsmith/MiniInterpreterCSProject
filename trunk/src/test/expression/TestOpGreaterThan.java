@@ -1,13 +1,22 @@
 package test.expression;
 
 import expression.OpLessThan;
-        import org.junit.*;
+import expression.OpGTE;
+import expression.OpGreaterThan;
+import org.junit.*;
         import static org.junit.Assert.*;
+import value.IntValue;
+import value.FloatValue;
+import value.BoolValue;
+import value.IdValue;
+import Interpreter.TypeException;
+import Interpreter.ReturnException;
+import Interpreter.Environment;
 
 public class TestOpGreaterThan {
-    private OpLessThan olt1;
-    private OpLessThan olt2;
-    private OpLessThan olt3;
+    private OpGreaterThan ogt1;
+    private OpGreaterThan ogt2;
+    private OpGreaterThan ogt3;
 
     public TestOpGreaterThan() {
     } // constructor
@@ -22,6 +31,16 @@ public class TestOpGreaterThan {
 
     @Before
     public void methodSetup() {
+        IntValue i1 = new IntValue(4);
+        IntValue i2 = new IntValue(2);
+        FloatValue f1 = new FloatValue((float)6.3);
+        BoolValue b1 = new BoolValue(true);
+        IdValue idval = new IdValue("testVal");
+
+        ogt1 = new OpGreaterThan(i1, i2);
+        ogt2 = new OpGreaterThan(f1, idval);
+        ogt3 = new OpGreaterThan(i2, b1);
+
     } // methodSetup()
 
     @After
@@ -29,12 +48,21 @@ public class TestOpGreaterThan {
     } // methodCleanup()
 
     @Test
-    public void testOpLessThan() {
-        fail(); // @todo - implement
-    } // testOpLessThan()
+    public void testOpAdd() {
+        assertTrue((ogt1!=null)&&(ogt2!=null)&&(ogt3!=null));
+    } // testOpAdd()
 
-    @Test
-    public void testGetValue() {
-        fail(); // @todo - implement
+    @Test(expected= TypeException.class)
+    public void testGetValue() throws ReturnException, TypeException {
+        //correct integer >   4>4
+        boolean res = ((BoolValue)(ogt1.getValue(null)).value).getInternalValue();
+        assertTrue(res);
+        //correct float 5 > 6.3
+        res = ((BoolValue)(ogt2.getValue(new Environment(null, "testVal", new IntValue(5)))).value).getInternalValue();
+        assertTrue(res);
+        //exception
+        ((BoolValue)(ogt3.getValue(null)).value).getInternalValue();
+        //TODO: exception not yet implemented in And class for non-boolean id bindings
+        ((BoolValue)(ogt2.getValue(new Environment(null, "testVal", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 }
