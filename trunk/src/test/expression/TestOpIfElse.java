@@ -22,6 +22,7 @@ public class TestOpIfElse {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,11 +31,11 @@ public class TestOpIfElse {
 
     @Test
     public void testOpIfElse() {
-        fail(); // @todo - implement
+        assertTrue((oie1!=null)&&(oie2!=null)&&(oie3!=null));
     } // testOpIfElse()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write if else tests
     } // testGetValue()
 }

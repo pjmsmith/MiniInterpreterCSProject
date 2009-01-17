@@ -29,7 +29,7 @@ public class OpAdd implements Expression {
 		Environment nEnv = one.getValue(environment);
 		Value leftSide = nEnv.value;
 		nEnv = nEnv.next;
-		
+
 		nEnv = two.getValue(nEnv);
 		Value rightSide = nEnv.value;
 		nEnv = nEnv.next;
@@ -79,10 +79,7 @@ public class OpAdd implements Expression {
 			{
 				ls = (float)((IntValue)leftSide).getInternalValue();
 			}
-            else
-            {
-                throw new TypeException();
-            }
+
 
             // pull right side as a float
 			if (rightSide instanceof FloatValue)
@@ -104,7 +101,7 @@ public class OpAdd implements Expression {
 		{
 			int ls = ((IntValue)leftSide).getInternalValue();
 			int rs = ((IntValue)rightSide).getInternalValue();
-			
+
 			return new Environment(environment, null, new IntValue(ls + rs));
 		}
 		else

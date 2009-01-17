@@ -33,13 +33,11 @@ public class Sequence implements Expression {
         {
             tempEnv = environment;
             Environment ansEnv = null;
+            Environment t = null;
             for (Expression expression : expressions) {
                 ansEnv = expression.getValue(tempEnv);
-                if(tempEnv.next != null)
-                {
-                    tempEnv.next = tempEnv;
-                }
                 tempEnv = ansEnv;
+                //TODO: re-test sequences
             }
 
             return tempEnv;

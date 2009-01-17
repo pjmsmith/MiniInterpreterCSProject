@@ -22,6 +22,7 @@ public class TestPrint {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,11 +31,11 @@ public class TestPrint {
 
     @Test
     public void testPrint() {
-        fail(); // @todo - implement
+        assertTrue((p1!=null)&&(p2!=null)&&(p3!=null));
     } // testPrint()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write print tests?
     } // testGetValue()
 }

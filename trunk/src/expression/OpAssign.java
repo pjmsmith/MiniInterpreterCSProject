@@ -33,7 +33,7 @@ public class OpAssign implements Expression{
 		// if type isn't ID then error
 		if (!(leftVal instanceof IdValue))
 		{
-			// TODO:: Return an exception
+			throw new TypeException();
 		}
 		
 		String name = ((IdValue)leftVal).getInternalValue();
@@ -55,11 +55,9 @@ public class OpAssign implements Expression{
 		}
 		else
 		{
-			// TODO: Add exception
+			throw new UnboundIdentifierException();
 		}
-		
-		
-		return null;
+
 	}
 
 }

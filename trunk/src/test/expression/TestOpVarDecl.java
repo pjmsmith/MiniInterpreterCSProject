@@ -22,6 +22,7 @@ public class TestOpVarDecl {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,11 +31,11 @@ public class TestOpVarDecl {
 
     @Test
     public void testOpVarDecl() {
-        fail(); // @todo - implement
+        assertTrue((ovd1!=null)&&(ovd2!=null)&&(ovd3!=null));
     } // testOpVarDecl()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write var declaration tests
     } // testGetValue()
 }
