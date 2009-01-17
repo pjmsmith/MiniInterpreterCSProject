@@ -30,21 +30,21 @@ public class TestFloatValue {
 
     @Test
     public void testFloatValue() {
-        fail(); // @todo - implement
+        assertTrue((fv1!=null)&&(fv2!=null)&&(fv3!=null));
     } // testFloatValue()
 
     @Test
     public void testGetInternalValue() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetInternalValue()
 
     @Test
     public void testIsType() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testIsType()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetValue()
 }

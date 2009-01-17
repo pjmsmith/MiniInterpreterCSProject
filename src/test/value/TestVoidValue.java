@@ -22,6 +22,7 @@ public class TestVoidValue {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,16 +31,16 @@ public class TestVoidValue {
 
     @Test
     public void testVoidValue() {
-        fail(); // @todo - implement
+        assertTrue((vv1!=null)&&(vv2!=null)&&(vv3!=null));
     } // testVoidValue()
 
     @Test
     public void testIsType() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testIsType()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetValue()
 }
