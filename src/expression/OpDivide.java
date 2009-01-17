@@ -1,10 +1,7 @@
 package expression;
 
 import value.*;
-import Interpreter.Environment;
-import Interpreter.ReturnException;
-import Interpreter.TypeException;
-import Interpreter.UnboundIdentifierException;
+import Interpreter.*;
 import test.Testable;
 
 public class OpDivide implements Expression {
@@ -99,15 +96,27 @@ public class OpDivide implements Expression {
             {
                 throw new TypeException();
             }
-
-            return new Environment(environment, null, new FloatValue(ls / rs));
-		}
+            if(rs == 0)
+            {
+                throw new TypeException();
+            }
+            else
+            {
+                return new Environment(environment, null, new FloatValue(ls / rs));
+            }
+        }
 		else if (leftSide instanceof IntValue && rightSide instanceof IntValue)
 		{
 			int ls = ((IntValue)leftSide).getInternalValue();
 			int rs = ((IntValue)rightSide).getInternalValue();
-
-			return new Environment(environment, null, new IntValue(ls / rs));
+            if(rs == 0)
+            {
+                throw new TypeException();
+            }
+            else
+            {
+                return new Environment(environment, null, new FloatValue(ls / rs));
+            }
 		}
 		else
         {

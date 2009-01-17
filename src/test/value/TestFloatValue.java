@@ -34,7 +34,7 @@ public class TestFloatValue {
 
     @Test
     public void testGetInternalValue() {
-        assertEquals(4.3, fv1.getInternalValue());
+        assertEquals(fv1.getInternalValue(), (float)4.3, 0.001);
     } // testGetInternalValue()
 
     @Test
