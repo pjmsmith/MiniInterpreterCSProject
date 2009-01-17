@@ -17,7 +17,6 @@ public class PlainObject extends Object {
     @Testable
     @Override
 	public boolean isType(Value val) {
-		// TODO Auto-generated method stub
 		return val instanceof PlainObject;
 	}
 
@@ -25,7 +24,6 @@ public class PlainObject extends Object {
     @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
-		// TODO Auto-generated method stub
 		return new Environment(environment, null, this);
 	}
 

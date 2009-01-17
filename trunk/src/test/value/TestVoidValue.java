@@ -6,8 +6,6 @@ import value.VoidValue;
 
 public class TestVoidValue {
     private VoidValue vv1;
-    private VoidValue vv2;
-    private VoidValue vv3;
 
     public TestVoidValue() {
     } // constructor
@@ -22,7 +20,7 @@ public class TestVoidValue {
 
     @Before
     public void methodSetup() {
-        //TODO: set up fixture
+        vv1 = new VoidValue();
     } // methodSetup()
 
     @After
@@ -31,16 +29,16 @@ public class TestVoidValue {
 
     @Test
     public void testVoidValue() {
-        assertTrue((vv1!=null)&&(vv2!=null)&&(vv3!=null));
+        assertTrue(vv1!=null);
     } // testVoidValue()
 
     @Test
     public void testIsType() {
-        //TODO: write tests
+        assertTrue(vv1.isType(vv1));
     } // testIsType()
 
     @Test
     public void testGetValue() {
-        //TODO: write tests
+        assertTrue(vv1.getValue(null)!=null);
     } // testGetValue()
 }

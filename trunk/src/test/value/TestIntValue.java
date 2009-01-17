@@ -6,8 +6,6 @@ import value.IntValue;
 
 public class TestIntValue {
     private IntValue iv1;
-    private IntValue iv2;
-    private IntValue iv3;
 
     public TestIntValue() {
     } // constructor
@@ -22,7 +20,7 @@ public class TestIntValue {
 
     @Before
     public void methodSetup() {
-        //TODO: set up fixture
+        iv1 = new IntValue(3);
     } // methodSetup()
 
     @After
@@ -31,21 +29,21 @@ public class TestIntValue {
 
     @Test
     public void testIntValue() {
-        assertTrue((iv1!=null)&&(iv2!=null)&&(iv3!=null));
+        assertTrue(iv1!=null);
     } // testIntValue()
 
     @Test
     public void testGetInternalValue() {
-        //TODO: write tests
+        assertEquals(3, iv1.getInternalValue());
     } // testGetInternalValue()
 
     @Test
     public void testIsType() {
-        //TODO: write tests
+        assertTrue(iv1.isType(iv1));
     } // testIsType()
 
     @Test
     public void testGetValue() {
-        //TODO: write tests
+        assertTrue(iv1.getValue(null)!=null);
     } // testGetValue()
 }
