@@ -25,7 +25,7 @@ public class OpAssign implements Expression{
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		// the returned value for the left should be an ID
 		Environment newEnv = left.getValue(environment);
-		Value leftVal = left.getValue(environment).value;
+		Value leftVal = newEnv.value;
 		
 		// pop top off
 		newEnv = newEnv.next;

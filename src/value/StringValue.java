@@ -3,7 +3,7 @@ package value;
 import Interpreter.Environment;
 import test.Testable;
 
-public class StringValue implements Value {
+public class StringValue extends Object {
 
 	private String value;
 
