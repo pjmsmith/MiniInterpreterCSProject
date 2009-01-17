@@ -23,7 +23,7 @@ public class OpGreaterThan implements Expression {
 	}
 
     @Testable
-    @Override
+	@Override
 	public Environment getValue(Environment environment) throws ReturnException, TypeException {
 		Environment nEnv = one.getValue(environment);
 		Value leftSide = nEnv.value;
@@ -42,7 +42,7 @@ public class OpGreaterThan implements Expression {
 			if (environ != null)
 			{
 				leftSide = environ.value;
-			}
+            }
 			else
 			{
 				// TODO: Exception, type not found
@@ -56,20 +56,11 @@ public class OpGreaterThan implements Expression {
 			if (environ != null)
 			{
 				rightSide = environ.value;
-			}
+            }
 			else
 			{
 				// TODO: Exception, type not found
 			}
-		}
-
-		// now check to make sure both are bool types
-		if (!(leftSide instanceof IntValue)
-			|| !(rightSide instanceof IntValue)
-			|| !(leftSide instanceof FloatValue)
-			|| !(rightSide instanceof FloatValue))
-		{
-			// TODO: throw an exception here
 		}
 
 		// now do the op
@@ -83,22 +74,30 @@ public class OpGreaterThan implements Expression {
 			{
 				ls = ((FloatValue)leftSide).getInternalValue();
 			}
-			else
+			else if(leftSide instanceof IntValue)
 			{
 				ls = (float)((IntValue)leftSide).getInternalValue();
 			}
+            else
+            {
+                throw new TypeException();
+            }
 
-			// pull right side as a float
+            // pull right side as a float
 			if (rightSide instanceof FloatValue)
 			{
-				ls = ((FloatValue)rightSide).getInternalValue();
+				rs = ((FloatValue)rightSide).getInternalValue();
 			}
-			else
+			else if(rightSide instanceof IntValue)
 			{
-				ls = (float)((IntValue)rightSide).getInternalValue();
+				rs = (float)((IntValue)rightSide).getInternalValue();
 			}
+            else
+            {
+                throw new TypeException();
+            }
 
-			return new Environment(environment, null, new BoolValue(ls > rs));
+            return new Environment(environment, null, new BoolValue(ls > rs));
 		}
 		else if (leftSide instanceof IntValue && rightSide instanceof IntValue)
 		{
@@ -107,9 +106,10 @@ public class OpGreaterThan implements Expression {
 
 			return new Environment(environment, null, new BoolValue(ls > rs));
 		}
-
-
-		return null;
+		else
+        {
+            throw new TypeException();
+        }
 	}
 
 }

@@ -1,8 +1,16 @@
 package test.expression;
 
 import expression.OpLessThan;
-        import org.junit.*;
+import expression.OpMult;
+import org.junit.*;
         import static org.junit.Assert.*;
+import value.IntValue;
+import value.FloatValue;
+import value.BoolValue;
+import value.IdValue;
+import Interpreter.ReturnException;
+import Interpreter.TypeException;
+import Interpreter.Environment;
 
 public class TestOpLessThan {
     private OpLessThan olt1;
@@ -22,6 +30,16 @@ public class TestOpLessThan {
 
     @Before
     public void methodSetup() {
+        IntValue i1 = new IntValue(4);
+        IntValue i2 = new IntValue(2);
+        FloatValue f1 = new FloatValue((float)6.3);
+        BoolValue b1 = new BoolValue(true);
+        IdValue idval = new IdValue("testVal");
+
+        olt1 = new OpLessThan(i2, i1);
+        olt2 = new OpLessThan(idval, f1);
+        olt3 = new OpLessThan(f1, b1);
+
     } // methodSetup()
 
     @After
@@ -29,12 +47,22 @@ public class TestOpLessThan {
     } // methodCleanup()
 
     @Test
-    public void testOpLessThan() {
-        fail(); // @todo - implement
-    } // testOpLessThan()
+    public void testOpAdd() {
+        assertTrue((olt1!=null)&&(olt2!=null)&&(olt3!=null));
+    } // testOpAdd()
 
-    @Test
-    public void testGetValue() {
-        fail(); // @todo - implement
+    @Test(expected= TypeException.class)
+    public void testGetValue() throws ReturnException, TypeException {
+        //correct integer <   2<4
+        boolean res = ((BoolValue)(olt1.getValue(null)).value).getInternalValue();
+        assertTrue(res);
+        //correct float 5 < 6.3
+        res = ((BoolValue)(olt2.getValue(new Environment(null, "testVal", new IntValue(5)))).value).getInternalValue();
+        assertTrue(res);
+        //exception
+        ((BoolValue)(olt3.getValue(null)).value).getInternalValue();
+        //TODO: exception not yet implemented in And class for non-boolean id bindings
+        ((BoolValue)(olt2.getValue(new Environment(null, "testVal", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 }
+

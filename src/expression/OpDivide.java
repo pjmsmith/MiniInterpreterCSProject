@@ -80,8 +80,12 @@ public class OpDivide implements Expression {
 			{
 				ls = (float)((IntValue)leftSide).getInternalValue();
 			}
+            else
+            {
+                throw new TypeException();
+            }
 
-			// pull right side as a float
+            // pull right side as a float
 			if (rightSide instanceof FloatValue)
 			{
 				rs = ((FloatValue)rightSide).getInternalValue();
@@ -90,8 +94,12 @@ public class OpDivide implements Expression {
 			{
 				rs = (float)((IntValue)rightSide).getInternalValue();
 			}
+            else
+            {
+                throw new TypeException();
+            }
 
-			return new Environment(environment, null, new FloatValue(ls / rs));
+            return new Environment(environment, null, new FloatValue(ls / rs));
 		}
 		else if (leftSide instanceof IntValue && rightSide instanceof IntValue)
 		{
