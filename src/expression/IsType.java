@@ -5,6 +5,7 @@ import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 
 public class IsType implements Expression {
 	
@@ -19,7 +20,7 @@ public class IsType implements Expression {
 
 	@Override
 	public Environment getValue(Environment environment)
-			throws ReturnException, TypeException {
+			throws ReturnException, TypeException, UnboundIdentifierException {
 		
 		Environment nEnv = value.getValue(environment);
 		Value val = nEnv.value;

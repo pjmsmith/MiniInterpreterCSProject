@@ -6,6 +6,7 @@ import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 import test.Testable;
 
 public class OpAssign implements Expression{
@@ -21,7 +22,7 @@ public class OpAssign implements Expression{
 	}
     @Testable
 	@Override
-	public Environment getValue(Environment environment) throws ReturnException, TypeException {
+	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		// the returned value for the left should be an ID
 		Environment newEnv = left.getValue(environment);
 		Value leftVal = left.getValue(environment).value;
