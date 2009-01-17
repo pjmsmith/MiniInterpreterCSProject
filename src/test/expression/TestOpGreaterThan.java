@@ -12,6 +12,7 @@ import value.IdValue;
 import Interpreter.TypeException;
 import Interpreter.ReturnException;
 import Interpreter.Environment;
+import Interpreter.UnboundIdentifierException;
 
 public class TestOpGreaterThan {
     private OpGreaterThan ogt1;
@@ -53,7 +54,7 @@ public class TestOpGreaterThan {
     } // testOpAdd()
 
     @Test(expected= TypeException.class)
-    public void testGetValue() throws ReturnException, TypeException {
+    public void testGetValue() throws ReturnException, TypeException, UnboundIdentifierException {
         //correct integer >   4>4
         boolean res = ((BoolValue)(ogt1.getValue(null)).value).getInternalValue();
         assertTrue(res);
@@ -62,7 +63,10 @@ public class TestOpGreaterThan {
         assertTrue(res);
         //exception
         ((BoolValue)(ogt3.getValue(null)).value).getInternalValue();
-        //TODO: exception not yet implemented in And class for non-boolean id bindings
-        ((BoolValue)(ogt2.getValue(new Environment(null, "testVal", new BoolValue(false)))).value).getInternalValue();
+    } // testGetValue()
+
+    @Test(expected= UnboundIdentifierException.class)
+    public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
+        ((BoolValue)(ogt2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 }

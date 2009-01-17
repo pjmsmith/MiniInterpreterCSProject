@@ -8,6 +8,7 @@ import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 import test.Testable;
 
 public class And implements Expression {
@@ -23,7 +24,7 @@ public class And implements Expression {
 	}
     @Testable
 	@Override
-	public Environment getValue(Environment environment) throws ReturnException, TypeException {
+	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		Environment nEnv = one.getValue(environment);
 		Value leftSide = nEnv.value;
 		nEnv = nEnv.next;
@@ -44,7 +45,7 @@ public class And implements Expression {
 			}
 			else
 			{
-				// TODO: Exception, type not found
+				throw new UnboundIdentifierException();
 			}
 		}
 		if (rightSide instanceof IdValue)
@@ -58,7 +59,7 @@ public class And implements Expression {
 			}
 			else
 			{
-				// TODO: Exception, type not found
+				throw new UnboundIdentifierException();
 			}
 		}
 		

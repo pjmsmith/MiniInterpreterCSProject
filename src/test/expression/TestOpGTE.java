@@ -11,6 +11,7 @@ import value.IdValue;
 import Interpreter.TypeException;
 import Interpreter.ReturnException;
 import Interpreter.Environment;
+import Interpreter.UnboundIdentifierException;
 
 public class TestOpGTE {
     private OpGTE ogte1;
@@ -52,7 +53,7 @@ public class TestOpGTE {
     } // testOpAdd()
 
     @Test(expected= TypeException.class)
-    public void testGetValue() throws ReturnException, TypeException {
+    public void testGetValue() throws ReturnException, TypeException, UnboundIdentifierException {
         //correct integer >=   4>=4
         boolean res = ((BoolValue)(ogte1.getValue(null)).value).getInternalValue();
         assertTrue(res);
@@ -61,7 +62,10 @@ public class TestOpGTE {
         assertTrue(res);
         //exception
         ((BoolValue)(ogte3.getValue(null)).value).getInternalValue();
-        //TODO: exception not yet implemented in And class for non-boolean id bindings
-        ((BoolValue)(ogte2.getValue(new Environment(null, "testVal", new BoolValue(false)))).value).getInternalValue();
+    } // testGetValue()
+
+    @Test(expected= UnboundIdentifierException.class)
+    public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
+        ((BoolValue)(ogte2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 }

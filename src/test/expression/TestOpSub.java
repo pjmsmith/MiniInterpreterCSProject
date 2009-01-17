@@ -11,6 +11,7 @@ import value.IdValue;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.Environment;
+import Interpreter.UnboundIdentifierException;
 
 public class TestOpSub {
     private OpSub os1;
@@ -51,7 +52,7 @@ public class TestOpSub {
     } // testOpAdd()
 
     @Test(expected= TypeException.class)
-    public void testGetValue() throws ReturnException, TypeException {
+    public void testGetValue() throws ReturnException, TypeException, UnboundIdentifierException {
         //correct integer add 4-4
         int ires = ((IntValue)(os1.getValue(null)).value).getInternalValue();
         assertEquals(ires, 0);
@@ -60,7 +61,10 @@ public class TestOpSub {
         assertEquals(fres, 1.3, 0.001);
         //exception
         ((FloatValue)(os3.getValue(null)).value).getInternalValue();
-        //TODO: exception not yet implemented in And class for non-boolean id bindings
-        ((FloatValue)(os2.getValue(new Environment(null, "testVal", new BoolValue(false)))).value).getInternalValue();
+    } // testGetValue()
+
+    @Test(expected= UnboundIdentifierException.class)
+    public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
+        ((BoolValue)(os2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 }
