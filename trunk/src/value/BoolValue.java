@@ -22,14 +22,12 @@ public class BoolValue implements Value {
     @Testable
     @Override
 	public Environment getValue(Environment environment) {
-		// TODO Auto-generated method stub
 		return new Environment(environment, null, this);
 	}
 
     @Testable
     @Override
 	public boolean isType(Value val) {
-		// TODO Auto-generated method stub
 		return val instanceof BoolValue;
 	}
 

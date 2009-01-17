@@ -7,7 +7,6 @@ import value.BoolValue;
 public class TestBoolValue {
     private BoolValue bv1;
     private BoolValue bv2;
-    private BoolValue bv3;
 
     public TestBoolValue() {
     } // constructor
@@ -22,7 +21,8 @@ public class TestBoolValue {
 
     @Before
     public void methodSetup() {
-        //TODO: set up fixture
+        bv1 = new BoolValue(true);
+        bv2 = new BoolValue(false);
     } // methodSetup()
 
     @After
@@ -31,21 +31,22 @@ public class TestBoolValue {
 
     @Test
     public void testBoolValue() {
-        assertTrue((bv1!=null)&&(bv2!=null)&&(bv3!=null));
+        assertTrue((bv1!=null)&&(bv2!=null));
     } // testBoolValue()
 
     @Test
     public void testGetInternalValue() {
-        //TODO: write tests
+        assertEquals(true, bv1.getInternalValue());
+        assertEquals(false, bv2.getInternalValue());
     } // testGetInternalValue()
 
     @Test
     public void testGetValue() {
-        //TODO: write tests
+        assertTrue(bv1.getValue(null)!=null);
     } // testGetValue()
 
     @Test
     public void testIsType() {
-        fail(); // @todo - implement
+        assertTrue(bv2.isType(bv2));
     } // testIsType()
 }
