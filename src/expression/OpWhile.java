@@ -46,14 +46,14 @@ public class OpWhile implements Expression {
 			}
 			else
 			{
-				// TODO: Exception, type not found
+				throw new UnboundIdentifierException();
 			}
 		}
 		
 		// if not a bool value error
 		if (!(check instanceof BoolValue))
 		{
-			//TODO: Add an exception here
+			throw new TypeException();
 		}
 		
 		// do while loop if true
@@ -67,7 +67,7 @@ public class OpWhile implements Expression {
 			tempEnv = test.getValue(tempEnv);
 			check = tempEnv.value;
 			tempEnv = tempEnv.next;
-			
+			//TODO: make sure this works with Sequence (re-test)
 			// check for ID
 			if (check instanceof IdValue)
 			{
@@ -80,7 +80,7 @@ public class OpWhile implements Expression {
 				}
 				else
 				{
-					// TODO: Exception, type not found
+					throw new UnboundIdentifierException();
 				}
 			}
 			

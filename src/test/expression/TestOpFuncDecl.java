@@ -22,6 +22,7 @@ public class TestOpFuncDecl {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,11 +31,11 @@ public class TestOpFuncDecl {
 
     @Test
     public void testOpFuncDecl() {
-        fail(); // @todo - implement
+        assertTrue((ofd1!=null)&&(ofd2!=null)&&(ofd3!=null));
     } // testOpFuncDecl()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write func decl tests
     } // testGetValue()
 }

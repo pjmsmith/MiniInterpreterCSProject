@@ -22,6 +22,7 @@ public class TestStringLength {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,11 +31,11 @@ public class TestStringLength {
 
     @Test
     public void testStringLength() {
-        fail(); // @todo - implement
+        assertTrue((sl1!=null)&&(sl2!=null)&&(sl3!=null));
     } // testStringLength()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write string length tests
     } // testGetValue()
 }

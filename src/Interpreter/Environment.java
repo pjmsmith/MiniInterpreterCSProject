@@ -49,8 +49,7 @@ public class Environment {
 	}
     
     @Testable
-    public static Value checkForID(Value val, Environment env)
-    {
+    public static Value checkForID(Value val, Environment env) throws UnboundIdentifierException {
     	// check for an ID
 		if (val instanceof IdValue)
 		{
@@ -63,7 +62,7 @@ public class Environment {
 			}
 			else
 			{
-				// TODO: Exception, type not found
+				throw new UnboundIdentifierException();
 			}
 		}
 		

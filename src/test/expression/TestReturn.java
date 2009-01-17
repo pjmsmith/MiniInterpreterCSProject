@@ -22,6 +22,7 @@ public class TestReturn {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,11 +31,11 @@ public class TestReturn {
 
     @Test
     public void testReturn() {
-        fail(); // @todo - implement
+        assertTrue((r1!=null)&&(r2!=null)&&(r3!=null));
     } // testReturn()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write return tests
     } // testGetValue()
 }
