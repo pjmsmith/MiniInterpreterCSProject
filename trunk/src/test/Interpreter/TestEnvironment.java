@@ -22,6 +22,7 @@ public class TestEnvironment {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,16 +31,16 @@ public class TestEnvironment {
 
     @Test
     public void testEnvironment() {
-        fail(); // @todo - implement
+        assertTrue((e1!=null)&&(e2!=null)&&(e3!=null));
     } // testEnvironment()
 
     @Test
     public void testFindIDInList() {
-        fail(); // @todo - implement
+        //TODO: write test
     } // testFindIDInList()
 
     @Test
     public void testFindID() {
-        fail(); // @todo - implement
+        //TODO: write test
     } // testFindID()
 }

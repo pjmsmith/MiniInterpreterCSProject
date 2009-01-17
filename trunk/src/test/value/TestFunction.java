@@ -22,6 +22,7 @@ public class TestFunction {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,21 +31,21 @@ public class TestFunction {
 
     @Test
     public void testFunction() {
-        fail(); // @todo - implement
+        assertTrue((f1!=null)&&(f2!=null)&&(f3!=null));
     } // testFunction()
 
     @Test
     public void testGetParamList() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetParamList()
 
     @Test
     public void testIsType() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testIsType()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetValue()
 }

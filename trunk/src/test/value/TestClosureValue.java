@@ -22,6 +22,7 @@ public class TestClosureValue {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,31 +31,31 @@ public class TestClosureValue {
 
     @Test
     public void testClosureValue() {
-        fail(); // @todo - implement
+        assertTrue((cv1!=null)&&(cv2!=null)&&(cv3!=null));
     } // testClosureValue()
 
     @Test
     public void testSetEnvironment() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testSetEnvironment()
 
     @Test
     public void testGetEnvironment() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetEnvironment()
 
     @Test
     public void testGetIntFunc() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetIntFunc()
 
     @Test
     public void testIsType() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testIsType()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetValue()
 }

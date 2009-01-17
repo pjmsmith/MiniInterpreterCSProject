@@ -22,6 +22,7 @@ public class TestBoolValue {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,17 +31,17 @@ public class TestBoolValue {
 
     @Test
     public void testBoolValue() {
-        fail(); // @todo - implement
+        assertTrue((bv1!=null)&&(bv2!=null)&&(bv3!=null));
     } // testBoolValue()
 
     @Test
     public void testGetInternalValue() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetInternalValue()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetValue()
 
     @Test

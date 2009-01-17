@@ -22,6 +22,7 @@ public class TestIntValue {
 
     @Before
     public void methodSetup() {
+        //TODO: set up fixture
     } // methodSetup()
 
     @After
@@ -30,21 +31,21 @@ public class TestIntValue {
 
     @Test
     public void testIntValue() {
-        fail(); // @todo - implement
+        assertTrue((iv1!=null)&&(iv2!=null)&&(iv3!=null));
     } // testIntValue()
 
     @Test
     public void testGetInternalValue() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetInternalValue()
 
     @Test
     public void testIsType() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testIsType()
 
     @Test
     public void testGetValue() {
-        fail(); // @todo - implement
+        //TODO: write tests
     } // testGetValue()
 }
