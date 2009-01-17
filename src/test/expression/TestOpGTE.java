@@ -48,7 +48,7 @@ public class TestOpGTE {
     } // methodCleanup()
 
     @Test
-    public void testOpAdd() {
+    public void testOpGTE() {
         assertTrue((ogte1 != null) && (ogte2 != null) && (ogte3 != null));
     } // testOpAdd()
 
@@ -68,9 +68,4 @@ public class TestOpGTE {
     public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
         ((BoolValue) (ogte2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
-
-    @Test
-    public void testOpGTE() {
-        fail(); // @todo - implement
-    } // testOpGTE()
 }

@@ -48,7 +48,7 @@ public class TestOpLessThan {
     } // methodCleanup()
 
     @Test
-    public void testOpAdd() {
+    public void testOpLessThan() {
         assertTrue((olt1 != null) && (olt2 != null) && (olt3 != null));
     } // testOpAdd()
 
@@ -69,9 +69,5 @@ public class TestOpLessThan {
         ((BoolValue) (olt2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 
-    @Test
-    public void testOpLessThan() {
-        fail(); // @todo - implement
-    } // testOpLessThan()
 }
 

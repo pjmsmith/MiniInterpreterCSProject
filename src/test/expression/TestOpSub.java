@@ -47,7 +47,7 @@ public class TestOpSub {
     } // methodCleanup()
 
     @Test
-    public void testOpAdd() {
+    public void testOpSub() {
         assertTrue((os1 != null) && (os2 != null) && (os3 != null));
     } // testOpAdd()
 
@@ -67,9 +67,4 @@ public class TestOpSub {
     public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
         ((BoolValue) (os2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
-
-    @Test
-    public void testOpSub() {
-        fail(); // @todo - implement
-    } // testOpSub()
 }

@@ -65,7 +65,7 @@ public class TestIsType {
 
     @Test
     public void testIsType() {
-        assertTrue((it1!=null)&&(it2!=null)&&(it3!=null));
+        assertTrue((it1!=null)&&(it2!=null)&&(it3!=null)&&(it4!=null)&&(it5!=null)&&(it6!=null)&&(it7!=null)&&(it8!=null)&&(it9!=null));
     } // testIsType()
 
     @Test
