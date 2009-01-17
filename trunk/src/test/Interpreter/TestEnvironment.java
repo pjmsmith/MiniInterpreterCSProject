@@ -1,8 +1,12 @@
 package test.Interpreter;
 
 import Interpreter.Environment;
-        import org.junit.*;
+import Interpreter.UnboundIdentifierException;
+import org.junit.*;
         import static org.junit.Assert.*;
+import value.IntValue;
+import value.FloatValue;
+import value.IdValue;
 
 public class TestEnvironment {
     private Environment e1;
@@ -22,7 +26,9 @@ public class TestEnvironment {
 
     @Before
     public void methodSetup() {
-        //TODO: set up fixture
+        e1 = new Environment(null, null, null);
+        e2 = new Environment(null, "testVal", new IntValue(4));
+        e3 = new Environment(e2, "topVal", new FloatValue((float)4.3));
     } // methodSetup()
 
     @After
@@ -36,16 +42,18 @@ public class TestEnvironment {
 
     @Test
     public void testFindIDInList() {
-        //TODO: write test
+        Environment t = Environment.findIDInList("testVal", e3);
+        assertTrue(t!=null);
     } // testFindIDInList()
 
     @Test
     public void testFindID() {
-        //TODO: write test
+        assertTrue(e2.findID("testVal")==e2);
+        assertTrue(e1.findID("fail")==null);
     } // testFindID()
 
     @Test
-    public void testCheckForID() {
-        fail(); // @todo - implement
+    public void testCheckForID() throws UnboundIdentifierException {
+        assertTrue(Environment.checkForID(new IdValue("testVal"), e3)!=null);
     } // testCheckForID()
 }

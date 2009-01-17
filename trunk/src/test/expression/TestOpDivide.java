@@ -47,7 +47,7 @@ public class TestOpDivide {
     } // methodCleanup()
 
     @Test
-    public void testOpAdd() {
+    public void testOpDivide() {
         assertTrue((od1 != null) && (od2 != null) && (od3 != null));
     } // testOpAdd()
 
@@ -68,8 +68,4 @@ public class TestOpDivide {
         ((FloatValue) (od2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
 
-    @Test
-    public void testOpDivide() {
-        fail(); // @todo - implement
-    } // testOpDivide()
 }

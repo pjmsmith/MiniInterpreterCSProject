@@ -47,7 +47,7 @@ public class TestOpMult {
     } // methodCleanup()
 
     @Test
-    public void testOpAdd() {
+    public void testOpMult() {
         assertTrue((om1 != null) && (om2 != null) && (om3 != null));
     } // testOpAdd()
 
@@ -67,10 +67,5 @@ public class TestOpMult {
     public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
         ((FloatValue) (om2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
-
-    @Test
-    public void testOpMult() {
-        fail(); // @todo - implement
-    } // testOpMult()
 }
 
