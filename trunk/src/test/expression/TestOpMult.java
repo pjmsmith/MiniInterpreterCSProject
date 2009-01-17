@@ -32,7 +32,7 @@ public class TestOpMult {
     @Before
     public void methodSetup() {
         IntValue i1 = new IntValue(4);
-        FloatValue f1 = new FloatValue((float)6.3);
+        FloatValue f1 = new FloatValue((float) 6.3);
         BoolValue b1 = new BoolValue(true);
         IdValue idval = new IdValue("testVal");
 
@@ -48,24 +48,29 @@ public class TestOpMult {
 
     @Test
     public void testOpAdd() {
-        assertTrue((om1!=null)&&(om2!=null)&&(om3!=null));
+        assertTrue((om1 != null) && (om2 != null) && (om3 != null));
     } // testOpAdd()
 
-    @Test(expected= TypeException.class)
+    @Test(expected = TypeException.class)
     public void testGetValue() throws ReturnException, TypeException, UnboundIdentifierException {
         //correct integer add 4*4
-        int ires = ((IntValue)(om1.getValue(null)).value).getInternalValue();
+        int ires = ((IntValue) (om1.getValue(null)).value).getInternalValue();
         assertEquals(ires, 16);
         //correct float add 6.3*5
-        float fres = ((FloatValue)(om2.getValue(new Environment(null, "testVal", new IntValue(5)))).value).getInternalValue();
-        assertEquals(fres, 6.3*5, 0.001);
+        float fres = ((FloatValue) (om2.getValue(new Environment(null, "testVal", new IntValue(5)))).value).getInternalValue();
+        assertEquals(fres, 6.3 * 5, 0.001);
         //exception
-        ((FloatValue)(om3.getValue(null)).value).getInternalValue();
+        ((FloatValue) (om3.getValue(null)).value).getInternalValue();
     } // testGetValue()
 
-    @Test(expected= UnboundIdentifierException.class)
+    @Test(expected = UnboundIdentifierException.class)
     public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
-        ((FloatValue)(om2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
+        ((FloatValue) (om2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
+
+    @Test
+    public void testOpMult() {
+        fail(); // @todo - implement
+    } // testOpMult()
 }
 

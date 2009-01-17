@@ -9,15 +9,18 @@ import value.StringValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
+import test.Testable;
 
 public class ReadLine implements Expression {
-	
-	public ReadLine()
+
+    @Testable
+    public ReadLine()
 	{
 		
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException {
 	    

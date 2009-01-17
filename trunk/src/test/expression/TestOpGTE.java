@@ -33,7 +33,7 @@ public class TestOpGTE {
     public void methodSetup() {
         IntValue i1 = new IntValue(4);
         IntValue i2 = new IntValue(2);
-        FloatValue f1 = new FloatValue((float)6.3);
+        FloatValue f1 = new FloatValue((float) 6.3);
         BoolValue b1 = new BoolValue(true);
         IdValue idval = new IdValue("testVal");
 
@@ -49,23 +49,28 @@ public class TestOpGTE {
 
     @Test
     public void testOpAdd() {
-        assertTrue((ogte1!=null)&&(ogte2!=null)&&(ogte3!=null));
+        assertTrue((ogte1 != null) && (ogte2 != null) && (ogte3 != null));
     } // testOpAdd()
 
-    @Test(expected= TypeException.class)
+    @Test(expected = TypeException.class)
     public void testGetValue() throws ReturnException, TypeException, UnboundIdentifierException {
         //correct integer >=   4>=4
-        boolean res = ((BoolValue)(ogte1.getValue(null)).value).getInternalValue();
+        boolean res = ((BoolValue) (ogte1.getValue(null)).value).getInternalValue();
         assertTrue(res);
         //correct float 5 >= 6.3
-        res = ((BoolValue)(ogte2.getValue(new Environment(null, "testVal", new IntValue(5)))).value).getInternalValue();
+        res = ((BoolValue) (ogte2.getValue(new Environment(null, "testVal", new IntValue(5)))).value).getInternalValue();
         assertTrue(res);
         //exception
-        ((BoolValue)(ogte3.getValue(null)).value).getInternalValue();
+        ((BoolValue) (ogte3.getValue(null)).value).getInternalValue();
     } // testGetValue()
 
-    @Test(expected= UnboundIdentifierException.class)
+    @Test(expected = UnboundIdentifierException.class)
     public void testGetValue2() throws ReturnException, TypeException, UnboundIdentifierException {
-        ((BoolValue)(ogte2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
+        ((BoolValue) (ogte2.getValue(new Environment(null, "blah", new BoolValue(false)))).value).getInternalValue();
     } // testGetValue()
+
+    @Test
+    public void testOpGTE() {
+        fail(); // @todo - implement
+    } // testOpGTE()
 }

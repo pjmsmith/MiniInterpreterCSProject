@@ -7,21 +7,24 @@ import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
+import test.Testable;
 
 public class SubString implements Expression {
 	
 	private Expression string;
 	private Expression start;
 	private Expression end;
-	
-	public SubString(Expression string, Expression start, Expression end)
+
+    @Testable
+    public SubString(Expression string, Expression start, Expression end)
 	{
 		this.string = string;
 		this.start = start;
 		this.end = end;
 	}
 
-	@Override
+    @Testable
+    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		
