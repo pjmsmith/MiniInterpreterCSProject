@@ -47,8 +47,6 @@ public class ClosureValue extends Object {
     @Testable
     @Override
 	public Environment getValue(Environment environment) throws ReturnException {
-
-		
 		return new Environment(environment, null, this);
 	}
 
