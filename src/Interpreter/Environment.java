@@ -33,7 +33,7 @@ public class Environment {
     public Environment findID(String name)
 	{
 		// check this value and then call down the chain
-		if (id.compareTo(name) == 0)
+        if (id.compareTo(name) == 0)
 		{
 			return this;
 		}

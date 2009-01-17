@@ -4,8 +4,11 @@ import java.util.List;
 
 import value.Value;
 import value.VoidValue;
+import value.IntValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
+import Interpreter.UnboundIdentifierException;
+import Interpreter.TypeException;
 import test.Testable;
 
 public class Sequence implements Expression {
@@ -20,16 +23,27 @@ public class Sequence implements Expression {
 
     @Testable
     @Override
-	public Environment getValue(Environment environment) throws ReturnException  {
-		Environment tempEnv = environment;
-		for (int i=0; i < expressions.size(); i++)
-		{
-			tempEnv = expressions.get(i).getValue(tempEnv);
-			// pop top off
-			tempEnv = tempEnv.next;
-		}
+	public Environment getValue(Environment environment) throws ReturnException, UnboundIdentifierException, TypeException {
+		Environment tempEnv = new Environment(environment, null, new VoidValue());
+        if(expressions.isEmpty())
+        {
+            return tempEnv;
+        }
+        else
+        {
+            tempEnv = environment;
+            Environment ansEnv = null;
+            for (Expression expression : expressions) {
+                ansEnv = expression.getValue(tempEnv);
+                if(tempEnv.next != null)
+                {
+                    tempEnv.next = tempEnv;
+                }
+                tempEnv = ansEnv;
+            }
 
-		return new Environment(tempEnv, null, new VoidValue());
-	}
+            return tempEnv;
+        }
+    }
 
 }
