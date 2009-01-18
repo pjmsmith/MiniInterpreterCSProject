@@ -1,1 +1,5 @@
 Implementation Language: Java
+
+We decided to use java for our interpreter. We took an object oriented aproach to the design of the interpreter. We broke most of the expressions up into seperate classes that acted as branches of the trees. The environment was basically a linked list that was passed around.
+
+Values are represented by an interface called "Value" and several classes that implement that interface inside of the value package. Expressions are defined by the Expression interface that is inside the expression package and the environment is expressed by the class Environment inside the interpreter package. 
