@@ -3,6 +3,11 @@ package test.expression;
 import expression.OpEquals;
         import org.junit.*;
         import static org.junit.Assert.*;
+import value.IntValue;
+import value.BoolValue;
+import Interpreter.UnboundIdentifierException;
+import Interpreter.ReturnException;
+import Interpreter.TypeException;
 
 public class TestOpEquals {
     OpEquals oe1;
@@ -22,7 +27,8 @@ public class TestOpEquals {
 
     @Before
     public void methodSetup() {
-        //TODO: set up fixture
+        oe1 = new OpEquals(new IntValue(2), new IntValue(2));
+        oe2 = new OpEquals(new BoolValue(true), new BoolValue(false));
     } // methodSetup()
 
     @After
@@ -35,7 +41,11 @@ public class TestOpEquals {
     } // testOpEquals()
 
     @Test
-    public void testGetValue() {
-        //TODO: write tests
+    public void testGetValue() throws UnboundIdentifierException, ReturnException, TypeException {
+        boolean res = ((BoolValue)oe1.getValue(null).value).getInternalValue();
+        assertTrue(res);
+        res = ((BoolValue)oe1.getValue(null).value).getInternalValue();
+        assertTrue(!res);
+
     } // testGetValue()
 }
