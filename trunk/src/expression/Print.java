@@ -38,7 +38,7 @@ public class Print implements Expression {
 			}
 			else
 			{
-				// TODO: Exception, type not found
+				throw new TypeException();
 			}
 		}
 		
