@@ -10,4 +10,3 @@ CLASSES:
 
 all:
     javac $(CLASSES)
-    
