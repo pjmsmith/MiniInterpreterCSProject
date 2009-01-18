@@ -46,6 +46,7 @@ public class TestOpEquals {
         assertTrue(res);
         res = ((BoolValue)oe1.getValue(null).value).getInternalValue();
         assertTrue(!res);
+        //add a test to check object pointer equality
 
     } // testGetValue()
 }
