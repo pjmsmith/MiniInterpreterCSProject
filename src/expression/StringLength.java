@@ -1,6 +1,5 @@
 package expression;
 
-import value.IdValue;
 import value.IntValue;
 import value.StringValue;
 import value.Value;
@@ -20,6 +19,7 @@ public class StringLength implements Expression {
 		string = exp;
 	}
 
+    @SuppressWarnings({"UnusedAssignment"})
     @Testable
     @Override
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
@@ -39,9 +39,8 @@ public class StringLength implements Expression {
 		}
 		else
 		{
-			// TODO: Add exception
+			throw new TypeException();
 		}
-		return null;
 	}
 
 }

@@ -34,15 +34,15 @@ public class OpFunctionCall implements Expression {
 		// check for null
 		if (func == null)
 		{
-			// TODO: add exception
+			throw new TypeException();
 		}
 		// check to make sure its a function
 		if (!(func.value instanceof Function) || !(func.value instanceof ClosureValue))
 		{
-			// TODO: add an exception
+			throw new TypeException();
 		}
-		Function function = null;
-		Environment nEnv = null;
+		Function function;
+		Environment nEnv;
 		if (func.value instanceof ClosureValue)
 		{
 			function = ((ClosureValue)func.value).getIntFunc();
