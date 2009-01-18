@@ -3,6 +3,9 @@ package test.expression;
 import expression.OpNew;
         import org.junit.*;
         import static org.junit.Assert.*;
+import Interpreter.UnboundIdentifierException;
+import Interpreter.ReturnException;
+import Interpreter.TypeException;
 
 
 public class TestOpNew {
@@ -23,7 +26,7 @@ public class TestOpNew {
 
     @Before
     public void methodSetup() {
-        //TODO: set up fixture
+        //on1 = new OpNew()
     } // methodSetup()
 
     @After
@@ -36,7 +39,7 @@ public class TestOpNew {
     } // testOpNew()
 
     @Test
-    public void testGetValue() {
-        //TODO: write tests
+    public void testGetValue() throws UnboundIdentifierException, ReturnException, TypeException {
+        
     } // testGetValue()
 }
