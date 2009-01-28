@@ -85,7 +85,7 @@ TOKEN :
 void Input() :
 {}
 {
-  Expression() <EOF>
+  (Expression())* <EOF>
 }
 
 /** Base Expression. */
