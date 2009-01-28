@@ -2,6 +2,10 @@
 PARSER_BEGIN(Footle)
 package parser;
 
+import expression.*;
+import value.*;
+import Interpreter.*;
+
 import java.io.*;
 /** Simple brace matcher. */
 public class Footle {
@@ -85,7 +89,7 @@ void Input() :
 }
 
 /** Base Expression. */
-void Expression() :
+Expression Expression() :
 {}
 {
     <VAR> <ID> <EQ> Expression() <SEMI>
@@ -130,46 +134,34 @@ void Expression() :
 |   <STRINGLESS> <LPAREN> Expression() <COMMA> Expression() <RPAREN>
 
 |   LOOKAHEAD(3)
-    NumExpression() (<PLUS> Expression())
+    Expression() (<PLUS> Expression())
 |   LOOKAHEAD(3)
-    NumExpression() (<MINUS> Expression())
+    Expression() (<MINUS> Expression())
 |   LOOKAHEAD(3)
-    NumExpression() (<DIVIDE> Expression())
+    Expression() (<DIVIDE> Expression())
 |   LOOKAHEAD(3)
-    NumExpression() (<MULT> Expression())
-|   NumExpression()
+    Expression() (<MULT> Expression())
 
 |   LOOKAHEAD(3)
-    BoolExpression() (<LTHEN> Expression())
+    Expression() (<LTHEN> Expression())
 |   LOOKAHEAD(3)
-    BoolExpression() (<GTHEN> Expression())
+    Expression() (<GTHEN> Expression())
 |   LOOKAHEAD(3)
-    BoolExpression() (<LTE> Expression())
+    Expression() (<LTE> Expression())
 |   LOOKAHEAD(3)
     BoolExpression() (<GTE> Expression())
 |   LOOKAHEAD(3)
-    BoolExpression() (<EQUAL> Expression())
+    Expression() (<EQUAL> Expression())
 |   LOOKAHEAD(3)
-    BoolExpression() (<AND> Expression())
+    Expression() (<AND> Expression())
 |   LOOKAHEAD(3)
-    BoolExpression() (<OR> Expression())
-|   BoolExpression()
-|   <NOT> BoolExpression()
+    Expression() (<OR> Expression())
+|   <NOT> Expression()
 |   <SEMI>
 |   <STRING>
-}
-
-void NumExpression() :
-{}
-{
-    <NUM>
+|   <NUM>
 |   <FLOAT>
-}
-
-void BoolExpression() :
-{}
-{
-    <TRUE>
+|   <TRUE>
 |   <FALSE>
 }
 
