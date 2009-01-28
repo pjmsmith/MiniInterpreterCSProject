@@ -1,0 +1,189 @@
+
+PARSER_BEGIN(Footle)
+package parser;
+
+/** Simple brace matcher. */
+public class Footle {
+
+  /** Main entry point. */
+  public static void main(String args[]) throws ParseException {
+    Footle parser = new Footle(System.in);
+    parser.Input();
+  }
+
+}
+
+PARSER_END(Footle)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+TOKEN :
+{
+  <LBRACE: "{">
+| <RBRACE: "}">
+| <LPAREN: "(">
+| <RPAREN: ")">
+| <SEMI: ";">
+| <COMMA: ",">
+| <PLUS: "+">
+| <MINUS: "-">
+| <DIVIDE: "\\">
+| <MULT: "*">
+| <LTHEN: "<">
+| <GTHEN: ">">
+| <LTE: "<=">
+| <GTE: ">=">
+| <VAR: "var">
+| <IF: "if">
+| <ELSE: "else">
+| <THEN: "then">
+| <WHILE: "while">
+| <TRUE: "true">
+| <FALSE: "false">
+| <RETURN: "return">
+| <NEW: "new">
+| <AND: "and">
+| <OR: "or">
+| <NOT: "not">
+| <STRLEN: "string-length">
+| <SUBSTRING: "substring">
+| <PRINT: "print">
+| <READLINE: "read-line">
+| <INSTANCEOF: "instanceof">
+| <STRINGEQUAL: "string=?">
+| <STRINGLESS: "string<?">
+| <ISINT: "integer?">
+| <ISFP: "floating-point?">
+| <ISVOID: "void?">
+| <ISSTR: "string?">
+| <ISCLOSURE: "closure?">
+| <ISPLAIN: "plain?">
+| <FUNC: "function">
+| <ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* >
+| <NUM: ( ["0"-"9"] )+ >
+| <FLOAT: ( ["0"-"9"] )+ "." (["0"-"9"])*
+           | "." (["0"-"9"])+ >
+| <STRING: "\"" ( ["a"-"z","A"-"Z","0"-"9"] )* "\"" >
+| <DOT: ".">
+| <EQ: "=">
+| <EQUAL: "==">
+}
+
+/** Root production. */
+void Input() :
+{}
+{
+  Expression() <EOF>
+}
+
+/** Base Expression. */
+void Expression() :
+{}
+{
+    <VAR> <ID> <EQ> Expression()
+|   LOOKAHEAD(3) <ID> <EQ> Expression()
+
+|   <IF> <LPAREN> Expression() <RPAREN> 
+    <LBRACE> (Expression() <SEMI>)+ <RBRACE> 
+    [<THEN> <LBRACE> (Expression() <SEMI>)+ <RBRACE>]
+
+|   <WHILE> <LPAREN> Expression() <RPAREN>
+    <THEN> <LBRACE> (Expression() <SEMI>)+ <RBRACE>
+
+|   LOOKAHEAD(3) <ID> <LPAREN> [Expression()](<COMMA> Expression())* <RPAREN> <SEMI>
+
+|   <LBRACE> (Expression() <SEMI>)+ <RBRACE>
+
+|   <FUNC> <ID> <LPAREN> [<ID>](<COMMA> <ID>)* <RPAREN>
+    <LBRACE> (Expression() <SEMI>)+ <RBRACE>
+
+|   <RETURN> Expression() <SEMI>
+
+|   IsType() <LPAREN> Expression() <RPAREN>
+
+|   <NEW> Expression()
+
+|   LOOKAHEAD(3) <ID> (<DOT> <ID>)*
+
+|   <PRINT> <LPAREN> Expression() <RPAREN>
+
+|   <READLINE> <LPAREN> <RPAREN>
+
+|   LOOKAHEAD(3) <ID> <INSTANCEOF> Expression()
+
+|   <STRLEN> <LPAREN> Expression() <RPAREN>
+
+|   <SUBSTRING> <LPAREN> Expression() <RPAREN>
+
+|   <STRINGEQUAL> <LPAREN> Expression() <COMMA> Expression() <RPAREN>
+
+|   <STRINGLESS> <LPAREN> Expression() <COMMA> Expression() <RPAREN>
+
+|   LOOKAHEAD(3)
+    NumExpression() (<PLUS> Expression())
+|   LOOKAHEAD(3)
+    NumExpression() (<MINUS> Expression())
+|   LOOKAHEAD(3)
+    NumExpression() (<DIVIDE> Expression())
+|   LOOKAHEAD(3)
+    NumExpression() (<MULT> Expression())
+|   NumExpression()
+
+|   LOOKAHEAD(3)
+    BoolExpression() (<LTHEN> Expression())
+|   LOOKAHEAD(3)
+    BoolExpression() (<GTHEN> Expression())
+|   LOOKAHEAD(3)
+    BoolExpression() (<LTE> Expression())
+|   LOOKAHEAD(3)
+    BoolExpression() (<GTE> Expression())
+|   LOOKAHEAD(3)
+    BoolExpression() (<EQUAL> Expression())
+|   LOOKAHEAD(3)
+    BoolExpression() (<AND> Expression())
+|   LOOKAHEAD(3)
+    BoolExpression() (<OR> Expression())
+|   BoolExpression()
+|   <NOT> BoolExpression()
+|   <SEMI>
+|   <STRING>
+}
+
+void NumExpression() :
+{}
+{
+    <NUM>
+|   <FLOAT>
+}
+
+void BoolExpression() :
+{}
+{
+    <TRUE>
+|   <FALSE>
+}
+
+void IsType() :
+{}
+{
+  <ISINT>
+| <ISFP>
+| <ISVOID>
+| <ISSTR>
+| <ISCLOSURE>
+| <ISPLAIN>
+}
+
+/** Brace counting production. */
+int MatchedBraces() :
+{ int nested_count=0; }
+{
+  <LBRACE> [ nested_count=MatchedBraces() ] <RBRACE>
+  { return ++nested_count; }
+}
