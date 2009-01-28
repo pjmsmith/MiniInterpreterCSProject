@@ -2,12 +2,14 @@
 PARSER_BEGIN(Footle)
 package parser;
 
+import java.io.*;
 /** Simple brace matcher. */
 public class Footle {
 
   /** Main entry point. */
   public static void main(String args[]) throws ParseException {
-    Footle parser = new Footle(System.in);
+    Reader sr = new StringReader(args[0]);
+    Footle parser = new Footle(sr);
     parser.Input();
   }
 
@@ -86,7 +88,7 @@ void Input() :
 void Expression() :
 {}
 {
-    <VAR> <ID> <EQ> Expression()
+    <VAR> <ID> <EQ> Expression() <SEMI>
 |   LOOKAHEAD(3) <ID> <EQ> Expression()
 
 |   <IF> <LPAREN> Expression() <RPAREN> 
@@ -94,11 +96,13 @@ void Expression() :
     [<THEN> <LBRACE> (Expression() <SEMI>)+ <RBRACE>]
 
 |   <WHILE> <LPAREN> Expression() <RPAREN>
-    <THEN> <LBRACE> (Expression() <SEMI>)+ <RBRACE>
+    <LBRACE> (Expression() <SEMI>)+ <RBRACE>
 
 |   LOOKAHEAD(3) <ID> <LPAREN> [Expression()](<COMMA> Expression())* <RPAREN> <SEMI>
 
 |   <LBRACE> (Expression() <SEMI>)+ <RBRACE>
+
+|   <LPAREN> (Expression())+ <RPAREN>
 
 |   <FUNC> <ID> <LPAREN> [<ID>](<COMMA> <ID>)* <RPAREN>
     <LBRACE> (Expression() <SEMI>)+ <RBRACE>
@@ -178,12 +182,4 @@ void IsType() :
 | <ISSTR>
 | <ISCLOSURE>
 | <ISPLAIN>
-}
-
-/** Brace counting production. */
-int MatchedBraces() :
-{ int nested_count=0; }
-{
-  <LBRACE> [ nested_count=MatchedBraces() ] <RBRACE>
-  { return ++nested_count; }
 }
