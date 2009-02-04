@@ -69,4 +69,15 @@ public class Environment {
 		// return the default value
 		return val;
     }
+
+    public String toString()
+    {
+        String s = "(Environment id: " + id + " val: " + value + " rest: ";
+        if(next!=null)
+        {
+            s += next.toString();
+        }
+        s += ")";
+        return s;
+    }
 }
