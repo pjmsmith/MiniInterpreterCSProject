@@ -42,4 +42,9 @@ public class StringValue extends Object {
 	public Environment getValue(Environment environment) {
 		return new Environment(environment, null, this);
 	}
+
+    public String toString()
+    {
+        return "(StringValue "+ value + ")";
+    }
 }

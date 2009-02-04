@@ -1,13 +1,13 @@
 package value;
 
-import java.util.List;
-
-import expression.Sequence;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
+import expression.Sequence;
 import test.Testable;
+
+import java.util.List;
 
 public class Function implements Value{
 	private List<String> params;
@@ -47,4 +47,15 @@ public class Function implements Value{
 		return new Environment(newEnv, null, new VoidValue());
 	}
 
+    public String toString()
+    {
+        String s = "(Function params: ";
+        for(String p: params)
+        {
+            s += p + " ";
+        }
+        s += sequence.toString();
+        s += ")";
+        return s;
+    }
 }

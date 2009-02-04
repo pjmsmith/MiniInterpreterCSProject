@@ -25,4 +25,8 @@ public class PlainObject extends Object {
 		return new Environment(environment, null, this);
 	}
 
+    public String toString()
+    {
+        return "(PlainObject " + super.toString() + ")";
+    }
 }

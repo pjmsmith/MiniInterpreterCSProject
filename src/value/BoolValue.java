@@ -1,7 +1,6 @@
 package value;
 
 import Interpreter.Environment;
-import expression.Expression;
 import test.Testable;
 
 public class BoolValue implements Value {
@@ -28,5 +27,10 @@ public class BoolValue implements Value {
 	public boolean isType(Value val) {
 		return val instanceof BoolValue;
 	}
+
+    public String toString()
+    {
+        return "(BoolValue " + value + ")";
+    }
 
 }

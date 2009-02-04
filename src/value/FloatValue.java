@@ -35,4 +35,8 @@ public class FloatValue implements Value {
 		return new Environment(environment, null, this);
 	}
 
+    public String toString()
+    {
+        return "(FloatValue " + value + ")";
+    }
 }

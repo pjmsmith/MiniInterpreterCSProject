@@ -34,5 +34,9 @@ public class IntValue implements Value {
 	public Environment getValue(Environment environment) {
 		return new Environment(environment, null, this);
 	}
-	
+
+    public String toString()
+    {
+        return "(IntValue " + value + ")";
+    }
 }

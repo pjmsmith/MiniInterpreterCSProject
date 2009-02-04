@@ -25,6 +25,14 @@ public class OpSub implements Expression {
 		this.two = two;
 	}
 
+    public Expression getOne() {
+        return one;
+    }
+
+    public Expression getTwo() {
+        return two;
+    }
+
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		Environment nEnv = one.getValue(environment);
@@ -114,4 +122,8 @@ public class OpSub implements Expression {
         }
 	}
 
+    public String toString()
+    {
+        return "(OpSub " + one.toString() + " " + two.toString() + ")";
+    }
 }

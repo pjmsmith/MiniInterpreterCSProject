@@ -1,16 +1,14 @@
 package expression;
 
-import java.util.List;
-
-import value.BoolValue;
-import value.IdValue;
-import value.Value;
-import value.VoidValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
 import test.Testable;
+import value.BoolValue;
+import value.IdValue;
+import value.Value;
+import value.VoidValue;
 
 public class OpWhile implements Expression {
 	
@@ -89,4 +87,8 @@ public class OpWhile implements Expression {
 		return new Environment(tempEnv, null, new VoidValue());
 	}
 
+    public String toString()
+    {
+        return "(While " + test.toString() + " body:" + sequence.toString() + ")";
+    }
 }

@@ -1,17 +1,13 @@
 package expression;
 
-import java.util.List;
-
-import value.ClosureValue;
-import value.Function;
-import value.IdValue;
-import value.PlainObject;
-import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
 import test.Testable;
+import value.*;
+
+import java.util.List;
 
 public class OpNew implements Expression {
 	
@@ -74,5 +70,16 @@ public class OpNew implements Expression {
 		
 		return new Environment(environment, null, obj);
 	}
+
+    public String toString()
+    {
+        String s = "(OpNew " + fnc.toString() + " args: ";
+        for(Expression a:args)
+        {
+            s += a.toString() + " ";
+        }
+        s += ")";
+        return s;
+    }
 
 }

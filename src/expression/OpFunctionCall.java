@@ -1,16 +1,16 @@
 package expression;
 
-import java.util.List;
-
-import value.ClosureValue;
-import value.Function;
-import value.IdValue;
-import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
 import test.Testable;
+import value.ClosureValue;
+import value.Function;
+import value.IdValue;
+import value.Value;
+
+import java.util.List;
 
 public class OpFunctionCall implements Expression {
 	
@@ -68,5 +68,16 @@ public class OpFunctionCall implements Expression {
 		/// pull off the return type
 		return new Environment(environment, null, nEnv.value);
 	}
+
+    public String toString()
+    {
+        String s = "(OpFunctionCall " + name.toString() + " args: ";
+        for(Expression a:args)
+        {
+            s += a.toString() + " ";
+        }
+        s += ")";
+        return s;
+    }
 
 }

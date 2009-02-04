@@ -35,4 +35,8 @@ public class IdValue implements Value {
 		return val instanceof IdValue;
 	}
 
+    public String toString()
+    {
+        return "(IdValue " + value + ")";
+    }
 }

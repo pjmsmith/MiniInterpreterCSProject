@@ -46,4 +46,8 @@ public class IsType implements Expression {
 		return new Environment(nEnv, null, new BoolValue(val.getClass() == type));
 	}
 
+    public String toString()
+    {
+        return "(IsType " + type.toString() + " " + value.toString() + ")";
+    }
 }

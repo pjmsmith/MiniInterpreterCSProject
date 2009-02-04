@@ -23,6 +23,15 @@ public class OpAdd implements Expression {
 		this.one = one;
 		this.two = two;
 	}
+
+    public Expression getOne() {
+        return one;
+    }
+
+    public Expression getTwo() {
+        return two;
+    }
+
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		Environment nEnv = one.getValue(environment);
@@ -108,5 +117,10 @@ public class OpAdd implements Expression {
             throw new TypeException();
         }
 	}
+
+    public String toString()
+    {
+        return "(OpAdd " + one.toString() + " " + two.toString() + ")";
+    }
 
 }

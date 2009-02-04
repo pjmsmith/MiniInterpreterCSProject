@@ -69,4 +69,8 @@ public class SubString implements Expression {
 		}
 	}
 
+    public String toString()
+    {
+        return "(SubString " + string.toString() + " " + start.toString() + " " + end.toString() + ")";
+    }
 }

@@ -1,15 +1,14 @@
 package expression;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import value.StringValue;
-
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import test.Testable;
+import value.StringValue;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class ReadLine implements Expression {
 
@@ -37,4 +36,8 @@ public class ReadLine implements Expression {
 		return new Environment(environment, null, new StringValue(readLine));
 	}
 
+    public String toString()
+    {
+        return "(ReadLine)";
+    }
 }
