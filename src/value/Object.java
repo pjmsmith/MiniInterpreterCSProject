@@ -41,6 +41,10 @@ public abstract class Object implements Value {
 
     public Environment getField(String name)
 	{
+    	// check to see if the field exists, if it doesn't add it
+    	if (!doesFieldExist(name))
+    		addField(name, new VoidValue());
+    	
         for (Environment field : fields) {
             if (field.id.compareTo(name) == 0) {
                 return field;

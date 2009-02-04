@@ -1,6 +1,7 @@
 package expression;
 
 import value.Value;
+import value.VoidValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
@@ -23,12 +24,13 @@ public class OpField implements Expression {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		
 		Environment newEnv = object.getValue(environment);
 		Value obj = newEnv.value;
+		
+		obj = Environment.checkForID(obj, newEnv.next);
 		
 		//check to make sure its an object
 		if (obj instanceof value.Object)
@@ -42,7 +44,7 @@ public class OpField implements Expression {
 				if (env != null)
 				{
 					// hope it works?
-					return env;
+					return new Environment(env, null, env.value);
 				}
 				else
 				{

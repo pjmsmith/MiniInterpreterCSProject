@@ -22,7 +22,6 @@ public class Sequence implements Expression {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) throws ReturnException, UnboundIdentifierException, TypeException {
 		Environment tempEnv = new Environment(environment, null, new VoidValue());
         if(expressions.isEmpty())
@@ -36,11 +35,11 @@ public class Sequence implements Expression {
             Environment t = null;
             for (Expression expression : expressions) {
                 ansEnv = expression.getValue(tempEnv);
-                tempEnv = ansEnv;
+                tempEnv = ansEnv.next;
                 //TODO: re-test sequences
             }
 
-            return tempEnv;
+            return new Environment(environment, null, new VoidValue());
         }
     }
 

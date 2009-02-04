@@ -5,6 +5,8 @@ package parser;
 import expression.*;
 import value.*;
 import Interpreter.*;
+import java.util.LinkedList;
+import java.util.List;
 
 import java.io.*;
 /** Simple brace matcher. */
@@ -12,9 +14,29 @@ public class Footle {
 
   /** Main entry point. */
   public static void main(String args[]) throws ParseException {
-    Reader sr = new StringReader(args[0]);
+    //Reader sr = new StringReader("testfile");
+    Reader sr = null;
+	try {
+		sr = new FileReader("testfile");
+	} catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     Footle parser = new Footle(sr);
-    parser.Input();
+    Expression tree = parser.Input();
+    try {
+		tree.getValue(null);
+	} catch (ReturnException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (TypeException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} catch (UnboundIdentifierException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    int temp = 0;
   }
 
 }
@@ -54,9 +76,9 @@ TOKEN :
 | <FALSE: "false">
 | <RETURN: "return">
 | <NEW: "new">
-| <AND: "and">
-| <OR: "or">
-| <NOT: "not">
+| <AND: "&&">
+| <OR: "||">
+| <NOT: "!">
 | <STRLEN: "string-length">
 | <SUBSTRING: "substring">
 | <PRINT: "print">
@@ -73,105 +95,149 @@ TOKEN :
 | <FUNC: "function">
 | <ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* >
 | <NUM: ( ["0"-"9"] )+ >
-| <FLOAT: ( ["0"-"9"] )+ "." (["0"-"9"])*
-           | "." (["0"-"9"])+ >
-| <STRING: "\"" ( ["a"-"z","A"-"Z","0"-"9"] )* "\"" >
+| < FLOAT:
+        (["0"-"9"])+ "." (["0"-"9"])*
+      | "." (["0"-"9"])+
+  >
+| < STRING:
+      "\""
+      (   (~["\"","\\","\n","\r"])
+        | ("\\"
+            ( ["n","t","b","r","f","\\","'","\""]
+            | ["0"-"7"] ( ["0"-"7"] )?
+            | ["0"-"3"] ["0"-"7"] ["0"-"7"]
+            )
+          )
+      )*
+      "\""
+  >
 | <DOT: ".">
 | <EQ: "=">
 | <EQUAL: "==">
 }
 
 /** Root production. */
-void Input() :
-{}
+Expression Input() :
+{List<Expression> finList = new LinkedList<Expression>(); Expression finalExp; }
 {
-  (Expression())* <EOF>
+  (finalExp = Statement() {finList.add(finalExp);})* <EOF>
+  {return new Sequence(finList); }
 }
 
-/** Base Expression. */
+Expression Statement() :
+{Expression retVal = null; Expression retVal1 = null; Expression retVal2 = null; 
+  Token idval = null; Token funName = null; Token exp; List<Expression> finList = new LinkedList<Expression>();
+  List<String> argList = new LinkedList<String>(); }
+{
+   <VAR> idval = <ID> <EQ> retVal = Expression() <SEMI>
+   { return new OpAssign(new OpVarDecl(idval.image), retVal); }
+|  LOOKAHEAD(3) retVal = Expr() <EQ> retVal1 = Expression() <SEMI>
+   { return new OpAssign(retVal, retVal1); }
+   
+|  <WHILE> <LPAREN> retVal = Expression() <RPAREN>
+   retVal1 = Statement()
+   { return new OpWhile(retVal, (Sequence)retVal1); }
+   
+|  <LBRACE> (retVal1 = Statement() {finList.add(retVal1);})* <RBRACE>
+   { return new Sequence(finList); }
+|  <IF> <LPAREN> retVal = Expression() <RPAREN>
+   retVal1 = Statement() [LOOKAHEAD(3) <ELSE> retVal2 = Statement()]
+   { return new OpIfElse(retVal, (Sequence)retVal1, (Sequence)retVal2); }
+   
+|  LOOKAHEAD(4) <FUNC> funName=<ID> <LPAREN>[idval=<ID>{argList.add(idval.image); } 
+     (<COMMA> idval=<ID> {argList.add(idval.image);})*]<RPAREN>
+   retVal1 = Statement()
+   { return new OpFuncDecl(new Function(argList, (Sequence)retVal1), funName.image); }
+
+|  <RETURN> retVal = Expression() <SEMI>
+   { return new Return(retVal); }
+   
+|  <PRINT> retVal = Expression() <SEMI>
+   { return new Print(retVal); }
+
+|  retVal = Expression() <SEMI>
+   { return retVal; }
+}
+
 Expression Expression() :
-{}
+{Expression retVal = null; Expression retVal2 = null; Token val; Token idval; 
+ List<Expression> finList = new LinkedList<Expression>();
+ List<String> argList = new LinkedList<String>(); }
 {
-    <VAR> <ID> <EQ> Expression() <SEMI>
-|   LOOKAHEAD(3) <ID> <EQ> Expression()
+   <FUNC> <LPAREN>[idval=<ID>{argList.add(idval.image); } 
+     (<COMMA> idval=<ID> {argList.add(idval.image);})*]<RPAREN>
+   retVal = Statement()
+   { return new ClosureValue(new Function(argList, (Sequence)retVal)); }
 
-|   <IF> <LPAREN> Expression() <RPAREN> 
-    <LBRACE> (Expression() <SEMI>)+ <RBRACE> 
-    [<THEN> <LBRACE> (Expression() <SEMI>)+ <RBRACE>]
-
-|   <WHILE> <LPAREN> Expression() <RPAREN>
-    <LBRACE> (Expression() <SEMI>)+ <RBRACE>
-
-|   LOOKAHEAD(3) <ID> <LPAREN> [Expression()](<COMMA> Expression())* <RPAREN> <SEMI>
-
-|   <LBRACE> (Expression() <SEMI>)+ <RBRACE>
-
-|   <LPAREN> (Expression())+ <RPAREN>
-
-|   <FUNC> <ID> <LPAREN> [<ID>](<COMMA> <ID>)* <RPAREN>
-    <LBRACE> (Expression() <SEMI>)+ <RBRACE>
-
-|   <RETURN> Expression() <SEMI>
-
-|   IsType() <LPAREN> Expression() <RPAREN>
-
-|   <NEW> Expression()
-
-|   LOOKAHEAD(3) <ID> (<DOT> <ID>)*
-
-|   <PRINT> <LPAREN> Expression() <RPAREN>
-
-|   <READLINE> <LPAREN> <RPAREN>
-
-|   LOOKAHEAD(3) <ID> <INSTANCEOF> Expression()
-
-|   <STRLEN> <LPAREN> Expression() <RPAREN>
-
-|   <SUBSTRING> <LPAREN> Expression() <RPAREN>
-
-|   <STRINGEQUAL> <LPAREN> Expression() <COMMA> Expression() <RPAREN>
-
-|   <STRINGLESS> <LPAREN> Expression() <COMMA> Expression() <RPAREN>
-
-|   LOOKAHEAD(3)
-    Expression() (<PLUS> Expression())
-|   LOOKAHEAD(3)
-    Expression() (<MINUS> Expression())
-|   LOOKAHEAD(3)
-    Expression() (<DIVIDE> Expression())
-|   LOOKAHEAD(3)
-    Expression() (<MULT> Expression())
-
-|   LOOKAHEAD(3)
-    Expression() (<LTHEN> Expression())
-|   LOOKAHEAD(3)
-    Expression() (<GTHEN> Expression())
-|   LOOKAHEAD(3)
-    Expression() (<LTE> Expression())
-|   LOOKAHEAD(3)
-    BoolExpression() (<GTE> Expression())
-|   LOOKAHEAD(3)
-    Expression() (<EQUAL> Expression())
-|   LOOKAHEAD(3)
-    Expression() (<AND> Expression())
-|   LOOKAHEAD(3)
-    Expression() (<OR> Expression())
-|   <NOT> Expression()
-|   <SEMI>
-|   <STRING>
-|   <NUM>
-|   <FLOAT>
-|   <TRUE>
-|   <FALSE>
+|  LOOKAHEAD(100) 
+   retVal=Expr() (LOOKAHEAD(100) <EQUAL> retVal2 = Expression())+
+   { return new OpEquals(retVal, retVal2); }
+   
+|  LOOKAHEAD(4) idval = <ID> <LPAREN> 
+     [retVal = Expression() {finList.add(retVal);}(
+       <COMMA> retVal = Expression(){finList.add(retVal);})*] <RPAREN>
+   {return new OpFunctionCall(new IdValue(idval.image), finList); }
+|  <NEW> idval = <ID> <LPAREN> [retVal = Expression() {finList.add(retVal);}(
+       <COMMA> retVal = Expression(){finList.add(retVal);})*] <RPAREN>
+   { return new OpNew(new IdValue(idval.image), finList); }    
+   
+|  LOOKAHEAD(100) 
+   retVal=Expr() (LOOKAHEAD(100) <PLUS> retVal2 = Expression())+
+   { return new OpAdd(retVal, retVal2); }
+|  LOOKAHEAD(100) 
+   retVal=Expr() (LOOKAHEAD(100) <MINUS> retVal2 = Expression())+
+   { return new OpSub(retVal, retVal2); }
+|  LOOKAHEAD(100) 
+   retVal=Expr() (LOOKAHEAD(100) <MULT> retVal2 = Expression())+
+   { return new OpMult(retVal, retVal2); }
+|  LOOKAHEAD(100) 
+   retVal=Expr() ( LOOKAHEAD(100) <DIVIDE> retVal2 = Expression())+
+   { return new OpDivide(retVal, retVal2); }
+|  LOOKAHEAD(100) 
+   retVal=Expr() ( LOOKAHEAD(100) <LTHEN> retVal2 = Expression())+
+   { return new OpLessThan(retVal, retVal2); }
+|  LOOKAHEAD(100) 
+   retVal=Expr() ( LOOKAHEAD(100) <GTHEN> retVal2 = Expression())+
+   { return new OpGreaterThan(retVal, retVal2); }
+|  LOOKAHEAD(100) 
+   retVal=Expr() ( LOOKAHEAD(100) <LTE> retVal2 = Expression())+
+   { return new OpLTE(retVal, retVal2); }
+|  LOOKAHEAD(100) 
+   retVal=Expr() ( LOOKAHEAD(100) <GTE> retVal2 = Expression())+
+   { return new OpGTE(retVal, retVal2); }
+|  LOOKAHEAD(100) 
+   retVal=Expr() ( LOOKAHEAD(100) <AND> retVal2 = Expression())+
+   { return new And(retVal, retVal2); }
+|  LOOKAHEAD(100) 
+   retVal=Expr() ( LOOKAHEAD(100) <OR> retVal2 = Expression())+
+   { return new Or(retVal, retVal2); }
+|  LOOKAHEAD(100)
+   <NOT> retVal = Expression()
+   { return new Not(retVal); }
+| LOOKAHEAD(100)
+   retVal=Expr()
+   { return retVal; }
 }
 
-void IsType() :
-{}
+Expression Expr() :
+{Expression retVal = null; Token val = null; Token idval = null;}
 {
-  <ISINT>
-| <ISFP>
-| <ISVOID>
-| <ISSTR>
-| <ISCLOSURE>
-| <ISPLAIN>
+   val=<NUM>
+   { return new IntValue(Integer.parseInt(val.image)); }
+|  val = <FLOAT>
+   { return new FloatValue(Float.parseFloat(val.image)); }
+|  <TRUE>
+   { return new BoolValue(true); }
+|  <FALSE>
+   { return new BoolValue(false); }
+|  val=<STRING>
+   { return new StringValue(val.image); }
+|  LOOKAHEAD(10) <LPAREN> retVal = Expression() <RPAREN>
+   { return retVal; }
+|  LOOKAHEAD(99) val=<ID> [LOOKAHEAD(4)<DOT> idval = <ID>]
+   { return idval == null ? new IdValue(val.image) 
+     : new OpField(new IdValue(val.image), idval.image, null); }
 }
+
+
+

@@ -19,7 +19,6 @@ public class OpFuncDecl implements Expression {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) throws ReturnException {
 		// add the function to the environment
 		Environment nEnv = new Environment(environment, name, func);

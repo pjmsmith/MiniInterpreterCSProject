@@ -21,7 +21,6 @@ public class OpAssign implements Expression{
 		this.right = right;
 	}
     @Testable
-	@Override
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		// the returned value for the left should be an ID
 		Environment newEnv = left.getValue(environment);
@@ -31,10 +30,19 @@ public class OpAssign implements Expression{
 		newEnv = newEnv.next;
 		
 		// if type isn't ID then error
+		
 		if (!(leftVal instanceof IdValue))
 		{
-			throw new TypeException();
+			//throw new TypeException();
+			// assign directly to the value
+			// mutate the value and return
+			Environment nEnv = right.getValue(newEnv.next);
+			newEnv.value = nEnv.value;
+			// return a reference to what we assigned...
+			return new Environment(environment, "", newEnv.value);
 		}
+		
+		
 		
 		String name = ((IdValue)leftVal).getInternalValue();
 		Environment environ = Environment.findIDInList(name, newEnv);

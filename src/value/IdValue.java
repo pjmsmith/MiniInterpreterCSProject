@@ -26,13 +26,11 @@ public class IdValue implements Value {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) {
 		return new Environment(environment, value, this);
 	}
 
     @Testable
-    @Override
 	public boolean isType(Value val) {
 		return val instanceof IdValue;
 	}
