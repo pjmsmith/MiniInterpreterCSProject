@@ -63,4 +63,8 @@ public class OpStringLess implements Expression {
 		return new Environment(nEnv, null, new BoolValue(true));
 	}
 
+    public String toString()
+    {
+        return "(OpStringLess " + left.toString() + " " + right.toString() + ")";
+    }
 }

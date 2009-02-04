@@ -22,6 +22,14 @@ public class OpEquals implements Expression {
 		right = two;
 	}
 
+    public Expression getLeft() {
+        return left;
+    }
+
+    public Expression getRight() {
+        return right;
+    }
+
     @Testable
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
@@ -62,5 +70,10 @@ public class OpEquals implements Expression {
 		}
 		
 	}
+
+    public String toString()
+    {
+        return "(OpEquals" + left.toString() + " " + right.toString() + ")";
+    }
 
 }

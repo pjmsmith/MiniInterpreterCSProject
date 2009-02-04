@@ -35,4 +35,8 @@ public class OpInstanceOf implements Expression {
 		return new Environment(environment, null, new BoolValue(false));
 	}
 
+    public String toString()
+    {
+        return "(OpInstanceOf " + obj.toString() + " " + val.toString() + ")";
+    }
 }

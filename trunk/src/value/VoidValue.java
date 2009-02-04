@@ -21,4 +21,9 @@ public class VoidValue implements Value {
 		return new Environment(environment, null, this);
 	}
 
+    public String toString()
+    {
+        return "(VoidValue)";
+    }
+
 }

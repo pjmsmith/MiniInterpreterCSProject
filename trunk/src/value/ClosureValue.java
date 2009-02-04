@@ -1,9 +1,5 @@
 package value;
 
-import java.util.List;
-
-import expression.Sequence;
-
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import test.Testable;
@@ -48,4 +44,8 @@ public class ClosureValue extends Object {
 		return new Environment(environment, null, this);
 	}
 
+    public String toString()
+    {
+        return "(Closure " + environ.toString() + " " + func.toString()  + ")";
+    }
 }

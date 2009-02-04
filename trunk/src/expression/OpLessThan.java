@@ -23,6 +23,14 @@ public class OpLessThan implements Expression {
 		this.two = two;
 	}
 
+    public Expression getOne() {
+        return one;
+    }
+
+    public Expression getTwo() {
+        return two;
+    }
+
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		Environment nEnv = one.getValue(environment);
@@ -112,4 +120,8 @@ public class OpLessThan implements Expression {
         }
 	}
 
+    public String toString()
+    {
+        return "(OpLessThan " + one.toString() + " " + two.toString() + ")";
+    }
 }

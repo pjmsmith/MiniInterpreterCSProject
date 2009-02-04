@@ -1,12 +1,9 @@
 package value;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import Interpreter.Environment;
 
-import expression.Expression;
-import test.Testable;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class Object implements Value {
 	
@@ -53,4 +50,15 @@ public abstract class Object implements Value {
 		
 		return null;
 	}
+
+    public String toString()
+    {
+        String s =  "(Object fields: ";
+        for(Environment e: fields)
+        {
+            s += e.toString() + " ";
+        }
+        s += ")";
+        return s;
+    }
 }

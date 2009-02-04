@@ -1,15 +1,13 @@
 package expression;
 
-import value.BoolValue;
-import value.FloatValue;
-import value.IdValue;
-import value.IntValue;
-import value.Value;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
 import test.Testable;
+import value.BoolValue;
+import value.IdValue;
+import value.Value;
 
 public class And implements Expression {
 	
@@ -22,6 +20,15 @@ public class And implements Expression {
 		this.one = one;
 		this.two = two;
 	}
+
+    public Expression getOne() {
+        return one;
+    }
+
+    public Expression getTwo() {
+        return two;
+    }
+
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		Environment nEnv = one.getValue(environment);
@@ -75,4 +82,8 @@ public class And implements Expression {
 		return new Environment(environment, null, new BoolValue(ls && rs));
 	}
 
+    public String toString()
+    {
+        return "(And " + one.toString() + " " + two.toString() + ")";
+    }
 }

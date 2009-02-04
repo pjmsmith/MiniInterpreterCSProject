@@ -64,4 +64,8 @@ public class Print implements Expression {
 		return new Environment(environment, null, new VoidValue());
 	}
 
+    public String toString()
+    {
+        return "(Print " + value.toString() + ")";
+    }
 }

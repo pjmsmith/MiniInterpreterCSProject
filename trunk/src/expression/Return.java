@@ -23,4 +23,9 @@ public class Return implements Expression {
 		throw new ReturnException(exp.getValue(environment).value);
 	}
 
+    public String toString()
+    {
+        return "(Return " + exp.toString() + ")";
+    }
+
 }

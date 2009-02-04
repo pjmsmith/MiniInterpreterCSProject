@@ -25,6 +25,14 @@ public class OpGTE implements Expression {
 		this.two = two;
 	}
 
+    public Expression getOne() {
+        return one;
+    }
+
+    public Expression getTwo() {
+        return two;
+    }
+
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		Environment nEnv = one.getValue(environment);
@@ -113,5 +121,10 @@ public class OpGTE implements Expression {
             throw new TypeException();
         }
 	}
+
+    public String toString()
+    {
+        return "(OpGTE " + one.toString() + " " + two.toString() + ")";
+    }
 
 }

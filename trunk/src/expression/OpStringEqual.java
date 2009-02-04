@@ -48,4 +48,9 @@ public class OpStringEqual implements Expression {
 		return new Environment(nEnv, null, new BoolValue(one.equals(two)));
 	}
 
+    public String toString()
+    {
+        return "(OpStringEqual " + left.toString() + " " + right.toString() + ")";
+    }
+
 }

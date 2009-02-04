@@ -24,6 +24,18 @@ public class OpIfElse implements Expression {
 		this.second = sec;
 	}
 
+    public Expression getTest() {
+        return test;
+    }
+
+    public Sequence getFirst() {
+        return first;
+    }
+
+    public Sequence getSecond() {
+        return second;
+    }
+
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, 
 		TypeException, UnboundIdentifierException {
@@ -68,4 +80,8 @@ public class OpIfElse implements Expression {
 		return new Environment(tempEnv, null, new VoidValue());
 	}
 
+    public String toString()
+    {
+        return "(OpIfElse " + test.toString() + " " + first.toString() + " " + second.toString() + ")";
+    }
 }

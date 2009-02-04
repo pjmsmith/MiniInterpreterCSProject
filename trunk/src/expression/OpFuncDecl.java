@@ -27,4 +27,9 @@ public class OpFuncDecl implements Expression {
 		return new Environment(nEnv, null, new VoidValue());
 	}
 
+    public String toString()
+    {
+        return "(OpFuncDecl " + func.toString() + " " + name.toString() + ")";
+    }
+
 }

@@ -1,13 +1,11 @@
 package expression;
 
-import value.Value;
-import value.VoidValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
-import value.Object;
 import test.Testable;
+import value.Value;
 
 public class OpField implements Expression {
 	
@@ -72,5 +70,10 @@ public class OpField implements Expression {
 			throw new TypeException();
 		}
 	}
+
+    public String toString()
+    {
+        return "(OpField " + object.toString() + " " + name.toString() + " " + assign.toString() + ")";
+    }
 
 }

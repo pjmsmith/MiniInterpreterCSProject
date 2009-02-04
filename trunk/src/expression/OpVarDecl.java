@@ -26,4 +26,9 @@ public class OpVarDecl implements Expression {
 		// now push the id ref on front and return
 		return new Environment(newEnv, null, temp);
 	}
+
+    public String toString()
+    {
+        return "(OpVarDecl " + name.toString() + ")";
+    }
 }

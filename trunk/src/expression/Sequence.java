@@ -1,15 +1,13 @@
 package expression;
 
-import java.util.List;
-
-import value.Value;
-import value.VoidValue;
-import value.IntValue;
 import Interpreter.Environment;
 import Interpreter.ReturnException;
-import Interpreter.UnboundIdentifierException;
 import Interpreter.TypeException;
+import Interpreter.UnboundIdentifierException;
 import test.Testable;
+import value.VoidValue;
+
+import java.util.List;
 
 public class Sequence implements Expression {
 	
@@ -20,6 +18,10 @@ public class Sequence implements Expression {
 	{
 		expressions = expr;
 	}
+
+    public List<Expression> getExpressions() {
+        return expressions;
+    }
 
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, UnboundIdentifierException, TypeException {
@@ -43,4 +45,14 @@ public class Sequence implements Expression {
         }
     }
 
+    public String toString()
+    {
+        String s = "(Sequence (";
+        for(Expression e:expressions)
+        {
+            s+=  e.toString() + "; ";
+        }
+        s += "))";
+        return s;
+    }
 }
