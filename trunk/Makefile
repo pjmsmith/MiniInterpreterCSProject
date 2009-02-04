@@ -1,12 +1,13 @@
 CLASSES:
-    ./expression/*.java
-    ./Interpreter/*.java
-    ./mainpack/*.java
-    ./value/*.java
-    ./test/*.java
-    ./test/expression/*.java
-    ./test/Interpreter/*.java
-    ./test/value/*.java
+	./src/expression/*.java
+	./src/Interpreter/*.java
+	./src/mainpack/*.java
+	./src/value/*.java
+	./src/test/*.java
+	./src/test/expression/*.java
+	./src/test/Interpreter/*.java
+	./src/test/value/*.java
 
 all:
-    javac $(CLASSES)
+	javac $(CLASSES)
+

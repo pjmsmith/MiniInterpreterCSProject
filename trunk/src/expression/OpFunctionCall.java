@@ -25,7 +25,6 @@ public class OpFunctionCall implements Expression {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) throws ReturnException, 
 		TypeException, UnboundIdentifierException {
 		// Get Function
@@ -37,7 +36,7 @@ public class OpFunctionCall implements Expression {
 			throw new TypeException();
 		}
 		// check to make sure its a function
-		if (!(func.value instanceof Function) || !(func.value instanceof ClosureValue))
+		if (!(func.value instanceof Function) && !(func.value instanceof ClosureValue))
 		{
 			throw new TypeException();
 		}

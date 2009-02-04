@@ -27,13 +27,11 @@ public class Function implements Value{
 	}
 	
     @Testable
-	@Override
 	public boolean isType(Value val) {
 		return val instanceof Function;
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException  {
 		Environment newEnv = null;
 		// run the function

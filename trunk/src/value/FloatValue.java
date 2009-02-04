@@ -26,13 +26,11 @@ public class FloatValue implements Value {
 	}
 
     @Testable
-    @Override
 	public boolean isType(Value val) {
 		return val instanceof FloatValue;
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) {
 		return new Environment(environment, null, this);
 	}

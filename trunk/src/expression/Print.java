@@ -18,7 +18,6 @@ public class Print implements Expression {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) throws ReturnException, 
 		TypeException, UnboundIdentifierException {
 		// print the value and return a new void pushed on top
@@ -62,7 +61,7 @@ public class Print implements Expression {
 		
 		
 		// return
-		return new Environment(nEnv, null, new VoidValue());
+		return new Environment(environment, null, new VoidValue());
 	}
 
 }

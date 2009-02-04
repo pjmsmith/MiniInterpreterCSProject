@@ -39,13 +39,11 @@ public class ClosureValue extends Object {
 	}
 
     @Testable
-    @Override
 	public boolean isType(Value val) {
 		return val instanceof ClosureValue;
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) throws ReturnException {
 		return new Environment(environment, null, this);
 	}

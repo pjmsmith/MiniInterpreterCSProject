@@ -15,13 +15,11 @@ public class PlainObject extends Object {
 	}
 
     @Testable
-    @Override
 	public boolean isType(Value val) {
 		return val instanceof PlainObject;
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		return new Environment(environment, null, this);

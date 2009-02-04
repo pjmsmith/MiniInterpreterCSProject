@@ -17,7 +17,6 @@ public class Return implements Expression {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		
 		// throw a new expression with the value returned

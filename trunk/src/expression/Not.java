@@ -21,7 +21,6 @@ public class Not implements Expression {
 		this.one = one;
 	}
     @Testable
-	@Override
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		Environment nEnv = one.getValue(environment);
 		Value leftSide = nEnv.value;

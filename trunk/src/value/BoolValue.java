@@ -20,13 +20,11 @@ public class BoolValue implements Value {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) {
 		return new Environment(environment, null, this);
 	}
 
     @Testable
-    @Override
 	public boolean isType(Value val) {
 		return val instanceof BoolValue;
 	}

@@ -1,6 +1,7 @@
 package expression;
 
 import value.BoolValue;
+import value.IntValue;
 import value.StringValue;
 import value.Value;
 import Interpreter.Environment;
@@ -22,7 +23,6 @@ public class OpEquals implements Expression {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		
@@ -44,7 +44,23 @@ public class OpEquals implements Expression {
 		}
 		
 		// check to make sure the values are the same type
-		return new Environment(nEnv, null, new BoolValue(leftVal.isType(rightVal)));
+		if (leftVal.isType(rightVal))
+		{
+			boolean val = false;
+			// check for int
+			if (leftVal instanceof IntValue)
+			{
+				int one = ((IntValue)leftVal).getInternalValue();
+				int two = ((IntValue)rightVal).getInternalValue();
+				val = (one == two);
+			}
+			return new Environment(nEnv, null, new BoolValue(val));
+		}
+		else
+		{
+			return new Environment(nEnv, null, new BoolValue(false));
+		}
+		
 	}
 
 }

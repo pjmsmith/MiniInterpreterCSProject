@@ -16,7 +16,6 @@ public class OpVarDecl implements Expression {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment) {
 		// Add the new environment, and then a reference to the value
 		Environment newEnv = new Environment(environment, name, new VoidValue());
