@@ -63,27 +63,27 @@ public interface FootleConstants {
   /** RegularExpression Id. */
   int NOT = 30;
   /** RegularExpression Id. */
-  int STRLEN = 31;
+  int ISSTR = 31;
   /** RegularExpression Id. */
-  int SUBSTRING = 32;
+  int STRLEN = 32;
   /** RegularExpression Id. */
-  int PRINT = 33;
+  int SUBSTRING = 33;
   /** RegularExpression Id. */
-  int READLINE = 34;
+  int PRINT = 34;
   /** RegularExpression Id. */
-  int INSTANCEOF = 35;
+  int READLINE = 35;
   /** RegularExpression Id. */
-  int STRINGEQUAL = 36;
+  int INSTANCEOF = 36;
   /** RegularExpression Id. */
-  int STRINGLESS = 37;
+  int STRINGEQUAL = 37;
   /** RegularExpression Id. */
-  int ISINT = 38;
+  int STRINGLESS = 38;
   /** RegularExpression Id. */
-  int ISFP = 39;
+  int ISINT = 39;
   /** RegularExpression Id. */
-  int ISVOID = 40;
+  int ISFP = 40;
   /** RegularExpression Id. */
-  int ISSTR = 41;
+  int ISVOID = 41;
   /** RegularExpression Id. */
   int ISCLOSURE = 42;
   /** RegularExpression Id. */
@@ -141,6 +141,7 @@ public interface FootleConstants {
     "\"&&\"",
     "\"||\"",
     "\"!\"",
+    "\"string?\"",
     "\"string-length\"",
     "\"substring\"",
     "\"print\"",
@@ -151,7 +152,6 @@ public interface FootleConstants {
     "\"integer?\"",
     "\"floating-point?\"",
     "\"void?\"",
-    "\"string?\"",
     "\"closure?\"",
     "\"plain?\"",
     "\"function\"",

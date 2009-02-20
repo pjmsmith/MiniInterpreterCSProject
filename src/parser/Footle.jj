@@ -5,6 +5,7 @@ package parser;
 import expression.*;
 import value.*;
 import Interpreter.*;
+import staticpass.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -79,6 +80,7 @@ TOKEN :
 | <AND: "&&">
 | <OR: "||">
 | <NOT: "!">
+| <ISSTR: "string?">
 | <STRLEN: "string-length">
 | <SUBSTRING: "substring">
 | <PRINT: "print">
@@ -89,7 +91,7 @@ TOKEN :
 | <ISINT: "integer?">
 | <ISFP: "floating-point?">
 | <ISVOID: "void?">
-| <ISSTR: "string?">
+
 | <ISCLOSURE: "closure?">
 | <ISPLAIN: "plain?">
 | <FUNC: "function">
@@ -138,6 +140,9 @@ Expression Statement() :
    retVal1 = Statement()
    { return new OpWhile(retVal, (Sequence)retVal1); }
    
+|  <ISINT> <LPAREN> retVal = Expression() <RPAREN>
+   { return new IsType(IntValue.class, retVal); }
+   
 |  <LBRACE> (retVal1 = Statement() {finList.add(retVal1);})* <RBRACE>
    { return new Sequence(finList); }
 |  <IF> <LPAREN> retVal = Expression() <RPAREN>
@@ -155,12 +160,14 @@ Expression Statement() :
 |  <PRINT> retVal = Expression() <SEMI>
    { return new Print(retVal); }
 
+
 |  retVal = Expression() <SEMI>
    { return retVal; }
 }
 
 Expression Expression() :
-{Expression retVal = null; Expression retVal2 = null; Token val; Token idval; 
+{Expression retVal = null; Expression retVal1 = null; Expression retVal2 = null; 
+ Token val; Token idval; 
  List<Expression> finList = new LinkedList<Expression>();
  List<String> argList = new LinkedList<String>(); }
 {
@@ -172,7 +179,34 @@ Expression Expression() :
 |  LOOKAHEAD(100) 
    retVal=Expr() (LOOKAHEAD(100) <EQUAL> retVal2 = Expression())+
    { return new OpEquals(retVal, retVal2); }
+
+|  <ISSTR> <LPAREN> retVal = Expression() <RPAREN>
+   { return new IsType(StringValue.class, retVal); }
+|  <ISFP> <LPAREN> retVal = Expression() <RPAREN>
+   { return new IsType(FloatValue.class, retVal); }
+|  <ISVOID> <LPAREN> retVal = Expression() <RPAREN>
+   { return new IsType(VoidValue.class, retVal); }
+|  <ISCLOSURE> <LPAREN> retVal = Expression() <RPAREN>
+   { return new IsType(ClosureValue.class, retVal); }
+|  <ISPLAIN> <LPAREN> retVal = Expression() <RPAREN>
+   { return new IsType(PlainObject.class, retVal); }
    
+|  <STRLEN> <LPAREN> retVal = Expression() <RPAREN>
+   { return new StringLength(retVal); }
+   
+|  <SUBSTRING> <LPAREN> retVal = Expression() 
+     <COMMA> retVal1 = Expression() 
+     <COMMA> retVal2 = Expression() <RPAREN>
+   { return new SubString(retVal, retVal1, retVal2); }
+   
+|  <STRINGEQUAL> <LPAREN> retVal = Expression() 
+     <COMMA> retVal1 = Expression() <RPAREN>
+   { return new OpStringEqual(retVal, retVal1); }
+
+|  <STRINGLESS> <LPAREN> retVal = Expression() 
+     <COMMA> retVal1 = Expression() <RPAREN>
+   { return new OpStringLess(retVal, retVal1); }
+      
 |  LOOKAHEAD(4) idval = <ID> <LPAREN> 
      [retVal = Expression() {finList.add(retVal);}(
        <COMMA> retVal = Expression(){finList.add(retVal);})*] <RPAREN>

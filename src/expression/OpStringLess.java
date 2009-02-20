@@ -22,7 +22,6 @@ public class OpStringLess implements Expression {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		Environment nEnv = left.getValue(environment);
