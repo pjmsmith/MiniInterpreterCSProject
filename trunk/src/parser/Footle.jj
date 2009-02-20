@@ -174,7 +174,7 @@ Expression Expression() :
    <FUNC> <LPAREN>[idval=<ID>{argList.add(idval.image); } 
      (<COMMA> idval=<ID> {argList.add(idval.image);})*]<RPAREN>
    retVal = Statement()
-   { return new ClosureValue(new Function(argList, (Sequence)retVal)); }
+   { return new ClosureValue(new Function(argList, new Scope(retVal))); }
 
 |  LOOKAHEAD(100) 
    retVal=Expr() (LOOKAHEAD(100) <EQUAL> retVal2 = Expression())+

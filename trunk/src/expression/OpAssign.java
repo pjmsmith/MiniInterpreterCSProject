@@ -20,6 +20,15 @@ public class OpAssign implements Expression{
 		this.left = left;
 		this.right = right;
 	}
+    
+    public Expression getLVal() {
+    	return left;
+    }
+    
+    public Expression getRVal() {
+    	return right;
+    }
+    
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		// the returned value for the left should be an ID

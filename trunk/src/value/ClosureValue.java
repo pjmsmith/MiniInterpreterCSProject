@@ -8,12 +8,14 @@ public class ClosureValue extends Object {
 	
 	private Environment environ;
 	private Function func;
+	private int funcId;
 
     @Testable
     public ClosureValue(Function func)
 	{
 		environ = null;
 		this.func = func;
+		funcId = 0;
 	}
 	
 	@Testable
@@ -33,6 +35,14 @@ public class ClosureValue extends Object {
 	{
 		return func;
 	}
+    
+    public int getFuncId() {
+    	return funcId;
+    }
+    
+    public void setFuncId(int val) {
+    	funcId = val;
+    }
 
     @Testable
 	public boolean isType(Value val) {

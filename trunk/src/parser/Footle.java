@@ -295,7 +295,7 @@ public class Footle implements FootleConstants {
       }
       jj_consume_token(RPAREN);
       retVal = Statement();
-     {if (true) return new ClosureValue(new Function(argList, (Sequence)retVal));}
+     {if (true) return new ClosureValue(new Function(argList, new Scope(retVal)));}
       break;
     default:
       jj_la1[13] = jj_gen;

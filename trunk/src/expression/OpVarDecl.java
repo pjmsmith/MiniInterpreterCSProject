@@ -8,12 +8,32 @@ import test.Testable;
 public class OpVarDecl implements Expression {
 	
 	private String name;
+	private int framecnt;
+	private int framenum;
 
     @Testable
     public OpVarDecl(String name)
 	{
 		this.name = name;
+		framecnt = 0;
+		framenum = 0;
 	}
+    
+    public void setFrameCnt(int cnt) {
+    	framecnt = cnt;
+    }
+    
+    public void setFrameNum(int num) {
+    	framenum = num;
+    }
+    
+    public int getFrameCnt() {
+    	return framecnt;
+    }
+    
+    public int getFrameNum() {
+    	return framenum;
+    }
 
     @Testable
 	public Environment getValue(Environment environment) {
