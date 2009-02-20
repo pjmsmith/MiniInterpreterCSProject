@@ -26,4 +26,9 @@ public class Scope implements Expression {
 		return expression.getValue(environment);
 	}
 
+    public String toString()
+    {
+        return "[SCOPE]";
+    }
+
 }
