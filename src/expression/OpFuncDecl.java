@@ -17,6 +17,10 @@ public class OpFuncDecl implements Expression {
 		this.func = func;
 		this.name = name;
 	}
+    
+    public String getFuncName() {
+    	return name;
+    }
 
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException {

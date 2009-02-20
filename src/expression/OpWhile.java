@@ -21,6 +21,14 @@ public class OpWhile implements Expression {
 		test = exp;
 		sequence = seq;
 	}
+    
+    public Expression getTest() {
+    	return test;
+    }
+    
+    public Expression getBody() {
+    	return sequence;
+    }
 
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, 

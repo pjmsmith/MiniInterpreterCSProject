@@ -15,7 +15,7 @@ public class Scope implements Expression {
 		expression = exp;
 	}
 	
-	public Expression getExp()
+	public Expression getExpression()
 	{
 		return expression;
 	}
