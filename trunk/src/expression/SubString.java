@@ -24,7 +24,6 @@ public class SubString implements Expression {
 	}
 
     @Testable
-    @Override
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
 		

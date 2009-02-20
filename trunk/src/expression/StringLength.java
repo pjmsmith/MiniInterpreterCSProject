@@ -21,7 +21,6 @@ public class StringLength implements Expression {
 
     @SuppressWarnings({"UnusedAssignment"})
     @Testable
-    @Override
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		
 		Environment nEnv = string.getValue(environment);
