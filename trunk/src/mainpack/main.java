@@ -8,6 +8,7 @@ import expression.Sequence;
 import llvm.CodeGenerator;
 import parser.Footle;
 import parser.ParseException;
+import staticpass.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +22,7 @@ public class main {
         BufferedReader p = new BufferedReader(new InputStreamReader(System.in));
         String parserInput;
         Expression prog = new Sequence(null);
+        Expression scopedProg;
         CodeGenerator cg;
         Footle parser = null;
         boolean flag = false;
@@ -45,6 +47,9 @@ public class main {
                 System.out.println("Parser generated AST: " + prog);
                 //TODO: AST.toString();
                 System.out.println("Static Checker...");
+                StaticPass sp = new StaticPass(prog);
+                scopedProg = sp.runStaticPass();
+                System.out.println("AST after static pass: " + prog);
                 //TODO: static checking
                 cg.setIr(cg.generateCode(prog));
                 System.out.println("LLVM IR Code generated: ");
