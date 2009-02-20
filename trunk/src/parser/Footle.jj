@@ -138,21 +138,21 @@ Expression Statement() :
    
 |  <WHILE> <LPAREN> retVal = Expression() <RPAREN>
    retVal1 = Statement()
-   { return new OpWhile(retVal, (Sequence)retVal1); }
+   { return new OpWhile(retVal, new Scope(retVal1)); }
    
 |  <ISINT> <LPAREN> retVal = Expression() <RPAREN>
    { return new IsType(IntValue.class, retVal); }
    
 |  <LBRACE> (retVal1 = Statement() {finList.add(retVal1);})* <RBRACE>
-   { return new Sequence(finList); }
+   { return new Scope(new Sequence(finList)); }
 |  <IF> <LPAREN> retVal = Expression() <RPAREN>
    retVal1 = Statement() [LOOKAHEAD(3) <ELSE> retVal2 = Statement()]
-   { return new OpIfElse(retVal, (Sequence)retVal1, (Sequence)retVal2); }
+   { return new OpIfElse(retVal, new Scope(retVal1), new Scope(retVal2)); }
    
 |  LOOKAHEAD(4) <FUNC> funName=<ID> <LPAREN>[idval=<ID>{argList.add(idval.image); } 
      (<COMMA> idval=<ID> {argList.add(idval.image);})*]<RPAREN>
    retVal1 = Statement()
-   { return new OpFuncDecl(new Function(argList, (Sequence)retVal1), funName.image); }
+   { return new OpFuncDecl(new Function(argList, new Scope(retVal1)), funName.image); }
 
 |  <RETURN> retVal = Expression() <SEMI>
    { return new Return(retVal); }

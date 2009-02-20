@@ -4,6 +4,7 @@ package parser;
 import expression.*;
 import value.*;
 import Interpreter.*;
+import staticpass.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -113,7 +114,7 @@ public class Footle implements FootleConstants {
           retVal = Expression();
           jj_consume_token(RPAREN);
           retVal1 = Statement();
-     {if (true) return new OpWhile(retVal, (Sequence)retVal1);}
+     {if (true) return new OpWhile(retVal, new Scope(retVal1));}
           break;
         case ISINT:
           jj_consume_token(ISINT);
@@ -163,7 +164,7 @@ public class Footle implements FootleConstants {
                                     finList.add(retVal1);
           }
           jj_consume_token(RBRACE);
-     {if (true) return new Sequence(finList);}
+     {if (true) return new Scope(new Sequence(finList));}
           break;
         case IF:
           jj_consume_token(IF);
@@ -177,7 +178,7 @@ public class Footle implements FootleConstants {
           } else {
             ;
           }
-     {if (true) return new OpIfElse(retVal, (Sequence)retVal1, (Sequence)retVal2);}
+     {if (true) return new OpIfElse(retVal, new Scope(retVal1), new Scope(retVal2));}
           break;
         default:
           jj_la1[5] = jj_gen;
@@ -210,7 +211,7 @@ public class Footle implements FootleConstants {
             }
             jj_consume_token(RPAREN);
             retVal1 = Statement();
-     {if (true) return new OpFuncDecl(new Function(argList, (Sequence)retVal1), funName.image);}
+     {if (true) return new OpFuncDecl(new Function(argList, new Scope(retVal1)), funName.image);}
           } else {
             switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
             case RETURN:
