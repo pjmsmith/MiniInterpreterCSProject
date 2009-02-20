@@ -13,11 +13,11 @@ import test.Testable;
 public class OpIfElse implements Expression {
 	
 	private Expression test;
-	private Sequence first;  // if clause
-	private Sequence second; // else clause
+	private Expression first;  // if clause
+	private Expression second; // else clause
 
     @Testable
-    public OpIfElse(Expression test, Sequence first, Sequence sec)
+    public OpIfElse(Expression test, Expression first, Expression sec)
 	{
 		this.test = test;
 		this.first = first;
@@ -28,11 +28,11 @@ public class OpIfElse implements Expression {
         return test;
     }
 
-    public Sequence getFirst() {
+    public Expression getFirst() {
         return first;
     }
 
-    public Sequence getSecond() {
+    public Expression getSecond() {
         return second;
     }
 

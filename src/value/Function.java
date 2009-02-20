@@ -4,6 +4,7 @@ import Interpreter.Environment;
 import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
+import expression.Expression;
 import expression.Sequence;
 import test.Testable;
 
@@ -11,10 +12,10 @@ import java.util.List;
 
 public class Function implements Value{
 	private List<String> params;
-	private Sequence sequence;
+	private Expression sequence;
 
     @Testable
-    public Function(List<String> params, Sequence seq)
+    public Function(List<String> params, Expression seq)
 	{
 		this.params = params;
 		sequence = seq;

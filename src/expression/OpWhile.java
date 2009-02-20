@@ -13,10 +13,10 @@ import value.VoidValue;
 public class OpWhile implements Expression {
 	
 	private Expression test;
-	private Sequence sequence;
+	private Expression sequence;
 
     @Testable
-    public OpWhile(Expression exp, Sequence seq)
+    public OpWhile(Expression exp, Expression seq)
 	{
 		test = exp;
 		sequence = seq;

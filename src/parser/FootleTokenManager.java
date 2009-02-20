@@ -3,6 +3,7 @@ package parser;
 import expression.*;
 import value.*;
 import Interpreter.*;
+import staticpass.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.io.*;
