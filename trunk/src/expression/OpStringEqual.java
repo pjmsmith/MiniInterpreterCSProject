@@ -50,7 +50,7 @@ public class OpStringEqual implements Expression {
 
     public String toString()
     {
-        return "(OpStringEqual " + left.toString() + " " + right.toString() + ")";
+        return "(OpStringEqual " + left + " " + right + ")";
     }
 
 }

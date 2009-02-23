@@ -47,6 +47,6 @@ public class IsType implements Expression {
 
     public String toString()
     {
-        return "(IsType " + type.toString() + " " + value.toString() + ")";
+        return "(IsType " + type + " " + value + ")";
     }
 }

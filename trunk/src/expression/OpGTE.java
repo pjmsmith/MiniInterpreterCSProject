@@ -124,7 +124,7 @@ public class OpGTE implements Expression {
 
     public String toString()
     {
-        return "(OpGTE " + one.toString() + " " + two.toString() + ")";
+        return "(OpGTE " + one + " " + two + ")";
     }
 
 }

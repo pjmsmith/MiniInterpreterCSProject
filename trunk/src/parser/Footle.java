@@ -19,7 +19,6 @@ public class Footle implements FootleConstants {
         try {
                 sr = new FileReader("testfile");
         } catch (FileNotFoundException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
         }
     Footle parser = new Footle(sr);
@@ -27,13 +26,10 @@ public class Footle implements FootleConstants {
     try {
                 tree.getValue(null);
         } catch (ReturnException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
         } catch (TypeException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
         } catch (UnboundIdentifierException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
         }
     int temp = 0;

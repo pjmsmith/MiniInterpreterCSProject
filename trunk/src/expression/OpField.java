@@ -73,7 +73,16 @@ public class OpField implements Expression {
 
     public String toString()
     {
-        return "(OpField " + object.toString() + " " + name.toString() + " " + assign.toString() + ")";
+        String s = "(OpField";
+        if(assign==null)
+        {
+            s+= "Lookup" + object + "(FieldName " + name + "))";
+        }
+        else
+        {
+            s+= "Mutation" + object + "(FieldName " + name + ") (NewValue " + assign + "))";
+        }
+        return s;
     }
 
 }

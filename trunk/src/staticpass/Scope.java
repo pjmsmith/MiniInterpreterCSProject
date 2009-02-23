@@ -22,13 +22,12 @@ public class Scope implements Expression {
 
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
-		// TODO Auto-generated method stub
-		return expression.getValue(environment);
+        return expression.getValue(environment);
 	}
 
     public String toString()
     {
-        return "[SCOPE]";
+        return "[Scope " + expression + "]";
     }
 
 }

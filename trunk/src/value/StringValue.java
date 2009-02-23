@@ -45,6 +45,6 @@ public class StringValue extends Object {
 
     public String toString()
     {
-        return "(StringValue "+ value + ")";
+        return "(StringValue \""+ value + "\")";
     }
 }

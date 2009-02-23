@@ -1,16 +1,15 @@
 package staticpass;
 
 
-import java.util.List;
-
-import value.*;
-
 import expression.*;
+import value.ClosureValue;
+
+import java.util.List;
 
 public class StaticPass {
 	
 	private Expression program;
-	private List<String> functionNames;
+    private List<String> functionNames;
 	private List<Integer> functionIds;
 	private int nextFuncId = 0;
 	
@@ -108,10 +107,6 @@ public class StaticPass {
 			runNode(((OpLessThan)exp).getOne(), scopeCnt, varCnt);
 			runNode(((OpLessThan)exp).getTwo(), scopeCnt, varCnt);
 		}
-		else if (exp instanceof OpLessThan) {
-			runNode(((OpLessThan)exp).getOne(), scopeCnt, varCnt);
-			runNode(((OpLessThan)exp).getTwo(), scopeCnt, varCnt);
-		}
 		else if (exp instanceof OpMult) {
 			runNode(((OpMult)exp).getOne(), scopeCnt, varCnt);
 			runNode(((OpMult)exp).getTwo(), scopeCnt, varCnt);
@@ -150,11 +145,40 @@ public class StaticPass {
 		else if (exp instanceof SubString) {
 			
 		}
-		
-		
-		
+
 		// return in case we added a variable to this scope
 		return varCnt;
 	}
+
+    public Expression getProgram() {
+        return program;
+    }
+
+    public void setProgram(Expression program) {
+        this.program = program;
+    }
+
+    public List<String> getFunctionNames() {
+        return functionNames;
+    }
+
+    public void setFunctionNames(List<String> functionNames) {
+        this.functionNames = functionNames;
+    }
+
+    public List<Integer> getFunctionIds() {
+        return functionIds;
+    }
+
+    public void setFunctionIds(List<Integer> functionIds) {
+        this.functionIds = functionIds;
+    }
+
+    public String toString()
+    {
+        //Print out list of function names and corresponding IDs
+        //Print out AST with associated variable names + IDs
+        return null;
+    }
 
 }

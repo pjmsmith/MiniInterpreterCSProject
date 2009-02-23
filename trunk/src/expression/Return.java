@@ -25,7 +25,7 @@ public class Return implements Expression {
 
     public String toString()
     {
-        return "(Return " + exp.toString() + ")";
+        return "(Return " + exp + ")";
     }
 
 }

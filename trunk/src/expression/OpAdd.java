@@ -120,7 +120,7 @@ public class OpAdd implements Expression {
 
     public String toString()
     {
-        return "(OpAdd " + one.toString() + " " + two.toString() + ")";
+        return "(OpAdd " + one + " " + two + ")";
     }
 
 }

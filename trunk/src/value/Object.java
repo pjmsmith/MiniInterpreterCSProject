@@ -53,7 +53,21 @@ public abstract class Object implements Value {
 
     public String toString()
     {
-        String s =  "(Object fields: ";
+        String s =  "(Object (fields ";
+        if(fields.isEmpty())
+        {
+            s += " (fields (Empty))";
+        }
+        else
+        {
+            String fieldsStr =  " (fields ";
+            for(Environment f:fields)
+            {
+                fieldsStr += f + " ";
+            }
+            fieldsStr = fieldsStr.substring(0, (fieldsStr.length()-1));
+            s += fieldsStr + "))";
+        }
         for(Environment e: fields)
         {
             s += e.toString() + " ";

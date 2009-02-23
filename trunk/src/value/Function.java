@@ -5,7 +5,6 @@ import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
 import expression.Expression;
-import expression.Sequence;
 import test.Testable;
 
 import java.util.List;
@@ -50,12 +49,25 @@ public class Function implements Value{
 
     public String toString()
     {
-        String s = "(Function params: ";
-        for(String p: params)
+        String s = "(Function ";
+        s+= "(params (";
+        String paramStr = "";
+        if(params.isEmpty())
         {
-            s += p + " ";
+            paramStr += "Empty";
         }
-        s += sequence.toString();
+        else
+        {
+            for(String p: params)
+            {
+                paramStr += p + ", ";
+            }
+            paramStr = paramStr.substring(0, (paramStr.length()-2));
+        }
+        s += paramStr;
+        s += ")) ";
+        s += "(body \n\t\t(";
+        s += sequence;
         s += ")";
         return s;
     }

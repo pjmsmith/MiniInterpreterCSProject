@@ -73,7 +73,7 @@ public class OpEquals implements Expression {
 
     public String toString()
     {
-        return "(OpEquals" + left.toString() + " " + right.toString() + ")";
+        return "(OpEquals" + left + " " + right + ")";
     }
 
 }

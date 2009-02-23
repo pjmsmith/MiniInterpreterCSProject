@@ -64,6 +64,6 @@ public class OpStringLess implements Expression {
 
     public String toString()
     {
-        return "(OpStringLess " + left.toString() + " " + right.toString() + ")";
+        return "(OpStringLess " + left + " " + right + ")";
     }
 }
