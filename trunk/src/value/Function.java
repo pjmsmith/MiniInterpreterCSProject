@@ -66,7 +66,7 @@ public class Function implements Value{
         }
         s += paramStr;
         s += ")) ";
-        s += "(body \n\t\t(";
+        s += "\n\t(body (";
         s += sequence;
         s += ")";
         return s;

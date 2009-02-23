@@ -97,6 +97,6 @@ public class OpWhile implements Expression {
 
     public String toString()
     {
-        return "(While " + test + " (body " + sequence + "))\n";
+        return "(While " + test + " \n\t(body " + sequence + "))\n";
     }
 }

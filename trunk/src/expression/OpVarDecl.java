@@ -18,7 +18,15 @@ public class OpVarDecl implements Expression {
 		framecnt = 0;
 		framenum = 0;
 	}
-    
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setFrameCnt(int cnt) {
     	framecnt = cnt;
     }
