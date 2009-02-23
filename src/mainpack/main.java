@@ -18,7 +18,7 @@ public class main {
         String fileName = null;
         Footle parser;
         Expression ast = null;
-        StaticPass statPass = null;
+        StaticPass statPass;
         CodeGenerator llvmGen;
         
         if(args.length == 2 && args[0].equals("-emit-llvm"))
@@ -72,11 +72,12 @@ public class main {
         {
             System.out.println("\nRunning AST through static pass...");
             statPass = new StaticPass(ast);
+            statPass.runStaticPass();
             System.out.println("Static Pass Completed: ");
             System.out.println(statPass);
         }
         
-        /*
+        /* generate the llvm from the result of the static pass
         if(statPass != null)
         {
             System.out.println("Generating LLVM...");
@@ -85,7 +86,7 @@ public class main {
             System.out.println("Outputting LLVM code to file...");
             //output LLVM to file
         }
-
+        //run assemble and run the llvm code
         /*The following block is attributed to Bill Hess, borrowed from the Google Group
         if (Command.exec("llvm-as test.s -f") == 0)
             if (Command.exec("llvm-ld -o testbin test.s.bc") == 0)

@@ -4,6 +4,7 @@ package staticpass;
 import expression.*;
 import value.ClosureValue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StaticPass {
@@ -12,11 +13,21 @@ public class StaticPass {
     private List<String> functionNames;
 	private List<Integer> functionIds;
 	private int nextFuncId = 0;
-	
-	public StaticPass(Expression prog)
+    private List<String> variableNames;
+	private List<Integer> variableFrameCnts;
+    private List<Integer> variableFrameNbrs;
+    private int scopes;
+
+    public StaticPass(Expression prog)
 	{
 		program = prog;
-	}
+        functionIds = new ArrayList<Integer>();
+        functionNames = new ArrayList<String>();
+        variableFrameCnts = new ArrayList<Integer>();
+        variableFrameNbrs = new ArrayList<Integer>();
+        variableNames = new ArrayList<String>();
+        scopes = 0;
+    }
 	
 	public Expression runStaticPass()
 	{
@@ -29,8 +40,9 @@ public class StaticPass {
 		// Most values do not need to be traversed
 		// Right now we only need to count var decl and function declarations
 		if (exp instanceof Scope) {
-			runNode(((Scope)exp).getExpression(), scopeCnt + 1, 0);
-		}
+            scopes++;
+            runNode(((Scope)exp).getExpression(), scopeCnt + 1, 0);  
+        }
 		else if (exp instanceof Sequence) {
 			List<Expression> expr = ((Sequence)exp).getExpressions();
 			
@@ -40,10 +52,14 @@ public class StaticPass {
 			}
 		}
 		else if (exp instanceof OpVarDecl) {
-			OpVarDecl idval = (OpVarDecl)exp;
-			idval.setFrameCnt(scopeCnt);
-			idval.setFrameNum(varCnt++);
-		}
+            //TODO: The way scope and varCnt are being passed around doesn't seem right.
+            OpVarDecl idval = (OpVarDecl)exp;
+            variableNames.add(idval.getName());
+            idval.setFrameCnt(scopeCnt);
+            variableFrameCnts.add(idval.getFrameCnt());
+            idval.setFrameNum(varCnt++);
+            variableFrameNbrs.add(idval.getFrameNum());
+        }
 		else if (exp instanceof OpFuncDecl) {
 			OpFuncDecl funcdec = (OpFuncDecl)exp;
 			functionNames.add(funcdec.getFuncName());
@@ -176,9 +192,19 @@ public class StaticPass {
 
     public String toString()
     {
-        //Print out list of function names and corresponding IDs
-        //Print out AST with associated variable names + IDs
-        return null;
+        String spStr = "-Function Names and IDs-\n";
+        for(int i = 0; i < functionIds.size(); i++)
+        {
+            spStr += functionNames.get(i) + ", " + functionIds.get(i) + "\n";
+        }
+
+        spStr += "-Variable names, frame counts, and frame numbers-\n";
+        for(int i = 0; i < variableNames.size(); i++)
+        {
+            spStr += variableNames.get(i) + ", " + variableFrameCnts.get(i) + ", " + variableFrameNbrs.get(i) + "\n";
+        }
+        spStr = spStr.substring(0, spStr.length()-1);
+        return spStr;
     }
 
 }
