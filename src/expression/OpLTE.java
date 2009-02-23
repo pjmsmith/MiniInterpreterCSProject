@@ -124,7 +124,7 @@ public class OpLTE implements Expression {
 
     public String toString()
     {
-        return "(OpLTE " + one.toString() + " " + two.toString() + ")";
+        return "(OpLTE " + one + " " + two + ")";
     }
 
 }

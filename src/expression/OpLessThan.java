@@ -122,6 +122,6 @@ public class OpLessThan implements Expression {
 
     public String toString()
     {
-        return "(OpLessThan " + one.toString() + " " + two.toString() + ")";
+        return "(OpLessThan " + one + " " + two + ")";
     }
 }

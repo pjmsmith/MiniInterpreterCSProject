@@ -124,6 +124,6 @@ public class OpSub implements Expression {
 
     public String toString()
     {
-        return "(OpSub " + one.toString() + " " + two.toString() + ")";
+        return "(OpSub " + one + " " + two + ")";
     }
 }

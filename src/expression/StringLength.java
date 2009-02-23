@@ -44,6 +44,6 @@ public class StringLength implements Expression {
 
     public String toString()
     {
-        return "(StringLength " + string.toString() + ")";
+        return "(StringLength " + string + ")";
     }
 }

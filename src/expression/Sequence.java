@@ -38,7 +38,6 @@ public class Sequence implements Expression {
             for (Expression expression : expressions) {
                 ansEnv = expression.getValue(tempEnv);
                 tempEnv = ansEnv.next;
-                //TODO: re-test sequences
             }
 
             return new Environment(environment, null, new VoidValue());
@@ -47,12 +46,12 @@ public class Sequence implements Expression {
 
     public String toString()
     {
-        String s = "(Sequence (";
+        String s = "(Sequence ";
         for(Expression e:expressions)
         {
-            s+=  e.toString() + "; ";
+            s += "\n\t" + e;
         }
-        s += "))";
+        s += ")";
         return s;
     }
 }

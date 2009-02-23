@@ -79,6 +79,6 @@ public class OpAssign implements Expression{
 
     public String toString()
     {
-        return "(OpAssign " + left.toString() + " " + right.toString() + ")";
+        return "(OpAssign " + left + " " + right + ")";
     }
 }

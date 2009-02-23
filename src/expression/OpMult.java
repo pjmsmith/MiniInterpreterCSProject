@@ -124,7 +124,7 @@ public class OpMult implements Expression {
 
     public String toString()
     {
-        return "(OpMult " + one.toString() + " " + two.toString() + ")";
+        return "(OpMult " + one + " " + two + ")";
     }
 
 }

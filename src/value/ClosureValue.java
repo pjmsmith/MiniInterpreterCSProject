@@ -56,6 +56,16 @@ public class ClosureValue extends Object {
 
     public String toString()
     {
-        return "(Closure " + environ.toString() + " " + func.toString()  + ")";
+        String s = "(Closure ";
+        if(environ == null)
+        {
+            s += "(EmptyEnv) ";
+        }
+        else
+        {
+            s += environ + " ";
+        }
+        s += func + ")";
+        return s;
     }
 }

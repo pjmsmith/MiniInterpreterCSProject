@@ -73,12 +73,21 @@ public class OpNew implements Expression {
 
     public String toString()
     {
-        String s = "(OpNew " + fnc.toString() + " args: ";
-        for(Expression a:args)
+        String s = "(OpNew " + fnc;
+        if(args.isEmpty())
         {
-            s += a.toString() + " ";
+            s += " (args (Empty))";
         }
-        s += ")";
+        else
+        {
+            String argStr =  " (args ";
+            for(Expression a:args)
+            {
+                argStr += a + ", ";
+            }
+            argStr = argStr.substring(0, (argStr.length()-2));
+            s += argStr + "))";
+        }
         return s;
     }
 

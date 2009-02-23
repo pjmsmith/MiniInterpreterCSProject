@@ -49,6 +49,6 @@ public class OpVarDecl implements Expression {
 
     public String toString()
     {
-        return "(OpVarDecl " + name.toString() + ")";
+        return "(OpVarDecl " + name + ")";
     }
 }

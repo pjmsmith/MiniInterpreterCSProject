@@ -133,7 +133,7 @@ public class OpDivide implements Expression {
 
     public String toString()
     {
-        return "(OpDivide " + one.toString() + " " + two.toString() + ")";
+        return "(OpDivide " + one + " " + two + ")";
     }
 
 }

@@ -66,6 +66,6 @@ public class Print implements Expression {
 
     public String toString()
     {
-        return "(Print " + value.toString() + ")";
+        return "(Print " + value + ")";
     }
 }

@@ -84,6 +84,6 @@ public class Or implements Expression {
 
     public String toString()
     {
-        return "(Or " + one.toString() + " " + two.toString() + ")";
+        return "(Or " + one + " " + two + ")";
     }
 }

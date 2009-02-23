@@ -84,6 +84,6 @@ public class And implements Expression {
 
     public String toString()
     {
-        return "(And " + one.toString() + " " + two.toString() + ")";
+        return "(And " + one + " " + two + ")";
     }
 }

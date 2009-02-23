@@ -57,6 +57,6 @@ public class Not implements Expression {
 
     public String toString()
     {
-        return "(Not " + one.toString() + ")";
+        return "(Not " + one + ")";
     }
 }

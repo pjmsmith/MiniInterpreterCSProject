@@ -82,6 +82,6 @@ public class OpIfElse implements Expression {
 
     public String toString()
     {
-        return "(OpIfElse " + test.toString() + " " + first.toString() + " " + second.toString() + ")";
+        return "(OpIfElse " + test + " " + first + " " + second + ")";
     }
 }

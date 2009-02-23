@@ -70,6 +70,6 @@ public class SubString implements Expression {
 
     public String toString()
     {
-        return "(SubString " + string.toString() + " " + start.toString() + " " + end.toString() + ")";
+        return "(SubString (target " + string + ") (startIdx " + start + ") (endIdx " + end + "))";
     }
 }

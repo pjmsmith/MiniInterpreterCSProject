@@ -33,7 +33,7 @@ public class OpFuncDecl implements Expression {
 
     public String toString()
     {
-        return "(OpFuncDecl " + func.toString() + " " + name.toString() + ")";
+        return "(OpFuncDecl (FuncName " + name + ") " + func + ")\n";
     }
 
 }

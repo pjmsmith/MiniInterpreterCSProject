@@ -37,6 +37,6 @@ public class OpInstanceOf implements Expression {
 
     public String toString()
     {
-        return "(OpInstanceOf " + obj.toString() + " " + val.toString() + ")";
+        return "(OpInstanceOf " + obj + " " + val + ")";
     }
 }

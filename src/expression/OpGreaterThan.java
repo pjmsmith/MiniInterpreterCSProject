@@ -122,7 +122,7 @@ public class OpGreaterThan implements Expression {
 
     public String toString()
     {
-        return "(OpGreaterThan " + one.toString() + " " + two.toString() + ")";
+        return "(OpGreaterThan " + one + " " + two + ")";
     }
 
 }
