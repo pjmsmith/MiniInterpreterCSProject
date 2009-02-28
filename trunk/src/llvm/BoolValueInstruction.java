@@ -1,21 +1,30 @@
 package llvm;
 
 /**
- * llvm: IntValueInstruction
+ * llvm: BoolValueInstruction
  * <p/>
  * Description:
  *
  * @author Patrick J. Smith
  * @date Feb 23, 2009
  */
-public class IntValueInstruction extends LLVMInstruction {
+public class BoolValueInstruction extends LLVMInstruction {
     private int value;
     private static final String type = "i32";
 
-    public IntValueInstruction(int target, int value)
+    public BoolValueInstruction(int target, boolean value)
     {
         super(target);
-        this.value = value << 2;
+        if(value)
+        {
+            this.value = 1;
+        }
+        else
+        {
+            this.value = 0;
+        }
+        this.value = this.value << 3;
+        this.value += 7;
     }
 
     public String toString()

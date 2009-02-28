@@ -10,11 +10,25 @@ package llvm;
  */
 public abstract class LLVMInstruction {
 
-    private int result;
-    
+    private int targetReg;
 
-    public int getResult()
+    public LLVMInstruction()
     {
-        return result;        
+
+    }
+
+    public LLVMInstruction(int tReg)
+    {
+        targetReg = tReg;
+    }
+
+    public int getTargetRegister()
+    {
+        return targetReg;
+    }
+
+    public void setTargetRegister(int tReg)
+    {
+        targetReg = tReg;
     }
 }
