@@ -1,21 +1,21 @@
 package llvm;
 
 /**
- * llvm: IntValueInstruction
+ * llvm: VoidInstruction
  * <p/>
  * Description:
  *
  * @author Patrick J. Smith
- * @date Feb 23, 2009
+ * @date Feb 27, 2009
  */
-public class IntValueInstruction extends LLVMInstruction {
+public class VoidInstruction extends LLVMInstruction {
     private int value;
     private static final String type = "i32";
 
-    public IntValueInstruction(int target, int value)
+    public VoidInstruction(int target)
     {
         super(target);
-        this.value = value << 2;
+        value = 3;
     }
 
     public String toString()
@@ -26,3 +26,4 @@ public class IntValueInstruction extends LLVMInstruction {
         return s;
     }
 }
+

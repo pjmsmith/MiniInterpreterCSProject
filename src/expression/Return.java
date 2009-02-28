@@ -16,6 +16,14 @@ public class Return implements Expression {
 		this.exp = exp;
 	}
 
+    public Expression getExp() {
+        return exp;
+    }
+
+    public void setExp(Expression exp) {
+        this.exp = exp;
+    }
+
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, TypeException, UnboundIdentifierException {
 		

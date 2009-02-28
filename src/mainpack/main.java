@@ -2,6 +2,7 @@ package mainpack;
 
 import expression.Expression;
 import llvm.CodeGenerator;
+import llvm.IntValueInstruction;
 import parser.Footle;
 import parser.ParseException;
 import staticpass.StaticPass;
@@ -18,9 +19,9 @@ public class main {
         String fileName = null;
         Footle parser;
         Expression ast = null;
-        StaticPass statPass;
+        StaticPass statPass = null;
         CodeGenerator llvmGen;
-        
+
         if(args.length == 2 && args[0].equals("-emit-llvm"))
         {
             emitLLVM = true;
@@ -76,14 +77,16 @@ public class main {
             System.out.println("Static Pass Completed: ");
             System.out.println(statPass);
         }
-        
-        /* generate the llvm from the result of the static pass
+
+        //generate the llvm from the result of the static pass
         if(statPass != null)
         {
             System.out.println("Generating LLVM...");
             llvmGen = new CodeGenerator(statPass);
+            System.out.println("***CodeGenerated***");
+            System.out.println(llvmGen);
             //generate LLVM object tree from AST
-            System.out.println("Outputting LLVM code to file...");
+            //System.out.println("Outputting LLVM code to file...");
             //output LLVM to file
         }
         //run assemble and run the llvm code
