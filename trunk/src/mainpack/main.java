@@ -7,9 +7,7 @@ import parser.Footle;
 import parser.ParseException;
 import staticpass.StaticPass;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 
 public class main {
 
@@ -74,8 +72,8 @@ public class main {
             System.out.println("\nRunning AST through static pass...");
             statPass = new StaticPass(ast);
             statPass.runStaticPass();
-            System.out.println("Static Pass Completed: ");
-            System.out.println(statPass);
+            //System.out.println("Static Pass Completed: ");
+            //System.out.println(statPass);
         }
 
         //generate the llvm from the result of the static pass
@@ -86,12 +84,14 @@ public class main {
             System.out.println("***CodeGenerated***");
             System.out.println(llvmGen);
             //generate LLVM object tree from AST
-            //System.out.println("Outputting LLVM code to file...");
+            System.out.println("Outputting LLVM code to file...");
             //output LLVM to file
+            toLLVMFile(llvmGen.toString());
+            
         }
         //run assemble and run the llvm code
-        /*The following block is attributed to Bill Hess, borrowed from the Google Group
-        if (Command.exec("llvm-as test.s -f") == 0)
+        /*/The following block is attributed to Bill Hess, borrowed from the Google Group
+        if (Command.exec("llvm-as my-footle.s -f") == 0)
             if (Command.exec("llvm-ld -o testbin test.s.bc") == 0)
                 if (System.getProperty("os.name").contains("Windows"))
                     Command.exec("testbin.exe");
@@ -104,4 +104,17 @@ public class main {
         //End */
 
     }
+
+    public static void toLLVMFile(String ir)
+    {
+        try {
+            BufferedWriter out = new BufferedWriter(new FileWriter("my-footle.s"));
+            out.write(ir);
+            out.close();
+        } catch (IOException e) {
+            System.out.println("Could not write to file.");
+            System.exit(-1);
+        }
+    }
+
 }

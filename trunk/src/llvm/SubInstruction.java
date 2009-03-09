@@ -15,7 +15,7 @@ public class SubInstruction extends LLVMInstruction {
 
     public SubInstruction(int target, int one, int two)
     {
-        super(target);
+        super(target, type);
         leftArg = one;
         rightArg = two;
 
@@ -23,7 +23,7 @@ public class SubInstruction extends LLVMInstruction {
 
     public String toString()
     {
-        String s= "%"+ super.getTargetRegister() + " = sub " + type + " %" + leftArg + ", %" + rightArg;
+        String s= "%r"+ super.getTargetRegister() + " = sub " + type + " %r" + leftArg + ", %r" + rightArg;
         return s;
     }
 }

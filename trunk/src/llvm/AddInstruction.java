@@ -15,7 +15,7 @@ public class AddInstruction extends LLVMInstruction {
 
     public AddInstruction(int target, int one, int two)
     {
-        super(target);
+        super(target+2, type);
         leftArg = one;
         rightArg = two;
 
@@ -23,7 +23,11 @@ public class AddInstruction extends LLVMInstruction {
 
     public String toString()
     {
-        String s= "%"+ super.getTargetRegister() + " = add " + type + " %" + leftArg + ", %" + rightArg;
+        int ptrResultL = super.getTargetRegister()-2;
+        int ptrResultR = super.getTargetRegister()-1;
+        String s= "%r" + ptrResultL + "= load " + type + "* %r" + leftArg + "\n" +
+                "%r" + ptrResultR + "= load " + type + "* %r" + rightArg + "\n" +
+        "%r"+ super.getTargetRegister() + " = add " + type + " %r" + ptrResultL + ", %r" + ptrResultR;
         return s;
     }
 }

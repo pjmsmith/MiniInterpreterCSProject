@@ -11,15 +11,17 @@ package llvm;
 public abstract class LLVMInstruction {
 
     private int targetReg;
+    private String type;
 
     public LLVMInstruction()
     {
 
     }
 
-    public LLVMInstruction(int tReg)
+    public LLVMInstruction(int tReg, String type)
     {
         targetReg = tReg;
+        this.type = type;
     }
 
     public int getTargetRegister()
@@ -30,5 +32,14 @@ public abstract class LLVMInstruction {
     public void setTargetRegister(int tReg)
     {
         targetReg = tReg;
+    }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String s) {
+        type = s;
     }
 }

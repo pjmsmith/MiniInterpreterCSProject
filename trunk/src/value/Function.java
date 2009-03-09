@@ -25,7 +25,15 @@ public class Function implements Value{
 	{
 		return params;
 	}
-	
+
+    public Expression getBody() {
+        return sequence;
+    }
+
+    public void setBody(Expression sequence) {
+        this.sequence = sequence;
+    }
+
     @Testable
 	public boolean isType(Value val) {
 		return val instanceof Function;
