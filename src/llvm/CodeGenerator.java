@@ -22,17 +22,21 @@ public class CodeGenerator {
     private StaticPass statPass;
     private List<LLVMInstruction> instructions;
     private EFrame ef;
+    private int lastEF;
     private int regCnt;
+    private String retType;
     private int nextReg;
 
     public CodeGenerator(StaticPass sp)
     {
         statPass = sp;
         instructions = new ArrayList<LLVMInstruction>();
-        regCnt = 0;
-        nextReg = 0;
-        //ef = new EFrame(sp.);
+        regCnt = 2;
+        nextReg = 2;
+        lastEF = 0;
+        ef = new EFrame(null);
         generateCode(statPass.getProgram());
+        retType = instructions.get(instructions.size()-1).getType();
     }
 
     public int generateCode(Expression exp)
@@ -49,9 +53,6 @@ public class CodeGenerator {
             return regCnt;
         }
 		else if (exp instanceof OpVarDecl) {
-            //figure out type of value
-            //alloca <type>
-            instructions.add(new VarDeclInstruction());
             return regCnt;
         }
 		else if (exp instanceof OpFuncDecl) {
@@ -79,17 +80,26 @@ public class CodeGenerator {
             int r = generateCode(a.getTwo());
             AddInstruction ai = new AddInstruction(nextReg, l, r);
             instructions.add(ai);
-            nextReg++;
-            regCnt++;
-            return nextReg-1;
+            nextReg += 3;
+            regCnt+= 3;
+            return ai.getTargetRegister();
         }
 		else if (exp instanceof OpAssign) {
             OpAssign oa = (OpAssign)exp;
-            int l = generateCode(oa.getLVal());
             int r = generateCode(oa.getRVal());
-            instructions.add(new AssignInstruction("i32", regCnt, l, r));
+            if(oa.getLVal() instanceof OpVarDecl && oa.getRVal() instanceof IntValue)
+            {
+                OpVarDecl vd = (OpVarDecl)oa.getLVal();
+                IntValue iv = (IntValue)oa.getRVal();
+                ef.addBinding(vd.getName(), iv);
+
+                int l = generateCode(oa.getLVal());
+                instructions.add(new AssignInstruction("i32", nextReg, vd.getName(), r, ef));
+            }
             //store <type> <value>, <type>* <target register>, align 4
-            return nextReg;
+            nextReg++;
+            regCnt++;
+            return nextReg-1;
         }
 		else if (exp instanceof OpDivide) {
             //sdiv or udiv
@@ -136,7 +146,7 @@ public class CodeGenerator {
             OpMult m = (OpMult)exp; //add i32, %0, %1
             int l = generateCode(m.getOne());
             int r = generateCode(m.getTwo());
-            AddInstruction mi = new AddInstruction(nextReg, l, r);
+            MultInstruction mi = new MultInstruction(nextReg, l, r);
             instructions.add(mi);
             nextReg++;
             return nextReg-1;
@@ -207,8 +217,10 @@ public class CodeGenerator {
             return regCnt;
         }
         else if (exp instanceof IdValue) {
-            //look up bound value in EFrame
-            return regCnt;
+            instructions.add(new IdValueInstruction(nextReg, ((IdValue)exp).getInternalValue(), ef, lastEF));
+            nextReg+=2;
+            regCnt+=2;
+            return nextReg-1;
         }
         else if (exp instanceof Function) {
             return regCnt;
@@ -217,8 +229,8 @@ public class CodeGenerator {
             //add tag bits
             LLVMInstruction intInst = new IntValueInstruction(nextReg, ((IntValue)exp).getInternalValue());
             instructions.add(intInst);
-            nextReg++;
-            regCnt++;
+            nextReg+=2;
+            regCnt+=2;
             return nextReg-1;
         }
         else if (exp instanceof PlainObject) {
@@ -244,15 +256,20 @@ public class CodeGenerator {
     public String toString()
     {
         //target header
-        String s = "target datalayout = \"e-p:32:32:32-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:32:64-f3\n" +
-                   "target triple = \"i386-pc-linux-gnu\"\n";
-        
+        String s = "target datalayout = \"e-p:32:32:32-i1:8:8-i8:8:" +
+                "8-i16:16:16-i32:32:32-i64:32:64-f32:32:32-f64:32:64-v64:64:64-v128:128:128-a0:0:64-f80:32:32\"\n" +
+                "target triple = \"i386-pc-linux-gnu\"\n";
+
+        //main function wrapper to see results
+        s+= "%eframe = type {%eframe*, i32, [0 x i32]}\n";
+        s+= "define i32 @llvm_main(){\n" +
+                new EFrameInstruction(lastEF, ef);
         //list of instructions
         for(LLVMInstruction l:instructions)
         {
             s+= l + "\n";
         }
-
+        s+="ret " + retType + " %r" + instructions.get(instructions.size()-1).getTargetRegister() + "\n}";
         return s;
     }
 }

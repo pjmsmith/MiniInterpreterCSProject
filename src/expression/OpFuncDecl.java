@@ -22,6 +22,14 @@ public class OpFuncDecl implements Expression {
     	return name;
     }
 
+    public Function getFunction() {
+        return func;
+    }
+
+    public void setFunction(Function func) {
+        this.func = func;
+    }
+
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException {
 		// add the function to the environment

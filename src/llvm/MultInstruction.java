@@ -15,7 +15,7 @@ public class MultInstruction extends LLVMInstruction {
 
     public MultInstruction(int target, int one, int two)
     {
-        super(target);
+        super(target, type);
         leftArg = one;
         rightArg = two;
 
@@ -23,7 +23,7 @@ public class MultInstruction extends LLVMInstruction {
 
     public String toString()
     {   //might need to allocate space for 
-        String s= "%"+ super.getTargetRegister() + " = mul " + type + " %" + leftArg + ", %" + rightArg;
+        String s= "%r"+ super.getTargetRegister() + " = mul " + type + " %r" + leftArg + ", %r" + rightArg;
         return s;
     }
 }

@@ -14,13 +14,13 @@ public class VoidInstruction extends LLVMInstruction {
 
     public VoidInstruction(int target)
     {
-        super(target);
+        super(target, type);
         value = 3;
     }
 
     public String toString()
     {
-        String s=  "%" + super.getTargetRegister() + " = alloca " + type;  //make space
+        String s=  "%r" + super.getTargetRegister() + " = alloca " + type;  //make space
         s+= "\nstore " + type + " 0x" + Integer.toHexString(value).toUpperCase()
                 + ", " + type + "* %" + super.getTargetRegister() + ", align 4";  //store in register
         return s;

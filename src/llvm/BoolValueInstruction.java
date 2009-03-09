@@ -14,7 +14,7 @@ public class BoolValueInstruction extends LLVMInstruction {
 
     public BoolValueInstruction(int target, boolean value)
     {
-        super(target);
+        super(target, type);
         if(value)
         {
             this.value = 1;
@@ -29,9 +29,9 @@ public class BoolValueInstruction extends LLVMInstruction {
 
     public String toString()
     {
-        String s=  "%" + super.getTargetRegister() + " = alloca " + type;  //make space
-        s+= "\nstore " + type + " 0x" + Integer.toHexString(value).toUpperCase()
-                + ", " + type + "* %" + super.getTargetRegister() + ", align 4";  //store in register
+        String s=  "%r" + super.getTargetRegister() + " = alloca " + type;  //make space
+        s+= "\nstore " + type + " " + value
+                + ", " + type + "* %r" + super.getTargetRegister() + ", align 4";  //store in register
         return s;
     }
 }
