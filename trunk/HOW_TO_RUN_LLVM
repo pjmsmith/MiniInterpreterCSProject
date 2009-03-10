@@ -1,0 +1,7 @@
+First, gcc -o runner runner.c, then follow these steps:
+
+Step 1: llvm-as <llvm_file>.s
+Step 2: llvm-ld -o runner <llvm_file>.s.bc runner.o
+Step 3: runner
+Step 4: ????????
+Step 5: Profit!
