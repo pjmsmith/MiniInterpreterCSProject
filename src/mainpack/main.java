@@ -2,7 +2,6 @@ package mainpack;
 
 import expression.Expression;
 import llvm.CodeGenerator;
-import llvm.IntValueInstruction;
 import parser.Footle;
 import parser.ParseException;
 import staticpass.StaticPass;

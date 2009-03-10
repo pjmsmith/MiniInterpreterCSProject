@@ -23,7 +23,7 @@ public class SubInstruction extends LLVMInstruction {
 
     public String toString()
     {
-        String s= "%r"+ super.getTargetRegister() + " = sub " + type + " %r" + leftArg + ", %r" + rightArg;
+        String s = "%r" + super.getTargetRegister() + " = sub " + type + " %r" + leftArg + ", %r" + rightArg;
         return s;
     }
 }

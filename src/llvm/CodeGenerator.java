@@ -80,8 +80,8 @@ public class CodeGenerator {
             int r = generateCode(a.getTwo());
             AddInstruction ai = new AddInstruction(nextReg, l, r);
             instructions.add(ai);
-            nextReg += 3;
-            regCnt+= 3;
+            nextReg += 4;
+            regCnt+= 4;
             return ai.getTargetRegister();
         }
 		else if (exp instanceof OpAssign) {
@@ -207,19 +207,14 @@ public class CodeGenerator {
         }
         else if (exp instanceof BoolValue) {
             //add tag bits
-            LLVMInstruction boolInst = new BoolValueInstruction(nextReg, ((BoolValue)exp).getInternalValue());
-            instructions.add(boolInst);
-            nextReg++;
-            regCnt++;
+            
             return nextReg-1;
         }
         else if (exp instanceof FloatValue) {
             return regCnt;
         }
         else if (exp instanceof IdValue) {
-            instructions.add(new IdValueInstruction(nextReg, ((IdValue)exp).getInternalValue(), ef, lastEF));
-            nextReg+=2;
-            regCnt+=2;
+
             return nextReg-1;
         }
         else if (exp instanceof Function) {
@@ -227,10 +222,7 @@ public class CodeGenerator {
         }
         else if (exp instanceof IntValue) {
             //add tag bits
-            LLVMInstruction intInst = new IntValueInstruction(nextReg, ((IntValue)exp).getInternalValue());
-            instructions.add(intInst);
-            nextReg+=2;
-            regCnt+=2;
+
             return nextReg-1;
         }
         else if (exp instanceof PlainObject) {
@@ -240,10 +232,7 @@ public class CodeGenerator {
             return regCnt;
         }
         else if (exp instanceof VoidValue) {
-            LLVMInstruction voidInst = new VoidInstruction(nextReg);
-            instructions.add(voidInst);
-            nextReg++;
-            regCnt++;
+
             return nextReg-1;
         }
         return -1;

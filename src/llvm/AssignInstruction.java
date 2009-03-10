@@ -26,7 +26,7 @@ public class AssignInstruction extends LLVMInstruction {
         String s = "%r" + (super.getTargetRegister()-1) + " = getelementptr %eframe* %r1, i32 0, i32 " +
                 ef.getBinding(leftSide) + "\n";
         s+= "%r" + (super.getTargetRegister()) + " = load i32* %r" + (rightSide-1) + "\n";
-        s+= "store i32 %r" + (super.getTargetRegister()) + ", i32* %r" + (super.getTargetRegister()-1);
+        s+= "store i32 %r" + (super.getTargetRegister()) + ", i32* %r" + (super.getTargetRegister()-1) + ", align 4";
         return s;
     }
 }
