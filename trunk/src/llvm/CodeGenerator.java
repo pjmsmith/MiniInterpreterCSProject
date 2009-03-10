@@ -21,9 +21,9 @@ public class CodeGenerator {
 
     private StaticPass statPass;
     private List<LLVMInstruction> instructions;
+    private List<FunctionDeclarationInstruction> functions;
     private EFrame ef;
     private int lastEF;
-    private int regCnt;
     private String retType;
     private int nextReg;
 
@@ -31,100 +31,139 @@ public class CodeGenerator {
     {
         statPass = sp;
         instructions = new ArrayList<LLVMInstruction>();
-        regCnt = 2;
+        functions = new ArrayList<FunctionDeclarationInstruction>();
         nextReg = 2;
         lastEF = 0;
         ef = new EFrame(null);
-        generateCode(statPass.getProgram());
-        retType = instructions.get(instructions.size()-1).getType();
+        if(generateCode(statPass.getProgram()) > 0)
+        {
+            retType = instructions.get(instructions.size()-1).getType();
+        }
     }
 
     public int generateCode(Expression exp)
     {
 
         if (exp instanceof Scope) {
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof Sequence) {
             for(Expression e: ((Sequence)exp).getExpressions())
             {
-                regCnt = generateCode(e);
+                nextReg = generateCode(e);
             }
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof OpVarDecl) {
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof OpFuncDecl) {
             //define i32 @f_0(i32 %p_0,...i32 %p_n) {
             // ...
             //ret <type> <value> }
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof ClosureValue) {
-            return regCnt;
+            return nextReg;
 		}
 		else if (exp instanceof And) {
             //not branching if one element in test is false
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof IsType) {
-            return regCnt;
+            return nextReg;
 		}
 		else if (exp instanceof Not) {
-            return regCnt;
+            return nextReg;
 		}
 		else if (exp instanceof OpAdd) {
             OpAdd a = (OpAdd)exp; //add i32, %0, %1
             int l = generateCode(a.getOne());
             int r = generateCode(a.getTwo());
-            AddInstruction ai = new AddInstruction(nextReg, l, r);
-            instructions.add(ai);
-            nextReg += 4;
-            regCnt+= 4;
-            return ai.getTargetRegister();
+            if(a.getOne() instanceof IntValue)
+            {
+                instructions.add(new LoadInstruction(nextReg, l));
+                l = nextReg;
+                nextReg++;
+            }
+            if(a.getTwo() instanceof IntValue)
+            {
+                instructions.add(new LoadInstruction(nextReg, r));
+                r = nextReg;
+                nextReg++;
+            }
+            instructions.add(new AddInstruction(nextReg, l, r));
+            nextReg++;
+            return nextReg-1;
         }
 		else if (exp instanceof OpAssign) {
             OpAssign oa = (OpAssign)exp;
             int r = generateCode(oa.getRVal());
-            if(oa.getLVal() instanceof OpVarDecl && oa.getRVal() instanceof IntValue)
+            Expression name = oa.getLVal();
+            if(name instanceof OpVarDecl)
             {
-                OpVarDecl vd = (OpVarDecl)oa.getLVal();
-                IntValue iv = (IntValue)oa.getRVal();
-                ef.addBinding(vd.getName(), iv);
-
-                int l = generateCode(oa.getLVal());
-                instructions.add(new AssignInstruction("i32", nextReg, vd.getName(), r, ef));
+                //add to eframe   
             }
-            //store <type> <value>, <type>* <target register>, align 4
-            nextReg++;
-            regCnt++;
+
             return nextReg-1;
         }
 		else if (exp instanceof OpDivide) {
             //sdiv or udiv
             //sdiv i32 %0, %1
-            return regCnt;
+            OpDivide d = (OpDivide)exp;
+            int l = generateCode(d.getOne());
+            int r = generateCode(d.getTwo());
+            boolean sdiv = false;
+            if(d.getOne() instanceof IntValue)
+            {
+                instructions.add(new LoadInstruction(nextReg, l));
+                l = nextReg;
+                nextReg++;
+                if(((IntValue)d.getOne()).getInternalValue() < 0)
+                {
+                    sdiv |= true;
+                }
+            }
+            if(d.getTwo() instanceof IntValue)
+            {
+                instructions.add(new LoadInstruction(nextReg, r));
+                r = nextReg;
+                nextReg++;
+                if(((IntValue)d.getTwo()).getInternalValue() < 0)
+                {
+                    sdiv |= true;
+                }
+            }
+            if(sdiv)
+            {
+                instructions.add(new SDivInstruction(nextReg, l, r));
+            }
+            else
+            {
+                instructions.add(new UDivInstruction(nextReg, l, r));   
+            }
+            nextReg++;
+            return nextReg-1;
         }
 		else if (exp instanceof OpEquals) {
             //icmp eq i32 %0, %1
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof OpField) {
-            return regCnt;
+            return nextReg;
 		}
 		else if (exp instanceof OpFunctionCall) {
             //call i32 @f_0(i32 %p_0,...i32 %p_n)
             //if void, add noreturn at the end
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof OpGreaterThan) {
             //icmp sgt i32 %0, %1
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof OpGTE) {
             //icmp sge i32 %0, %1
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof OpIfElse) {
             //translate test, get reg
@@ -133,41 +172,63 @@ public class CodeGenerator {
                 //translate body of then
             //label2
                 //translate body of else
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof OpInstanceOf) {
-            return regCnt;
+            return nextReg;
 		}
 		else if (exp instanceof OpLessThan) {
             //icmp slt i32 %0, %1
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof OpMult) {
-            OpMult m = (OpMult)exp; //add i32, %0, %1
+            OpMult m = (OpMult)exp; //mul i32, %0, %1
             int l = generateCode(m.getOne());
             int r = generateCode(m.getTwo());
-            MultInstruction mi = new MultInstruction(nextReg, l, r);
-            instructions.add(mi);
+            if(m.getOne() instanceof IntValue)
+            {
+                instructions.add(new LoadInstruction(nextReg, l));
+                l = nextReg;
+                nextReg++;
+            }
+            if(m.getTwo() instanceof IntValue)
+            {
+                instructions.add(new LoadInstruction(nextReg, r));
+                r = nextReg;
+                nextReg++;
+            }
+            instructions.add(new MultInstruction(nextReg, l, r));
             nextReg++;
             return nextReg-1;
         }
 		else if (exp instanceof OpNew) {
-            return regCnt;
+            return nextReg;
 		}
 		else if (exp instanceof OpStringEqual) {
             //call library function written in C
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof OpStringLess) {
             //call library function written in C
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof OpSub) {
             OpSub s = (OpSub)exp; //sub i32, %0, %1
             int l = generateCode(s.getOne());
             int r = generateCode(s.getTwo());
-            SubInstruction si = new SubInstruction(nextReg, l, r);
-            instructions.add(si);
+            if(s.getOne() instanceof IntValue)
+            {
+                instructions.add(new LoadInstruction(nextReg, l));
+                l = nextReg;
+                nextReg++;
+            }
+            if(s.getTwo() instanceof IntValue)
+            {
+                instructions.add(new LoadInstruction(nextReg, r));
+                r = nextReg;
+                nextReg++;
+            }
+            instructions.add(new SubInstruction(nextReg, l, r));
             nextReg++;
             return nextReg-1;
         }
@@ -175,61 +236,70 @@ public class CodeGenerator {
             //generate test, get reg
             //create blocks for: beginning of body, after body
             //generate body code
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof Or) {
             //branches if one of things in test is true
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof Print) {
             //call i32 (i8*, ...)* @printf(i8* noalias getelementptr ([4 x i8]* @.str, i32 0, i32 0), i32 %1) nounwind
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof ReadLine) {
             //call i32 (i8*, ...)* @scanf(i8* noalias getelementptr ([4 x i8]* @.str, i32 0, i32 0), i32 %1) nounwind
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof Return) {
             ReturnInstruction ret;
-            int r = generateCode(((Return)exp).getExp());
-            //find out the type of the last register used in the generation of return's expression
-            ret = new ReturnInstruction("i32", instructions.get(instructions.size()-1).getTargetRegister());  //i32 for now
-            instructions.add(ret);
-            return r;
+
+            return nextReg;
         }
 		else if (exp instanceof StringLength) {
             //call a library function written in C
-            return regCnt;
+            return nextReg;
         }
 		else if (exp instanceof SubString) {
             //call a library function written in C
-            return regCnt;
+            return nextReg;
         }
         else if (exp instanceof BoolValue) {
             //add tag bits
-            
+            instructions.add(new MallocInstruction(nextReg, "i32", ""));
+            int tagged = 7;
+            if((((BoolValue)exp).getInternalValue()))
+            {
+                tagged = tagged << 1;
+                tagged++;
+            }
+            String shiftedVal = ((Integer)tagged).toString();
+            instructions.add(new StoreInstruction(nextReg, "i32", shiftedVal));
+            nextReg++;
             return nextReg-1;
         }
         else if (exp instanceof FloatValue) {
-            return regCnt;
+            return nextReg;
         }
         else if (exp instanceof IdValue) {
 
             return nextReg-1;
         }
         else if (exp instanceof Function) {
-            return regCnt;
+            return nextReg;
         }
         else if (exp instanceof IntValue) {
             //add tag bits
-
+            instructions.add(new MallocInstruction(nextReg, "i32", ""));
+            String shiftedVal = ((Integer)(((IntValue)exp).getInternalValue()<<2)).toString();
+            instructions.add(new StoreInstruction(nextReg, "i32", shiftedVal));
+            nextReg++;
             return nextReg-1;
         }
         else if (exp instanceof PlainObject) {
-            return regCnt;
+            return nextReg;
         }
         else if (exp instanceof StringValue) {
-            return regCnt;
+            return nextReg;
         }
         else if (exp instanceof VoidValue) {
 
@@ -239,7 +309,7 @@ public class CodeGenerator {
     }
 
     public int getResult() {
-        return regCnt;
+        return nextReg;
     }
 
     public String toString()
@@ -248,17 +318,31 @@ public class CodeGenerator {
         String s = "target datalayout = \"e-p:32:32:32-i1:8:8-i8:8:" +
                 "8-i16:16:16-i32:32:32-i64:32:64-f32:32:32-f64:32:64-v64:64:64-v128:128:128-a0:0:64-f80:32:32\"\n" +
                 "target triple = \"i386-pc-linux-gnu\"\n";
-
+        String eframeType = "{%eframe*, i32, [" + ef.getNumElements() + " x i32]}";
         //main function wrapper to see results
         s+= "%eframe = type {%eframe*, i32, [0 x i32]}\n";
+        for(FunctionDeclarationInstruction f: functions)
+        {
+            s+= f + "\n";
+        }
         s+= "define i32 @llvm_main(){\n" +
-                new EFrameInstruction(lastEF, ef);
+                new MallocInstruction(0, eframeType, "") + "\n" +
+                new BitCastInstruction(1, eframeType + "*", "%r0", "%eframe*") + "\n";
         //list of instructions
         for(LLVMInstruction l:instructions)
         {
             s+= l + "\n";
         }
-        s+="ret " + retType + " %r" + instructions.get(instructions.size()-1).getTargetRegister() + "\n}";
+        //TODO: figure out whether the result of the last instruction needs loading
+        if(!(instructions.get(instructions.size()-1) instanceof AddInstruction) &&
+                !(instructions.get(instructions.size()-1) instanceof SubInstruction) &&
+                !(instructions.get(instructions.size()-1) instanceof MultInstruction))
+        {
+            s+= new LoadInstruction(nextReg+1, nextReg) + "\n";
+            nextReg++;
+        }
+        s+= new ReturnInstruction("i32", nextReg);
+        s+= "\n}";
         return s;
     }
 }
