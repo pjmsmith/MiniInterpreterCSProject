@@ -306,7 +306,7 @@ Expression PrecedenceFour() :
    { return new OpAdd(retVal, retVal2); }
 |  LOOKAHEAD(10)
    retVal = PrecedenceThree() <MINUS> retVal2 = PrecedenceFour()
-   { return new OpAdd(retVal, retVal2); }
+   { return new OpSubt(retVal, retVal2); }
 
 |  retVal= PrecedenceThree()
    { return retVal; }
@@ -338,7 +338,7 @@ Expression PrecedenceOne() :
 {
    LOOKAHEAD(10)
    retVal = Expr() <DOT> retVal2 = PrecedenceOne()
-   { return new OpAdd(retVal, retVal2); }
+   { return new OpField(retVal, retVal2); }
 
 |  retVal= Expr()
    { return retVal; }

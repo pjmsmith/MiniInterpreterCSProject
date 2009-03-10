@@ -622,7 +622,7 @@ public class Footle implements FootleConstants {
       retVal = PrecedenceThree();
       jj_consume_token(MINUS);
       retVal2 = PrecedenceFour();
-     {if (true) return new OpAdd(retVal, retVal2);}
+     {if (true) return new OpSub(retVal, retVal2);}
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LPAREN:
@@ -706,7 +706,7 @@ public class Footle implements FootleConstants {
       retVal = Expr();
       jj_consume_token(DOT);
       retVal2 = PrecedenceOne();
-     {if (true) return new OpAdd(retVal, retVal2);}
+     {if (true) return new OpField(retVal, retVal2);}
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LPAREN:
