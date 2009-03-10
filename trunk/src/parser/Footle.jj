@@ -62,7 +62,7 @@ TOKEN :
 | <COMMA: ",">
 | <PLUS: "+">
 | <MINUS: "-">
-| <DIVIDE: "\\">
+| <DIVIDE: "/">
 | <MULT: "*">
 | <LTHEN: "<">
 | <GTHEN: ">">
@@ -123,7 +123,7 @@ Expression Input() :
 {List<Expression> finList = new LinkedList<Expression>(); Expression finalExp; }
 {
   (finalExp = Statement() {finList.add(finalExp);})* <EOF>
-  {return new Sequence(finList); }
+  {return new Scope(new Sequence(finList)); }
 }
 
 Expression Statement() :
@@ -147,7 +147,7 @@ Expression Statement() :
    { return new Scope(new Sequence(finList)); }
 |  <IF> <LPAREN> retVal = Expression() <RPAREN>
    retVal1 = Statement() [LOOKAHEAD(3) <ELSE> retVal2 = Statement()]
-   { return new OpIfElse(retVal, new Scope(retVal1), new Scope(retVal2)); }
+   { return new OpIfElse(retVal, retVal1, retVal2); }
    
 |  LOOKAHEAD(4) <FUNC> funName=<ID> <LPAREN>[idval=<ID>{argList.add(idval.image); } 
      (<COMMA> idval=<ID> {argList.add(idval.image);})*]<RPAREN>
@@ -157,7 +157,7 @@ Expression Statement() :
 |  <RETURN> retVal = Expression() <SEMI>
    { return new Return(retVal); }
    
-|  <PRINT> retVal = Expression() <SEMI>
+|  <PRINT> <LPAREN> retVal = Expression() <RPAREN> <SEMI>
    { return new Print(retVal); }
 
 
@@ -175,10 +175,6 @@ Expression Expression() :
      (<COMMA> idval=<ID> {argList.add(idval.image);})*]<RPAREN>
    retVal = Statement()
    { return new ClosureValue(new Function(argList, new Scope(retVal))); }
-
-|  LOOKAHEAD(100) 
-   retVal=Expr() (LOOKAHEAD(100) <EQUAL> retVal2 = Expression())+
-   { return new OpEquals(retVal, retVal2); }
 
 |  <ISSTR> <LPAREN> retVal = Expression() <RPAREN>
    { return new IsType(StringValue.class, retVal); }
@@ -214,19 +210,11 @@ Expression Expression() :
 |  <NEW> idval = <ID> <LPAREN> [retVal = Expression() {finList.add(retVal);}(
        <COMMA> retVal = Expression(){finList.add(retVal);})*] <RPAREN>
    { return new OpNew(new IdValue(idval.image), finList); }    
-   
-|  LOOKAHEAD(100) 
-   retVal=Expr() (LOOKAHEAD(100) <PLUS> retVal2 = Expression())+
-   { return new OpAdd(retVal, retVal2); }
-|  LOOKAHEAD(100) 
-   retVal=Expr() (LOOKAHEAD(100) <MINUS> retVal2 = Expression())+
-   { return new OpSub(retVal, retVal2); }
-|  LOOKAHEAD(100) 
-   retVal=Expr() (LOOKAHEAD(100) <MULT> retVal2 = Expression())+
-   { return new OpMult(retVal, retVal2); }
-|  LOOKAHEAD(100) 
-   retVal=Expr() ( LOOKAHEAD(100) <DIVIDE> retVal2 = Expression())+
-   { return new OpDivide(retVal, retVal2); }
+
+| LOOKAHEAD(4)
+   retVal = Precedence()
+  { return retVal; }
+/**
 |  LOOKAHEAD(100) 
    retVal=Expr() ( LOOKAHEAD(100) <LTHEN> retVal2 = Expression())+
    { return new OpLessThan(retVal, retVal2); }
@@ -244,12 +232,115 @@ Expression Expression() :
    { return new And(retVal, retVal2); }
 |  LOOKAHEAD(100) 
    retVal=Expr() ( LOOKAHEAD(100) <OR> retVal2 = Expression())+
-   { return new Or(retVal, retVal2); }
+   { return new Or(retVal, retVal2); } */
+
 |  LOOKAHEAD(100)
    <NOT> retVal = Expression()
    { return new Not(retVal); }
+/*
 | LOOKAHEAD(100)
    retVal=Expr()
+   { return retVal; } */
+}
+Expression Precedence() :
+{Expression retVal = null; Expression retVal2 = null;}
+{
+   LOOKAHEAD(10)
+   retVal = PrecedenceSev() <EQUAL> retVal2 = Precedence()
+   { return new OpEquals(retVal, retVal2); }
+|  LOOKAHEAD(10)
+   retVal = PrecedenceSev()
+   { return retVal; }
+}
+
+Expression PrecedenceSev() :
+{Expression retVal = null; Expression retVal2 = null;}
+{
+   LOOKAHEAD(10)
+   retVal = PrecedenceSix() <AND> retVal2 = PrecedenceSev()
+   { return new And(retVal, retVal2); }
+|  LOOKAHEAD(10)
+   retVal = PrecedenceSix() <OR> retVal2 = PrecedenceSev()
+   { return new Or(retVal, retVal2); }
+
+|  retVal= PrecedenceSix()
+   { return retVal; }
+}
+
+Expression PrecedenceSix() :
+{Expression retVal = null; Expression retVal2 = null;}
+{
+   LOOKAHEAD(10)
+   retVal = PrecedenceFive() <LTHEN> retVal2 = PrecedenceSix()
+   { return new OpLessThan(retVal, retVal2); }
+|  LOOKAHEAD(10)
+   retVal = PrecedenceFive() <LTE> retVal2 = PrecedenceSix()
+   { return new OpLTE(retVal, retVal2); }
+|  LOOKAHEAD(10)
+   retVal = PrecedenceFive() <GTHEN> retVal2 = PrecedenceSix()
+   { return new OpGreaterThan(retVal, retVal2); }
+|  LOOKAHEAD(10)
+   retVal = PrecedenceFive() <GTE> retVal2 = PrecedenceSix()
+   { return new OpGTE(retVal, retVal2); }
+
+|  retVal= PrecedenceFive()
+   { return retVal; }
+}
+
+Expression PrecedenceFive() :
+{Expression retVal = null; Expression retVal2 = null;}
+{
+   LOOKAHEAD(10)
+   retVal = PrecedenceFour() <DIVIDE> retVal2 = PrecedenceFive()
+   { return new OpDivide(retVal, retVal2); }
+
+|  retVal= PrecedenceFour()
+   { return retVal; }
+}
+
+Expression PrecedenceFour() :
+{Expression retVal = null; Expression retVal2 = null;}
+{
+   LOOKAHEAD(10)
+   retVal = PrecedenceThree() <PLUS> retVal2 = PrecedenceFour()
+   { return new OpAdd(retVal, retVal2); }
+|  LOOKAHEAD(10)
+   retVal = PrecedenceThree() <MINUS> retVal2 = PrecedenceFour()
+   { return new OpAdd(retVal, retVal2); }
+
+|  retVal= PrecedenceThree()
+   { return retVal; }
+}
+
+Expression PrecedenceThree() :
+{Expression retVal = null; Expression retVal2 = null;}
+{
+   LOOKAHEAD(10)
+   retVal = PrecedenceTwo() <MULT> retVal2 = PrecedenceThree()
+   { return new OpMult(retVal, retVal2); }
+
+|  retVal= PrecedenceTwo()
+   { return retVal; }
+}
+
+Expression PrecedenceTwo() :
+{Expression retVal = null; Expression retVal2 = null;}
+{
+   <NOT> retVal = PrecedenceTwo()
+   { return new Not(retVal); }
+
+|  retVal= PrecedenceOne()
+   { return retVal; }
+}
+
+Expression PrecedenceOne() :
+{Expression retVal = null; Expression retVal2 = null;}
+{
+   LOOKAHEAD(10)
+   retVal = Expr() <DOT> retVal2 = PrecedenceOne()
+   { return new OpAdd(retVal, retVal2); }
+
+|  retVal= Expr()
    { return retVal; }
 }
 
@@ -266,11 +357,10 @@ Expression Expr() :
    { return new BoolValue(false); }
 |  val=<STRING>
    { return new StringValue(val.image); }
-|  LOOKAHEAD(10) <LPAREN> retVal = Expression() <RPAREN>
+|  <LPAREN> retVal = Expression() <RPAREN>
    { return retVal; }
-|  LOOKAHEAD(99) val=<ID> [LOOKAHEAD(4)<DOT> idval = <ID>]
-   { return idval == null ? new IdValue(val.image) 
-     : new OpField(new IdValue(val.image), idval.image, null); }
+|  val=<ID>
+   { return new IdValue(val.image); }
 }
 
 
