@@ -20,6 +20,11 @@ public class OpField implements Expression {
 		this.name = name;
 		this.assign = assign;
 	}
+    
+    public OpField(Expression left, Expression right)
+    {
+    	
+    }
 
     @Testable
 	public Environment getValue(Environment environment)
