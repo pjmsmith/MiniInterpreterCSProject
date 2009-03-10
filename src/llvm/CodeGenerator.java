@@ -43,6 +43,15 @@ public class CodeGenerator {
         }
     }
 
+    public CodeGenerator(int next)
+    {
+        instructions = new ArrayList<LLVMInstruction>();
+        functions = new ArrayList<FunctionDeclarationInstruction>();
+        nextReg = next;
+        lastEF = 0;
+        ef = new EFrame(null);
+    }
+
     public int generateCode(Expression exp)
     {
         if (exp instanceof Scope) {
@@ -63,6 +72,20 @@ public class CodeGenerator {
             //define i32 @f_0(i32 %p_0,...i32 %p_n) {
             // ...
             //ret <type> <value> }
+            OpFuncDecl fundec = (OpFuncDecl)exp;
+            Function func = fundec.getFunction();
+
+            CodeGenerator cg = new CodeGenerator(nextReg);
+            cg.generateCode(func.getBody());
+            nextReg = cg.getResult();
+            String args = "";
+            for(String s: func.getParamList())
+            {
+                args+= "i32 %" + s + ", ";
+            }
+            args = args.substring(0, args.length()-2);
+            functions.add(new FunctionDeclarationInstruction(nextReg, "i32", fundec.getFuncName(), args,
+                    (ArrayList<LLVMInstruction>)cg.getInstructions()));
             return nextReg;
         }
 		else if (exp instanceof ClosureValue) {
@@ -147,6 +170,10 @@ public class CodeGenerator {
         }
 		else if (exp instanceof OpEquals) {
             //icmp eq i32 %0, %1
+            OpEquals oe = (OpEquals)exp;
+            int l = generateCode(oe.getLeft());
+            int r = generateCode(oe.getRight());
+            instructions.add(new ICmpInstruction(nextReg, "eq", l, r));
             return nextReg;
         }
 		else if (exp instanceof OpField) {
@@ -155,14 +182,29 @@ public class CodeGenerator {
 		else if (exp instanceof OpFunctionCall) {
             //call i32 @f_0(i32 %p_0,...i32 %p_n)
             //if void, add noreturn at the end
+            OpFunctionCall ofc = (OpFunctionCall)exp;
+            for(Expression e: ofc.getArgs())
+            {
+                generateCode(e);
+            }
+            String args = "";
+            instructions.add(new CallInstruction(nextReg, "i32", ((IdValue)ofc.getName()).getInternalValue(), args));
             return nextReg;
         }
 		else if (exp instanceof OpGreaterThan) {
             //icmp sgt i32 %0, %1
+            OpGreaterThan ogt = (OpGreaterThan)exp;
+            int l = generateCode(ogt.getOne());
+            int r = generateCode(ogt.getTwo());
+            instructions.add(new ICmpInstruction(nextReg, "sgt", l, r));
             return nextReg;
         }
 		else if (exp instanceof OpGTE) {
             //icmp sge i32 %0, %1
+            OpGTE ogte = (OpGTE)exp;
+            int l = generateCode(ogte.getOne());
+            int r = generateCode(ogte.getTwo());
+            instructions.add(new ICmpInstruction(nextReg, "sge", l, r));
             return nextReg;
         }
 		else if (exp instanceof OpIfElse) {
@@ -179,9 +221,21 @@ public class CodeGenerator {
 		}
 		else if (exp instanceof OpLessThan) {
             //icmp slt i32 %0, %1
+            OpLessThan olt = (OpLessThan)exp;
+            int l = generateCode(olt.getOne());
+            int r = generateCode(olt.getTwo());
+            instructions.add(new ICmpInstruction(nextReg, "slt", l, r));
             return nextReg;
         }
-		else if (exp instanceof OpMult) {
+        else if (exp instanceof OpGTE) {
+            //icmp sge i32 %0, %1
+            OpLTE olte = (OpLTE)exp;
+            int l = generateCode(olte.getOne());
+            int r = generateCode(olte.getTwo());
+            instructions.add(new ICmpInstruction(nextReg, "sle", l, r));
+            return nextReg;
+        }
+        else if (exp instanceof OpMult) {
             OpMult m = (OpMult)exp; //mul i32, %0, %1
             int l = generateCode(m.getOne());
             int r = generateCode(m.getTwo());
@@ -322,6 +376,14 @@ public class CodeGenerator {
 
     public int getResult() {
         return nextReg;
+    }
+
+    public List<LLVMInstruction> getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(List<LLVMInstruction> instructions) {
+        this.instructions = instructions;
     }
 
     public String toString()

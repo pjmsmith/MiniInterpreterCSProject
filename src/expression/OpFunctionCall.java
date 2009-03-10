@@ -24,6 +24,22 @@ public class OpFunctionCall implements Expression {
 		this.args = args;
 	}
 
+    public IdValue getName() {
+        return name;
+    }
+
+    public void setName(IdValue name) {
+        this.name = name;
+    }
+
+    public List<Expression> getArgs() {
+        return args;
+    }
+
+    public void setArgs(List<Expression> args) {
+        this.args = args;
+    }
+
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, 
 		TypeException, UnboundIdentifierException {
