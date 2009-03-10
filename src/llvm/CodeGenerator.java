@@ -35,7 +35,9 @@ public class CodeGenerator {
         nextReg = 2;
         lastEF = 0;
         ef = new EFrame(null);
-        if(generateCode(statPass.getProgram()) > 0)
+        generateCode(statPass.getProgram());
+        System.out.println(statPass.getProgram());
+        if(instructions.size()-1 > 0)
         {
             retType = instructions.get(instructions.size()-1).getType();
         }
@@ -43,8 +45,8 @@ public class CodeGenerator {
 
     public int generateCode(Expression exp)
     {
-
         if (exp instanceof Scope) {
+            generateCode(((Scope)exp).getExpression());
             return nextReg;
         }
 		else if (exp instanceof Sequence) {
@@ -102,7 +104,7 @@ public class CodeGenerator {
             Expression name = oa.getLVal();
             if(name instanceof OpVarDecl)
             {
-                //add to eframe   
+                //add to eframe
             }
 
             return nextReg-1;
@@ -117,23 +119,20 @@ public class CodeGenerator {
             if(d.getOne() instanceof IntValue)
             {
                 instructions.add(new LoadInstruction(nextReg, l));
+                nextReg++;
+                instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 l = nextReg;
                 nextReg++;
-                if(((IntValue)d.getOne()).getInternalValue() < 0)
-                {
-                    sdiv |= true;
-                }
             }
             if(d.getTwo() instanceof IntValue)
             {
                 instructions.add(new LoadInstruction(nextReg, r));
+                nextReg++;
+                instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 r = nextReg;
                 nextReg++;
-                if(((IntValue)d.getTwo()).getInternalValue() < 0)
-                {
-                    sdiv |= true;
-                }
             }
+
             if(sdiv)
             {
                 instructions.add(new SDivInstruction(nextReg, l, r));
@@ -142,6 +141,7 @@ public class CodeGenerator {
             {
                 instructions.add(new UDivInstruction(nextReg, l, r));   
             }
+            instructions.add(new ShiftLeftInstruction(nextReg, nextReg-1, 2));
             nextReg++;
             return nextReg-1;
         }
@@ -188,16 +188,22 @@ public class CodeGenerator {
             if(m.getOne() instanceof IntValue)
             {
                 instructions.add(new LoadInstruction(nextReg, l));
+                nextReg++;
+                instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 l = nextReg;
                 nextReg++;
             }
             if(m.getTwo() instanceof IntValue)
             {
                 instructions.add(new LoadInstruction(nextReg, r));
+                nextReg++;
+                instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 r = nextReg;
                 nextReg++;
             }
             instructions.add(new MultInstruction(nextReg, l, r));
+            nextReg++;
+            instructions.add(new ShiftLeftInstruction(nextReg, nextReg-1, 2));
             nextReg++;
             return nextReg-1;
         }
@@ -219,16 +225,22 @@ public class CodeGenerator {
             if(s.getOne() instanceof IntValue)
             {
                 instructions.add(new LoadInstruction(nextReg, l));
+                nextReg++;
+                instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 l = nextReg;
                 nextReg++;
             }
             if(s.getTwo() instanceof IntValue)
             {
                 instructions.add(new LoadInstruction(nextReg, r));
+                nextReg++;
+                instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 r = nextReg;
                 nextReg++;
             }
             instructions.add(new SubInstruction(nextReg, l, r));
+            nextReg++;
+            instructions.add(new ShiftLeftInstruction(nextReg, nextReg-1, 2));
             nextReg++;
             return nextReg-1;
         }
@@ -334,13 +346,8 @@ public class CodeGenerator {
             s+= l + "\n";
         }
         //TODO: figure out whether the result of the last instruction needs loading
-        if(!(instructions.get(instructions.size()-1) instanceof AddInstruction) &&
-                !(instructions.get(instructions.size()-1) instanceof SubInstruction) &&
-                !(instructions.get(instructions.size()-1) instanceof MultInstruction))
-        {
-            s+= new LoadInstruction(nextReg+1, nextReg) + "\n";
-            nextReg++;
-        }
+        /*s+= new LoadInstruction(nextReg+1, nextReg) + "\n";
+        nextReg++;*/
         s+= new ReturnInstruction("i32", nextReg);
         s+= "\n}";
         return s;
