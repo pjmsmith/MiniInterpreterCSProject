@@ -22,8 +22,8 @@ public class MultInstruction extends LLVMInstruction {
     }
 
     public String toString()
-    {   //might need to allocate space for 
-        String s= "%r"+ super.getTargetRegister() + " = mul " + type + " %r" + leftArg + ", %r" + rightArg;
+    {
+        String s = "%r" + super.getTargetRegister() + " = mul " + type + " %r" + leftArg + ", %r" + rightArg;
         return s;
     }
 }

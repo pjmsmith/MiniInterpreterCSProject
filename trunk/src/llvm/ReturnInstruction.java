@@ -18,9 +18,25 @@ public class ReturnInstruction extends LLVMInstruction {
         this.value = value;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
+    }
+
     public String toString()
     {
-        String s = "ret " + type + " %" + value; 
+        String s = "ret " + type + " %r" + value; 
         return s;
     }
 }

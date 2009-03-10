@@ -1,19 +1,19 @@
 package llvm;
 
 /**
- * llvm: AddInstruction
+ * llvm: SDivInstruction
  * <p/>
  * Description:
  *
  * @author Patrick J. Smith
- * @date Feb 27, 2009
+ * @date Mar 9, 2009
  */
-public class AddInstruction extends LLVMInstruction {
+public class SDivInstruction extends LLVMInstruction {
     private int leftArg;
     private int rightArg;
     private static final String type = "i32";
 
-    public AddInstruction(int target, int one, int two)
+    public SDivInstruction(int target, int one, int two)
     {
         super(target, type);
         leftArg = one;
@@ -39,7 +39,7 @@ public class AddInstruction extends LLVMInstruction {
 
     public String toString()
     {
-        String s = "%r" + super.getTargetRegister() + " = add " + type + " %r" + leftArg + ", %r" + rightArg;
+        String s = "%r" + super.getTargetRegister() + " = sdiv " + type + " %r" + leftArg + ", %r" + rightArg;
         return s;
     }
 }
