@@ -48,7 +48,7 @@ public class GetElementPtrInstruction extends LLVMInstruction {
 
     public String toString()
     {
-        String s = "%r" + super.getTargetRegister() + " = getelementptr " + ptrType + " " + ptrVal + " " + location;
+        String s = "%r" + super.getTargetRegister() + " = getelementptr " + ptrType + " " + ptrVal + ", " + location;
         return s;
     }
 }
