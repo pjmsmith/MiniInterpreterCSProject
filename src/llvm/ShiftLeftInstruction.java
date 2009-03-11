@@ -37,7 +37,7 @@ public class ShiftLeftInstruction extends LLVMInstruction {
 
     public String toString()
     {
-        String s = "%r" + super.getTargetRegister() + " = shl " + super.getType() + "%r" + value + ", " + numShifts;
+        String s = "%r" + super.getTargetRegister() + " = shl " + super.getType() + " %r" + value + ", " + numShifts;
         return s;
     }
 }

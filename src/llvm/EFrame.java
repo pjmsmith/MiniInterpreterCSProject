@@ -14,7 +14,7 @@ import java.util.ArrayList;
  */
 public class EFrame {
     private int numElements;
-    private ArrayList<Value> elementList;
+    private ArrayList<Integer> elementList;
     private ArrayList<String> elementNames;
     private EFrame previous;
 
@@ -22,11 +22,11 @@ public class EFrame {
     {
         this.previous = previous;
         numElements = 0;
-        elementList = new ArrayList<Value>();
+        elementList = new ArrayList<Integer>();
         elementNames = new ArrayList<String>();
     }
 
-    public void addBinding(String name, Value val)
+    public void addBinding(String name, Integer val)
     {
         elementList.add(val);
         elementNames.add(name);
@@ -55,11 +55,11 @@ public class EFrame {
         this.numElements = numElements;
     }
 
-    public ArrayList<Value> getElementList() {
+    public ArrayList<Integer> getElementList() {
         return elementList;
     }
 
-    public void setElementList(ArrayList<Value> elementList) {
+    public void setElementList(ArrayList<Integer> elementList) {
         this.elementList = elementList;
     }
 
@@ -78,4 +78,5 @@ public class EFrame {
     public void setPrevious(EFrame previous) {
         this.previous = previous;
     }
+
 }

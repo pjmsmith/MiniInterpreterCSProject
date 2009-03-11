@@ -71,8 +71,8 @@ public class main {
             System.out.println("\nRunning AST through static pass...");
             statPass = new StaticPass(ast);
             statPass.runStaticPass();
-            //System.out.println("Static Pass Completed: ");
-            //System.out.println(statPass);
+            System.out.println("Static Pass Completed: ");
+            System.out.println(statPass);
         }
 
         //generate the llvm from the result of the static pass
@@ -89,18 +89,19 @@ public class main {
             
         }
         //run assemble and run the llvm code
-        /*/The following block is attributed to Bill Hess, borrowed from the Google Group
-        if (Command.exec("llvm-as my-footle.s -f") == 0)
-            if (Command.exec("llvm-ld -o testbin test.s.bc") == 0)
-                if (System.getProperty("os.name").contains("Windows"))
-                    Command.exec("testbin.exe");
-                else
-                    Command.exec("testbin");
+        //The following block is attributed to Bill Hess, borrowed from the Google Group
+        if (System.getProperty("os.name").contains("Windows"))
+        {
+                    System.exit(-1);
+        }
+        if (Command.exec("llvm-as -f my-footle.s ") == 0)
+            if (Command.exec("llvm-ld -o runner test.s.bc runner.o") == 0)
+                Command.exec("runner");
             else
                 System.out.println("compile: Failed to create binary executable.");
         else
             System.out.println("compile: Assembler failed.");
-        //End */
+        //End
 
     }
 

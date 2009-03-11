@@ -37,7 +37,7 @@ public class LogicalShiftRightInstruction extends LLVMInstruction {
 
     public String toString()
     {
-        String s = "%r" + super.getTargetRegister() + " = lshr " + super.getType() + "%r" + value + ", " + numShifts;
+        String s = "%r" + super.getTargetRegister() + " = lshr " + super.getType() + " %r" + value + ", " + numShifts;
         return s;
     }
 }
