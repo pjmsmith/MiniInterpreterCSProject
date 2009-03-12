@@ -17,6 +17,7 @@ public class EFrame {
     private ArrayList<Integer> elementList;
     private ArrayList<String> elementNames;
     private EFrame previous;
+    private int numScopesBack;
 
     public EFrame(EFrame previous)
     {
@@ -24,6 +25,7 @@ public class EFrame {
         numElements = 0;
         elementList = new ArrayList<Integer>();
         elementNames = new ArrayList<String>();
+        numScopesBack = 0;
     }
 
     public void addBinding(String name, Integer val)
@@ -35,14 +37,25 @@ public class EFrame {
 
     public int getBinding(String name)
     {
-        int binding = 0;
-        for(int i = 0; i < numElements; i++)
+        int binding = -1;
+        EFrame next = this;
+        numScopesBack = 0;
+        while(next != null)
         {
-            if(elementNames.get(i).equals(name))
+            for(int i = 0; i < next.getNumElements(); i++)
             {
-                binding = i;
+                if(next.getElementNames().get(i).equals(name))
+                {
+                    binding = i;
+                    break;
+                }
+            }
+            if(binding >= 0)
+            {
                 break;
             }
+            numScopesBack++;
+            next = next.getPrevious();
         }
         return binding;
     }
@@ -79,4 +92,11 @@ public class EFrame {
         this.previous = previous;
     }
 
+    public int getNumScopesBack() {
+        return numScopesBack;
+    }
+
+    public void setNumScopesBack(int numScopesBack) {
+        this.numScopesBack = numScopesBack;
+    }
 }

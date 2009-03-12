@@ -26,6 +26,29 @@ public class FunctionDeclarationInstruction extends LLVMInstruction {
 
     }
 
+    public String getArguments() {
+        return arguments;
+    }
+
+    public void setArguments(String arguments) {
+        this.arguments = arguments;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public ArrayList<LLVMInstruction> getBody() {
+        return body;
+    }
+
+    public void setBody(ArrayList<LLVMInstruction> body) {
+        this.body = body;
+    }
 
     public String toString()
     {

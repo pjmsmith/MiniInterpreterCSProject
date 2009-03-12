@@ -34,13 +34,12 @@ public class CodeGenerator {
         statPass = sp;
         instructions = new ArrayList<LLVMInstruction>();
         functions = new ArrayList<FunctionDeclarationInstruction>();
-        nextReg = 2;
+        nextReg = 3;
         nextLabel = 0;
         lastEF = 1;
         lastVal = null;
         ef = new EFrame(null);
         generateCode(statPass.getProgram());
-        System.out.println(statPass.getProgram());
         if(instructions.size()-1 > 0)
         {
             retType = instructions.get(instructions.size()-1).getType();
@@ -70,6 +69,7 @@ public class CodeGenerator {
             return nextReg;
         }
 		else if (exp instanceof OpVarDecl) {
+            //nothing needs generating, OpVarDecl is always contained in OpAssign
             return nextReg;
         }
 		else if (exp instanceof OpFuncDecl) {
@@ -79,10 +79,49 @@ public class CodeGenerator {
             OpFuncDecl fundec = (OpFuncDecl)exp;
             Function func = fundec.getFunction();
 
-            CodeGenerator cg = new CodeGenerator(nextReg);
+            CodeGenerator cg = new CodeGenerator(nextReg+3+func.getParamList().size());
+            int tempNextReg = nextReg;
+            cg.setNextLabel(nextLabel);
+            cg.setLastEF(nextReg+1);
+            for(String s: func.getParamList())
+            {
+                cg.getEF().addBinding(s, 0);
+            }
             cg.generateCode(func.getBody());
+            for(FunctionDeclarationInstruction f: cg.getFunctions())
+            {
+                functions.add(f);
+            }
+            String eframeType = "{%eframe*, i32, " +
+                    "[" + cg.getEF().getNumElements() + " x i32]}";
+            cg.getEF().setPrevious(ef);
+            cg.setNextLabel(nextLabel);
+            ArrayList<LLVMInstruction> extendedBody = new ArrayList<LLVMInstruction>(4);
+            extendedBody.add(new MallocInstruction(tempNextReg, eframeType, ""));
+            extendedBody.add(new BitCastInstruction(tempNextReg+1, eframeType + "*", "%r" + tempNextReg, "%eframe*"));
+            extendedBody.add(new GetElementPtrInstruction(tempNextReg+2, "%eframe*", "%r" + cg.getLastEF(), "i32 0, i32 0"));
+            extendedBody.add(new StoreInstruction(tempNextReg+2, "%eframe*", "%env", "%eframe**"));
+            //extend eframe with paramlist here
+            tempNextReg += 3;
+            for(int i = 0; i < func.getParamList().size(); i++)
+            {
+                extendedBody.add(new GetElementPtrInstruction(tempNextReg, "%eframe*",
+                        cg.getEF().getElementList().get(i).toString(), "i32 0, i32 2, i32 " + i));
+                extendedBody.add(new StoreInstruction(tempNextReg, "i32", "%" + func.getParamList().get(i), ""));
+                tempNextReg++;
+            }
+            for(LLVMInstruction l: cg.getInstructions())
+            {
+                extendedBody.add(l);
+            }
+            cg.setInstructions(extendedBody);
+            //%nextReg malloc new eframe
+            //%nextReg+1 bitcast     -> lastEF = this value
+            //getelementptr 0, 0
+            //store %env
             nextReg = cg.getResult();
             String args = "";
+
             for(String s: func.getParamList())
             {
                 args+= "i32 %" + s + ", ";
@@ -111,20 +150,20 @@ public class CodeGenerator {
             int r = generateCode(a.getTwo());
             if(isIntOp(a.getOne()))
             {
-                instructions.add(new LoadInstruction(nextReg, l-1));
+                instructions.add(new LoadInstruction(nextReg, l-1, "i32"));
                 l = nextReg;
                 nextReg++;
             }
             if(isIntOp(a.getTwo()))
             {
-                instructions.add(new LoadInstruction(nextReg, r-1));
+                instructions.add(new LoadInstruction(nextReg, r-1, "i32"));
                 r = nextReg;
                 nextReg++;
             }
             instructions.add(new AddInstruction(nextReg, l, r));
             nextReg++;
             instructions.add(new MallocInstruction(nextReg, "i32", ""));
-            instructions.add(new StoreInstruction(nextReg, "i32", "%r" + (nextReg-1)));
+            instructions.add(new StoreInstruction(nextReg, "i32", "%r" + (nextReg-1), ""));
             nextReg++;
             return nextReg;
         }
@@ -135,11 +174,11 @@ public class CodeGenerator {
             if(name instanceof OpVarDecl)
             {
                 ef.addBinding(((OpVarDecl)name).getName(), lastVal);
-                instructions.add(new LoadInstruction(nextReg, nextReg-1));
+                instructions.add(new LoadInstruction(nextReg, nextReg-1, "i32"));
                 nextReg++;
                 instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 2, i32 " +
                         ef.getBinding(((OpVarDecl)name).getName())));
-                instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1)));
+                instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1), ""));
                 nextReg++;
             }
             else if(name instanceof IdValue)
@@ -148,10 +187,10 @@ public class CodeGenerator {
                 IdValue id = (IdValue)name;
                 String name2 = id.getInternalValue();
                 int location = ef.getBinding(name2);
-                instructions.add(new LoadInstruction(nextReg, r-1));
+                instructions.add(new LoadInstruction(nextReg, r-1, "i32"));
                 nextReg++;
                 instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 2, i32 " + location));
-                instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1)));
+                instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1), ""));
                 nextReg++;
             }
 
@@ -166,7 +205,7 @@ public class CodeGenerator {
             boolean sdiv = false;
             if(d.getOne() instanceof IntValue)
             {
-                instructions.add(new LoadInstruction(nextReg, l));
+                instructions.add(new LoadInstruction(nextReg, l, "i32"));
                 nextReg++;
                 instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 l = nextReg;
@@ -174,7 +213,7 @@ public class CodeGenerator {
             }
             if(d.getTwo() instanceof IntValue)
             {
-                instructions.add(new LoadInstruction(nextReg, r));
+                instructions.add(new LoadInstruction(nextReg, r, "i32"));
                 nextReg++;
                 instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 r = nextReg;
@@ -200,13 +239,13 @@ public class CodeGenerator {
             int r = generateCode(oe.getRight());
             if(isIntOp(oe.getLeft()))
             {
-                instructions.add(new LoadInstruction(nextReg, l-1));
+                instructions.add(new LoadInstruction(nextReg, l-1, "i32"));
                 l = nextReg;
                 nextReg++;
             }
             if(isIntOp(oe.getRight()))
             {
-                instructions.add(new LoadInstruction(nextReg, r-1));
+                instructions.add(new LoadInstruction(nextReg, r-1, "i32"));
                 r = nextReg;
                 nextReg++;
             }
@@ -236,13 +275,13 @@ public class CodeGenerator {
             int r = generateCode(ogt.getTwo());
             if(isIntOp(ogt.getOne()))
             {
-                instructions.add(new LoadInstruction(nextReg, l-1));
+                instructions.add(new LoadInstruction(nextReg, l-1, "i32"));
                 l = nextReg;
                 nextReg++;
             }
             if(isIntOp(ogt.getTwo()))
             {
-                instructions.add(new LoadInstruction(nextReg, r-1));
+                instructions.add(new LoadInstruction(nextReg, r-1, "i32"));
                 r = nextReg;
                 nextReg++;
             }
@@ -257,13 +296,13 @@ public class CodeGenerator {
             int r = generateCode(ogte.getTwo());
             if(isIntOp(ogte.getOne()))
             {
-                instructions.add(new LoadInstruction(nextReg, l-1));
+                instructions.add(new LoadInstruction(nextReg, l-1, "i32"));
                 l = nextReg;
                 nextReg++;
             }
             if(isIntOp(ogte.getTwo()))
             {
-                instructions.add(new LoadInstruction(nextReg, r-1));
+                instructions.add(new LoadInstruction(nextReg, r-1, "i32"));
                 r = nextReg;
                 nextReg++;
             }
@@ -318,13 +357,13 @@ public class CodeGenerator {
             int r = generateCode(olt.getTwo());
             if(isIntOp(olt.getOne()))
             {
-                instructions.add(new LoadInstruction(nextReg, l-1));
+                instructions.add(new LoadInstruction(nextReg, l-1, "i32"));
                 l = nextReg;
                 nextReg++;
             }
             if(isIntOp(olt.getTwo()))
             {
-                instructions.add(new LoadInstruction(nextReg, r-1));
+                instructions.add(new LoadInstruction(nextReg, r-1, "i32"));
                 r = nextReg;
                 nextReg++;
             }
@@ -339,13 +378,13 @@ public class CodeGenerator {
             int r = generateCode(olte.getTwo());
             if(isIntOp(olte.getOne()))
             {
-                instructions.add(new LoadInstruction(nextReg, l-1));
+                instructions.add(new LoadInstruction(nextReg, l-1, "i32"));
                 l = nextReg;
                 nextReg++;
             }
             if(isIntOp(olte.getTwo()))
             {
-                instructions.add(new LoadInstruction(nextReg, r-1));
+                instructions.add(new LoadInstruction(nextReg, r-1, "i32"));
                 r = nextReg;
                 nextReg++;
             }
@@ -359,7 +398,7 @@ public class CodeGenerator {
             int r = generateCode(m.getTwo());
             if(isIntOp(m.getOne()))
             {
-                instructions.add(new LoadInstruction(nextReg, l-1));
+                instructions.add(new LoadInstruction(nextReg, l-1, "i32"));
                 nextReg++;
                 instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 l = nextReg;
@@ -367,7 +406,7 @@ public class CodeGenerator {
             }
             if(isIntOp(m.getTwo()))
             {
-                instructions.add(new LoadInstruction(nextReg, r-1));
+                instructions.add(new LoadInstruction(nextReg, r-1, "i32"));
                 nextReg++;
                 instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 r = nextReg;
@@ -378,7 +417,7 @@ public class CodeGenerator {
             instructions.add(new ShiftLeftInstruction(nextReg, nextReg-1, 2));
             nextReg++;
             instructions.add(new MallocInstruction(nextReg, "i32", ""));    
-            instructions.add(new StoreInstruction(nextReg, "i32", "%r" + (nextReg-1)));
+            instructions.add(new StoreInstruction(nextReg, "i32", "%r" + (nextReg-1), ""));
             nextReg++;
             return nextReg;
         }
@@ -399,7 +438,7 @@ public class CodeGenerator {
             int r = generateCode(s.getTwo());
             if(isIntOp(s.getOne()))
             {
-                instructions.add(new LoadInstruction(nextReg, l-1));
+                instructions.add(new LoadInstruction(nextReg, l-1, "i32"));
                 nextReg++;
                 instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 l = nextReg;
@@ -407,7 +446,7 @@ public class CodeGenerator {
             }
             if(isIntOp(s.getTwo()))
             {
-                instructions.add(new LoadInstruction(nextReg, r-1));
+                instructions.add(new LoadInstruction(nextReg, r-1, "i32"));
                 nextReg++;
                 instructions.add(new LogicalShiftRightInstruction(nextReg, nextReg-1, 2));
                 r = nextReg;
@@ -418,7 +457,7 @@ public class CodeGenerator {
             instructions.add(new ShiftLeftInstruction(nextReg, nextReg-1, 2));
             nextReg++;                     
             instructions.add(new MallocInstruction(nextReg, "i32", ""));
-            instructions.add(new StoreInstruction(nextReg, "i32", "%r" + (nextReg-1)));
+            instructions.add(new StoreInstruction(nextReg, "i32", "%r" + (nextReg-1), ""));
             nextReg++;
             return nextReg;
         }
@@ -462,8 +501,11 @@ public class CodeGenerator {
             return nextReg;
         }
 		else if (exp instanceof Return) {
-            ReturnInstruction ret;
-
+            Return r = (Return)exp;
+            int res = generateCode(r.getExp());
+            instructions.add(new LoadInstruction(nextReg, res-1, "i32"));
+            nextReg++;
+            instructions.add(new ReturnInstruction("i32", nextReg-1 ));
             return nextReg;
         }
 		else if (exp instanceof StringLength) {
@@ -484,7 +526,7 @@ public class CodeGenerator {
                 tagged++;
             }
             String shiftedVal = ((Integer)tagged).toString();
-            instructions.add(new StoreInstruction(nextReg, "i32", shiftedVal));
+            instructions.add(new StoreInstruction(nextReg, "i32", shiftedVal, ""));
             lastVal = tagged;
             nextReg++;
             return nextReg;
@@ -496,13 +538,32 @@ public class CodeGenerator {
             IdValue id = (IdValue)exp;
             String name = id.getInternalValue();
             int location = ef.getBinding(name);
-            instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 2, i32 " + location));
-            nextReg++;
-            instructions.add(new LoadInstruction(nextReg, nextReg-1));
-            nextReg++;
-            instructions.add(new MallocInstruction(nextReg, "i32", ""));
-            instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1)));
-            nextReg++;
+            if(location >= 0)
+            {
+                for(int i =  0; i < ef.getNumScopesBack(); i++)
+                {
+                    instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 0"));
+                    nextReg++;
+                    instructions.add(new LoadInstruction(nextReg, nextReg-1, "%eframe*"));
+                }
+                instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 2, i32 " + location));
+                nextReg++;
+                instructions.add(new LoadInstruction(nextReg, nextReg-1, "i32"));
+                nextReg++;
+                instructions.add(new MallocInstruction(nextReg, "i32", ""));
+                instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1), ""));
+                nextReg++;
+            }
+            else
+            {
+                for(FunctionDeclarationInstruction f:functions)
+                {
+                    if(f.getName().equals(name));
+                    {
+                        //dispatch on name, args, etc
+                    }
+                }
+            }
             return nextReg;
         }
         else if (exp instanceof Function) {
@@ -513,7 +574,7 @@ public class CodeGenerator {
             instructions.add(new MallocInstruction(nextReg, "i32", ""));
             Integer val = (((IntValue)exp).getInternalValue()<<2);
             String shiftedVal = (val.toString());
-            instructions.add(new StoreInstruction(nextReg, "i32", shiftedVal));
+            instructions.add(new StoreInstruction(nextReg, "i32", shiftedVal, ""));
             nextReg++;
             lastVal = val;
             return nextReg;
@@ -549,6 +610,46 @@ public class CodeGenerator {
                 exp instanceof OpMult || exp instanceof OpSub || exp instanceof OpDivide);
     }
 
+    public int getLastEF() {
+        return lastEF;
+    }
+
+    public void setLastEF(int lastEF) {
+        this.lastEF = lastEF;
+    }
+
+    public EFrame getEF() {
+        return ef;
+    }
+
+    public void setEF(EFrame ef) {
+        this.ef = ef;
+    }
+
+    public int getNextReg() {
+        return nextReg;
+    }
+
+    public void setNextReg(int nextReg) {
+        this.nextReg = nextReg;
+    }
+
+    public int getNextLabel() {
+        return nextLabel;
+    }
+
+    public void setNextLabel(int nextLabel) {
+        this.nextLabel = nextLabel;
+    }
+
+    public List<FunctionDeclarationInstruction> getFunctions() {
+        return functions;
+    }
+
+    public void setFunctions(List<FunctionDeclarationInstruction> functions) {
+        this.functions = functions;
+    }
+
     public String toString()
     {
         //target header
@@ -556,6 +657,7 @@ public class CodeGenerator {
                 "8-i16:16:16-i32:32:32-i64:32:64-f32:32:32-f64:32:64-v64:64:64-v128:128:128-a0:0:64-f80:32:32\"\n" +
                 "target triple = \"i386-pc-linux-gnu\"\n";
         String eframeType = "{%eframe*, i32, [" + ef.getNumElements() + " x i32]}";
+        ef.setPrevious(null);
         //main function wrapper to see results
         s+= "%eframe = type {%eframe*, i32, [0 x i32]}\n";
         s+= "@emptyframe = global %eframe undef\n";
@@ -565,7 +667,9 @@ public class CodeGenerator {
         }
         s+= "define i32 @llvm_main(){\n" +
                 new MallocInstruction(0, eframeType, "") + "\n" +
-                new BitCastInstruction(1, eframeType + "*", "%r0", "%eframe*") + "\n";
+                new BitCastInstruction(1, eframeType + "*", "%r0", "%eframe*") + "\n" +
+                new GetElementPtrInstruction(2, "%eframe*", "%r1", "i32 0, i32 0") + "\n" +
+                new StoreInstruction(2, "%eframe*", "@emptyframe", "%eframe**") + "\n";
         //list of instructions
         for(LLVMInstruction l:instructions)
         {
@@ -574,13 +678,13 @@ public class CodeGenerator {
         //TODO: figure out whether the result of the last instruction needs loading
         if(instructions.get(instructions.size()-1) instanceof StoreInstruction)
         {
-            s+= new LoadInstruction(nextReg, nextReg-1) + "\n";
+            s+= new LoadInstruction(nextReg, nextReg-1, "i32") + "\n";
             s+= new ReturnInstruction(retType, nextReg);
             s+= "\n}";
         }
         else
         {
-            s+= new LoadInstruction(nextReg+1, nextReg) + "\n";
+            s+= new LoadInstruction(nextReg+1, nextReg, "i32") + "\n";
             s+= new ReturnInstruction(retType, nextReg+1);
             s+= "\n}";
         }

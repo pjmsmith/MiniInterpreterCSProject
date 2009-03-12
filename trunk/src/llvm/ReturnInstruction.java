@@ -36,7 +36,15 @@ public class ReturnInstruction extends LLVMInstruction {
 
     public String toString()
     {
-        String s = "ret " + type + " %r" + value; 
+        String s = "ret ";
+        if(!type.equals(""))
+        {
+            s+= type + " %r" + value;
+        }
+        else
+        {
+            s+= "void";
+        }
         return s;
     }
 }
