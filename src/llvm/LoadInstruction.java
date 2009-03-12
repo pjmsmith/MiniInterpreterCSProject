@@ -10,10 +10,9 @@ package llvm;
  */
 public class LoadInstruction extends LLVMInstruction {
     private int sourcePtr;
-
-    public LoadInstruction(int target, int ptr)
+    public LoadInstruction(int target, int ptr, String type)
     {
-        super(target, "i32");
+        super(target, type);
         sourcePtr = ptr;
     }
 

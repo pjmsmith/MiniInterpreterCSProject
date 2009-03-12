@@ -95,8 +95,11 @@ public class main {
                     System.exit(-1);
         }
         if (Command.exec("llvm-as -f my-footle.s ") == 0)
-            if (Command.exec("llvm-ld -o runner test.s.bc runner.o") == 0)
+            if (Command.exec("llvm-ld -o runner my-footle.s.bc runner.o") == 0)
+            {
+                System.out.println("*** Running assembled code ****");
                 Command.exec("runner");
+            }
             else
                 System.out.println("compile: Failed to create binary executable.");
         else
