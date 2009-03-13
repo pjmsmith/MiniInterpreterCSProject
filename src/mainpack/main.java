@@ -56,34 +56,34 @@ public class main {
 
         if(inStream != null)
         {
-            System.out.println("Parsing " + fileName + "...");
+            //System.out.println("Parsing " + fileName + "...");
             parser = new Footle(inStream);
             try {
                 ast = parser.Input();
-                System.out.println("AST Generated: ");
-                System.out.println(ast);
+                //System.out.println("AST Generated: ");
+                //System.out.println(ast);
             } catch (ParseException e) {
                 System.out.println("compile: Parse error encountered. Check input file.");
             }
         }
         if(ast != null)
         {
-            System.out.println("\nRunning AST through static pass...");
+            //System.out.println("\nRunning AST through static pass...");
             statPass = new StaticPass(ast);
             statPass.runStaticPass();
-            System.out.println("Static Pass Completed: ");
-            System.out.println(statPass);
+            //System.out.println("Static Pass Completed: ");
+            //System.out.println(statPass);
         }
 
         //generate the llvm from the result of the static pass
         if(statPass != null)
         {
-            System.out.println("Generating LLVM...");
+            //System.out.println("Generating LLVM...");
             llvmGen = new CodeGenerator(statPass);
-            System.out.println("***CodeGenerated***");
-            System.out.println(llvmGen);
+            //System.out.println("***CodeGenerated***");
+            //System.out.println(llvmGen);
             //generate LLVM object tree from AST
-            System.out.println("Outputting LLVM code to file...");
+            //System.out.println("Outputting LLVM code to file...");
             //output LLVM to file
             toLLVMFile(llvmGen.toString());
             
@@ -95,10 +95,9 @@ public class main {
                     System.exit(-1);
         }
         if (Command.exec("llvm-as -f my-footle.s ") == 0)
-            if (Command.exec("llvm-ld -o runner my-footle.s.bc runner.o") == 0)
+            if (Command.exec("llvm-ld -o a.out my-footle.s.bc runner.o") == 0)
             {
-                System.out.println("*** Running assembled code ****");
-                Command.exec("runner");
+                //do nothing
             }
             else
                 System.out.println("compile: Failed to create binary executable.");
