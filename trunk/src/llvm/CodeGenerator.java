@@ -470,6 +470,9 @@ public class CodeGenerator {
             /////////////End
             instructions.add(new LabelInstruction(nextReg, nextLabel));
             nextLabel++;
+            String valsAndLabels = "[%r"+thenResult+", %" + thenLabel  + "]" + ", [%r"+elseResult+", %" + elseLabel  + "]";
+            instructions.add(new PhiNodeInstruction(nextReg, "i32", valsAndLabels));
+            nextLabel++;
             /* phi node goes here? */
             return nextReg;
         }
