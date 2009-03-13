@@ -94,7 +94,7 @@ public class main {
         {
                     System.exit(-1);
         }
-        if (Command.exec("llvm-as -f my-footle.s ") == 0)
+        if (emitLLVM && Command.exec("llvm-as -f my-footle.s ") == 0)
             if (Command.exec("llvm-ld -o a.out my-footle.s.bc runner.o") == 0)
             {
                 //do nothing
