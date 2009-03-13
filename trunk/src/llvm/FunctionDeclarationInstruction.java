@@ -15,6 +15,8 @@ public class FunctionDeclarationInstruction extends LLVMInstruction {
     private String arguments;
     private String name;
     private ArrayList<LLVMInstruction> body;
+    private boolean returnsClosure;
+    private String cloId;
 
     public FunctionDeclarationInstruction(int target, String type, String name,
                                           String arguments, ArrayList<LLVMInstruction> body)
@@ -23,6 +25,8 @@ public class FunctionDeclarationInstruction extends LLVMInstruction {
         this.arguments = arguments;
         this.name = name;
         this.body = body;
+        returnsClosure = false;
+        cloId = "";
 
     }
 
@@ -67,4 +71,20 @@ public class FunctionDeclarationInstruction extends LLVMInstruction {
         return s;
     }
 
+    public void setClosure(boolean b) {
+        returnsClosure = b;
+    }
+
+    public boolean getClosure()
+    {
+        return returnsClosure;
+    }
+
+    public String getCloId() {
+        return cloId;
+    }
+
+    public void setCloId(String cloId) {
+        this.cloId = cloId;
+    }
 }

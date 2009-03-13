@@ -22,6 +22,7 @@ public class CodeGenerator {
     private StaticPass statPass;
     private List<LLVMInstruction> instructions;
     private List<FunctionDeclarationInstruction> functions;
+    private Closure closures;
     private EFrame ef;
     private int lastEF;
     private String retType;
@@ -37,6 +38,7 @@ public class CodeGenerator {
         nextReg = 3;
         nextLabel = 0;
         lastEF = 1;
+        closures = new Closure();
         lastVal = null;
         ef = new EFrame(null);
         generateCode(statPass.getProgram());
@@ -83,18 +85,34 @@ public class CodeGenerator {
             int tempNextReg = nextReg;
             cg.setNextLabel(nextLabel);
             cg.setLastEF(nextReg+1);
+            cg.getEF().setPrevious(ef);
             for(String s: func.getParamList())
             {
                 cg.getEF().addBinding(s, 0);
             }
+            
             cg.generateCode(func.getBody());
+            LLVMInstruction lastInst = cg.getInstructions().get(cg.getInstructions().size()-2);
+            boolean clo = false;
+            String cloId = "";
+            if(lastInst instanceof PtrToIntInstruction)
+            {
+                PtrToIntInstruction r = (PtrToIntInstruction)lastInst;
+                if(r.getType1().equals("%closure*"))
+                {
+                    clo = true;
+                    List<Expression> l = ((Sequence)(((Scope)((Scope)func.getBody()).getExpression()).getExpression())).getExpressions();
+                    cloId = ((IdValue)((Return)l.get(l.size()-1)).getExp()).getInternalValue();
+
+                }
+            }
             for(FunctionDeclarationInstruction f: cg.getFunctions())
             {
                 functions.add(f);
             }
             String eframeType = "{%eframe*, i32, " +
-                    "[" + cg.getEF().getNumElements() + " x i32]}";
-            cg.getEF().setPrevious(ef);
+                    "[" + cg.getEF().getNumElements() + " x i32]}"; //TODO check this
+           
             cg.setNextLabel(nextLabel);
             ArrayList<LLVMInstruction> extendedBody = new ArrayList<LLVMInstruction>(4);
             extendedBody.add(new MallocInstruction(tempNextReg, eframeType, ""));
@@ -106,7 +124,7 @@ public class CodeGenerator {
             for(int i = 0; i < func.getParamList().size(); i++)
             {
                 extendedBody.add(new GetElementPtrInstruction(tempNextReg, "%eframe*",
-                        cg.getEF().getElementList().get(i).toString(), "i32 0, i32 2, i32 " + i));
+                        "%r" + cg.getLastEF(), "i32 0, i32 2, i32 " + i));
                 extendedBody.add(new StoreInstruction(tempNextReg, "i32", "%" + func.getParamList().get(i), ""));
                 tempNextReg++;
             }
@@ -129,6 +147,8 @@ public class CodeGenerator {
             args = args.substring(0, args.length()-2);
             functions.add(new FunctionDeclarationInstruction(nextReg, "i32", fundec.getFuncName(), args,
                     (ArrayList<LLVMInstruction>)cg.getInstructions()));
+            functions.get(functions.size()-1).setClosure(clo);
+            functions.get(functions.size()-1).setCloId(cloId);
             return nextReg;
         }
 		else if (exp instanceof ClosureValue) {
@@ -169,21 +189,97 @@ public class CodeGenerator {
         }
 		else if (exp instanceof OpAssign) {
             OpAssign oa = (OpAssign)exp;
-            int r = generateCode(oa.getRVal());
             Expression name = oa.getLVal();
+
             if(name instanceof OpVarDecl)
             {
-                ef.addBinding(((OpVarDecl)name).getName(), lastVal);
-                instructions.add(new LoadInstruction(nextReg, nextReg-1, "i32"));
-                nextReg++;
-                instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 2, i32 " +
+                boolean isAFunction = false;
+                if(oa.getRVal() instanceof IdValue)
+                {
+                    String lId = ((OpVarDecl)oa.getLVal()).getName();
+                    String rId = ((IdValue)oa.getRVal()).getInternalValue();
+                    for(FunctionDeclarationInstruction f:functions)
+                    {
+                        if(f.getName().equals(rId)) // it's a function name
+                        {
+                            isAFunction = true;
+                            break;
+                        }
+                    }
+                    if(isAFunction)
+                    {
+                        closures.addBinding(lId, rId);
+                    }
+                    else
+                    {
+                        generateCode(oa.getRVal());
+                        ef.addBinding(((OpVarDecl)name).getName(), lastVal);
+                        instructions.add(new LoadInstruction(nextReg, nextReg-1, "i32"));
+                        nextReg++;
+                        instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 2, i32 " +
                         ef.getBinding(((OpVarDecl)name).getName())));
-                instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1), ""));
-                nextReg++;
+                        instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1), ""));
+                        nextReg++;
+                    }
+                }
+                else if(oa.getRVal() instanceof OpFunctionCall)
+                {
+                    OpFunctionCall ofc = (OpFunctionCall)oa.getRVal();
+                    String lId = ((OpVarDecl)oa.getLVal()).getName();
+                    int retr = generateCode(oa.getRVal());
+                    boolean clo = false;
+                    for(FunctionDeclarationInstruction f: functions)
+                    {
+                        if(f.getName().equals(ofc.getName().getInternalValue()))
+                        {
+                            if(f.getClosure())
+                            {
+                                closures.addBinding(lId, f.getCloId());
+                                clo = true;
+
+                            }
+                            break;
+                        }
+                    }
+                    if(clo)
+                    {
+                        //extend eframe, lastEF = whatever the extended eframe is
+                        instructions.add(new LoadInstruction(nextReg, (retr-1), "i32"));
+                        nextReg++;
+                        instructions.add(new IntToPtrInstruction(nextReg, "i32", "%r"+(nextReg-1), "%closure*"));
+                        nextReg++;
+                        instructions.add(new GetElementPtrInstruction(nextReg, "%closure*", "%r"+(nextReg-1), "i32 0, i32 0"));
+                        nextReg++;
+                        instructions.add(new LoadInstruction(nextReg, nextReg-1, "%eframe*"));
+                        lastEF = nextReg;
+                        nextReg++;
+                    }
+                    else
+                    {
+                        ef.addBinding(((OpVarDecl)name).getName(), lastVal);
+                        instructions.add(new LoadInstruction(nextReg, nextReg-1, "i32"));
+                        nextReg++;
+                        instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 2, i32 " +
+                        ef.getBinding(((OpVarDecl)name).getName())));
+                        instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1), ""));
+                        nextReg++;            
+                    }
+                }
+                else
+                {
+                    generateCode(oa.getRVal());
+                    ef.addBinding(((OpVarDecl)name).getName(), lastVal);
+                    instructions.add(new LoadInstruction(nextReg, nextReg-1, "i32"));
+                    nextReg++;
+                    instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 2, i32 " +
+                    ef.getBinding(((OpVarDecl)name).getName())));
+                    instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1), ""));
+                    nextReg++;
+                }
             }
             else if(name instanceof IdValue)
             {
-
+                int r = generateCode(oa.getRVal());
                 IdValue id = (IdValue)name;
                 String name2 = id.getInternalValue();
                 int location = ef.getBinding(name2);
@@ -260,12 +356,42 @@ public class CodeGenerator {
             //call i32 @f_0(i32 %p_0,...i32 %p_n)
             //if void, add noreturn at the end
             OpFunctionCall ofc = (OpFunctionCall)exp;
+            ArrayList<Integer> argRegs = new ArrayList<Integer>();
             for(Expression e: ofc.getArgs())
             {
-                generateCode(e);
+                argRegs.add(generateCode(e)-1);
+            }
+            ArrayList<Integer> loadedArgs = new ArrayList<Integer>();
+            for(Integer i: argRegs)
+            {
+                instructions.add(new LoadInstruction(nextReg, i, "i32"));
+                loadedArgs.add(nextReg);
+                nextReg++;
             }
             String args = "";
-            instructions.add(new CallInstruction(nextReg, "i32", ((IdValue)ofc.getName()).getInternalValue(), args));
+            args += "%eframe* %r" + lastEF;
+            if(!loadedArgs.isEmpty())
+            {
+                args+= ", ";
+                for(Integer i: loadedArgs)
+                {
+                    args += "i32 %r" + i + ", ";
+                }
+            }
+            args = args.substring(0, args.length()-2);
+            String functionName = closures.lookupBinding(((IdValue)ofc.getName()).getInternalValue());
+            if(functionName.equals(""))
+            {
+                instructions.add(new CallInstruction(nextReg, "i32", ((IdValue)ofc.getName()).getInternalValue(), args));
+            }
+            else
+            {
+                instructions.add(new CallInstruction(nextReg, "i32", functionName, args));    
+            }
+            nextReg++;
+            instructions.add(new MallocInstruction(nextReg, "i32", ""));
+            instructions.add(new StoreInstruction(nextReg, "i32", "%r" + (nextReg-1), ""));
+            nextReg++;
             return nextReg;
         }
 		else if (exp instanceof OpGreaterThan) {
@@ -502,10 +628,41 @@ public class CodeGenerator {
         }
 		else if (exp instanceof Return) {
             Return r = (Return)exp;
-            int res = generateCode(r.getExp());
-            instructions.add(new LoadInstruction(nextReg, res-1, "i32"));
-            nextReg++;
-            instructions.add(new ReturnInstruction("i32", nextReg-1 ));
+            int res = -1;
+            if(r.getExp() instanceof IdValue)
+            {
+                String idVal = ((IdValue)r.getExp()).getInternalValue();
+                //look up idVal in functions, if it's there, malloc a closure containing eframe, ptrtoint, return that
+                int i = 0;
+                for(FunctionDeclarationInstruction f: functions)
+                {
+                    if(f.getName().equals(idVal))
+                    {
+                        instructions.add(new MallocInstruction(nextReg, "{%eframe*}", ""));
+                        nextReg++;
+                        instructions.add(new BitCastInstruction(nextReg, "{%eframe*}*", "%r"+(nextReg-1), "%closure*"));
+                        int cloVal = nextReg;
+                        nextReg++;
+                        instructions.add(new GetElementPtrInstruction(nextReg, "%closure*", "%r"+cloVal, "i32 0, i32 0"));
+                        instructions.add(new StoreInstruction(nextReg, "%eframe*", "%r"+lastEF, "%eframe**"));
+                        nextReg++;
+                        instructions.add(new PtrToIntInstruction(nextReg, "%closure*", "%r"+cloVal, "i32"));
+                        int cloInt = nextReg;
+                        nextReg++;
+                        instructions.add(new ReturnInstruction("i32", cloInt));
+
+                        break;
+                    }
+                    i++;
+                }
+            }
+            else
+            {
+                res = generateCode(r.getExp());
+                instructions.add(new LoadInstruction(nextReg, res-1, "i32"));
+                nextReg++;
+                instructions.add(new ReturnInstruction("i32", nextReg-1 ));
+            }
             return nextReg;
         }
 		else if (exp instanceof StringLength) {
@@ -538,15 +695,18 @@ public class CodeGenerator {
             IdValue id = (IdValue)exp;
             String name = id.getInternalValue();
             int location = ef.getBinding(name);
-            if(location >= 0)
+            if(location >= 0)   // for var refs
             {
+                int tempEF = lastEF;
                 for(int i =  0; i < ef.getNumScopesBack(); i++)
                 {
                     instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 0"));
                     nextReg++;
                     instructions.add(new LoadInstruction(nextReg, nextReg-1, "%eframe*"));
+                    nextReg++;
+                    tempEF = nextReg-1;
                 }
-                instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+lastEF, "i32 0, i32 2, i32 " + location));
+                instructions.add(new GetElementPtrInstruction(nextReg, "%eframe*", "%r"+tempEF, "i32 0, i32 2, i32 " + location));
                 nextReg++;
                 instructions.add(new LoadInstruction(nextReg, nextReg-1, "i32"));
                 nextReg++;
@@ -554,14 +714,15 @@ public class CodeGenerator {
                 instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1), ""));
                 nextReg++;
             }
-            else
+            else      // for fun calls, etc
             {
                 for(FunctionDeclarationInstruction f:functions)
                 {
-                    if(f.getName().equals(name));
+                    if(f.getName().equals(name)) // it's a function reference
                     {
                         //dispatch on name, args, etc
                     }
+                    //else if(name.equals())  // check if the id is bound to a function i.e. g = f, f is a function
                 }
             }
             return nextReg;
@@ -660,6 +821,7 @@ public class CodeGenerator {
         ef.setPrevious(null);
         //main function wrapper to see results
         s+= "%eframe = type {%eframe*, i32, [0 x i32]}\n";
+        s+= "%closure = type {%eframe*}\n";
         s+= "@emptyframe = global %eframe undef\n";
         for(FunctionDeclarationInstruction f: functions)
         {
