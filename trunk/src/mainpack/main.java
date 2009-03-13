@@ -90,20 +90,27 @@ public class main {
         }
         //run assemble and run the llvm code
         //The following block is attributed to Bill Hess, borrowed from the Google Group
-        if (System.getProperty("os.name").contains("Windows"))
+        if(emitLLVM)
         {
-                    System.exit(-1);
-        }
-        if (emitLLVM && Command.exec("llvm-as -f my-footle.s ") == 0)
-            if (Command.exec("llvm-ld -o a.out my-footle.s.bc runner.o") == 0)
+            if (System.getProperty("os.name").contains("Windows"))
             {
-                //do nothing
+                        System.exit(-1);
             }
+            if (Command.exec("llvm-as -f my-footle.s ") == 0)
+                if (Command.exec("llvm-ld -o a.out my-footle.s.bc runner.o") == 0)
+                {
+                    //do nothing
+                }
+                else
+                    System.out.println("compile: Failed to create binary executable.");
             else
-                System.out.println("compile: Failed to create binary executable.");
+                System.out.println("compile: Assembler failed.");
+            //End
+        }
         else
-            System.out.println("compile: Assembler failed.");
-        //End
+        {
+            System.out.println("compile: SPARC generation not supported!");
+        }
 
     }
 
