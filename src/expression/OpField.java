@@ -5,6 +5,7 @@ import Interpreter.ReturnException;
 import Interpreter.TypeException;
 import Interpreter.UnboundIdentifierException;
 import test.Testable;
+import value.IdValue;
 import value.Value;
 
 public class OpField implements Expression {
@@ -12,6 +13,8 @@ public class OpField implements Expression {
 	private Expression object;
 	private String name;
 	private Expression assign;
+	private Expression left;
+	private Expression right;
 
     @Testable
     public OpField(Expression obj, String name, Expression assign)
@@ -23,13 +26,42 @@ public class OpField implements Expression {
     
     public OpField(Expression left, Expression right)
     {
-    	
+    	this.left = left;
+    	this.right = right;
     }
 
     @Testable
 	public Environment getValue(Environment environment)
 			throws ReturnException, TypeException, UnboundIdentifierException {
+    	
+    	Environment newEnv = left.getValue( environment);
+		Value obj = newEnv.value;
+		obj = Environment.checkForID(obj, newEnv.next);
 		
+		newEnv = right.getValue(environment);
+		Value rightSide = newEnv.value;
+		//rightSide = Environment.checkForID(rightSide, newEnv.next);
+		
+		if (obj instanceof value.Object && rightSide instanceof IdValue)
+		{
+			value.Object refObject= (value.Object)obj;
+			Environment env = refObject.getField(((IdValue)rightSide).getInternalValue());
+			if (env != null)
+			{
+				// hope it works?
+				return new Environment(env, null, env.value);
+			}
+			else
+			{
+				throw new TypeException();
+			}
+		}
+		else
+		{
+			throw new TypeException();
+		}
+		
+		/*
 		Environment newEnv = object.getValue(environment);
 		Value obj = newEnv.value;
 		
@@ -74,6 +106,7 @@ public class OpField implements Expression {
 		{
 			throw new TypeException();
 		}
+		*/
 	}
 
     public String toString()

@@ -101,7 +101,7 @@ public class Footle implements FootleConstants {
     default:
       jj_la1[4] = jj_gen;
       if (jj_2_2(3)) {
-        retVal = Expr();
+        retVal = PrecedenceOne();
         jj_consume_token(EQ);
         retVal1 = Expression();
         jj_consume_token(SEMI);
@@ -614,15 +614,39 @@ public class Footle implements FootleConstants {
   static final public Expression PrecedenceFour() throws ParseException {
  Expression retVal = null; Expression retVal2 = null;
     if (jj_2_16(10)) {
-      retVal = PrecedenceThree();
-      jj_consume_token(PLUS);
-      retVal2 = PrecedenceFour();
-     {if (true) return new OpAdd(retVal, retVal2);}
-    } else if (jj_2_17(10)) {
-      retVal = PrecedenceThree();
+      retVal = PrecedenceThreeFive();
       jj_consume_token(MINUS);
       retVal2 = PrecedenceFour();
      {if (true) return new OpSub(retVal, retVal2);}
+    } else {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LPAREN:
+      case TRUE:
+      case FALSE:
+      case NOT:
+      case ID:
+      case NUM:
+      case FLOAT:
+      case STRING:
+        retVal = PrecedenceThreeFive();
+     {if (true) return retVal;}
+        break;
+      default:
+        jj_la1[18] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+    }
+    throw new Error("Missing return statement in function");
+  }
+
+  static final public Expression PrecedenceThreeFive() throws ParseException {
+ Expression retVal = null; Expression retVal2 = null;
+    if (jj_2_17(10)) {
+      retVal = PrecedenceThree();
+      jj_consume_token(PLUS);
+      retVal2 = PrecedenceThreeFive();
+     {if (true) return new OpAdd(retVal, retVal2);}
     } else {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case LPAREN:
@@ -637,7 +661,7 @@ public class Footle implements FootleConstants {
      {if (true) return retVal;}
         break;
       default:
-        jj_la1[18] = jj_gen;
+        jj_la1[19] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -666,7 +690,7 @@ public class Footle implements FootleConstants {
      {if (true) return retVal;}
         break;
       default:
-        jj_la1[19] = jj_gen;
+        jj_la1[20] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -693,7 +717,7 @@ public class Footle implements FootleConstants {
      {if (true) return retVal;}
       break;
     default:
-      jj_la1[20] = jj_gen;
+      jj_la1[21] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -720,7 +744,7 @@ public class Footle implements FootleConstants {
      {if (true) return retVal;}
         break;
       default:
-        jj_la1[21] = jj_gen;
+        jj_la1[22] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -762,7 +786,7 @@ public class Footle implements FootleConstants {
      {if (true) return new IdValue(val.image);}
       break;
     default:
-      jj_la1[22] = jj_gen;
+      jj_la1[23] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -902,7 +926,7 @@ public class Footle implements FootleConstants {
     finally { jj_save(18, xla); }
   }
 
-  static private boolean jj_3R_39() {
+  static private boolean jj_3R_34() {
     if (jj_scan_token(ISCLOSURE)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -910,7 +934,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_38() {
+  static private boolean jj_3R_33() {
     if (jj_scan_token(ISVOID)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -918,7 +942,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_37() {
+  static private boolean jj_3R_32() {
     if (jj_scan_token(ISFP)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -926,7 +950,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_36() {
+  static private boolean jj_3R_31() {
     if (jj_scan_token(ISSTR)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -934,15 +958,42 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_58() {
+  static private boolean jj_3R_56() {
+    if (jj_scan_token(ID)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_60() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_scan_token(ID)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_55() {
+    if (jj_scan_token(LPAREN)) return true;
+    if (jj_3R_9()) return true;
+    if (jj_scan_token(RPAREN)) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_54() {
+    if (jj_scan_token(STRING)) return true;
     return false;
   }
 
   static private boolean jj_3R_9() {
     Token xsp;
     xsp = jj_scanpos;
+    if (jj_3R_30()) {
+    jj_scanpos = xsp;
+    if (jj_3R_31()) {
+    jj_scanpos = xsp;
+    if (jj_3R_32()) {
+    jj_scanpos = xsp;
+    if (jj_3R_33()) {
+    jj_scanpos = xsp;
+    if (jj_3R_34()) {
+    jj_scanpos = xsp;
     if (jj_3R_35()) {
     jj_scanpos = xsp;
     if (jj_3R_36()) {
@@ -953,19 +1004,9 @@ public class Footle implements FootleConstants {
     jj_scanpos = xsp;
     if (jj_3R_39()) {
     jj_scanpos = xsp;
-    if (jj_3R_40()) {
-    jj_scanpos = xsp;
-    if (jj_3R_41()) {
-    jj_scanpos = xsp;
-    if (jj_3R_42()) {
-    jj_scanpos = xsp;
-    if (jj_3R_43()) {
-    jj_scanpos = xsp;
-    if (jj_3R_44()) {
-    jj_scanpos = xsp;
     if (jj_3_4()) {
     jj_scanpos = xsp;
-    if (jj_3R_45()) {
+    if (jj_3R_40()) {
     jj_scanpos = xsp;
     if (jj_3_5()) {
     jj_scanpos = xsp;
@@ -986,14 +1027,19 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_35() {
+  static private boolean jj_3R_30() {
     if (jj_scan_token(FUNC)) return true;
     if (jj_scan_token(LPAREN)) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_56()) jj_scanpos = xsp;
+    if (jj_3R_58()) jj_scanpos = xsp;
     if (jj_scan_token(RPAREN)) return true;
     if (jj_3R_7()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_53() {
+    if (jj_scan_token(FALSE)) return true;
     return false;
   }
 
@@ -1003,45 +1049,53 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_34() {
-    if (jj_scan_token(ID)) return true;
+  static private boolean jj_3R_52() {
+    if (jj_scan_token(TRUE)) return true;
     return false;
   }
 
-  static private boolean jj_3R_33() {
-    if (jj_scan_token(LPAREN)) return true;
-    if (jj_3R_9()) return true;
-    if (jj_scan_token(RPAREN)) return true;
+  static private boolean jj_3R_51() {
+    if (jj_scan_token(FLOAT)) return true;
     return false;
   }
 
-  static private boolean jj_3R_32() {
-    if (jj_scan_token(STRING)) return true;
+  static private boolean jj_3R_20() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_50()) {
+    jj_scanpos = xsp;
+    if (jj_3R_51()) {
+    jj_scanpos = xsp;
+    if (jj_3R_52()) {
+    jj_scanpos = xsp;
+    if (jj_3R_53()) {
+    jj_scanpos = xsp;
+    if (jj_3R_54()) {
+    jj_scanpos = xsp;
+    if (jj_3R_55()) {
+    jj_scanpos = xsp;
+    if (jj_3R_56()) return true;
+    }
+    }
+    }
+    }
+    }
+    }
     return false;
   }
 
-  static private boolean jj_3R_31() {
-    if (jj_scan_token(FALSE)) return true;
+  static private boolean jj_3R_50() {
+    if (jj_scan_token(NUM)) return true;
     return false;
   }
 
-  static private boolean jj_3R_27() {
+  static private boolean jj_3R_28() {
     if (jj_3R_9()) return true;
     if (jj_scan_token(SEMI)) return true;
     return false;
   }
 
-  static private boolean jj_3R_30() {
-    if (jj_scan_token(TRUE)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_29() {
-    if (jj_scan_token(FLOAT)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_26() {
+  static private boolean jj_3R_27() {
     if (jj_scan_token(PRINT)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -1050,51 +1104,43 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_8() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_28()) {
-    jj_scanpos = xsp;
-    if (jj_3R_29()) {
-    jj_scanpos = xsp;
-    if (jj_3R_30()) {
-    jj_scanpos = xsp;
-    if (jj_3R_31()) {
-    jj_scanpos = xsp;
-    if (jj_3R_32()) {
-    jj_scanpos = xsp;
-    if (jj_3R_33()) {
-    jj_scanpos = xsp;
-    if (jj_3R_34()) return true;
-    }
-    }
-    }
-    }
-    }
-    }
+  static private boolean jj_3R_29() {
+    if (jj_3R_20()) return true;
     return false;
   }
 
-  static private boolean jj_3R_28() {
-    if (jj_scan_token(NUM)) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_25() {
+  static private boolean jj_3R_26() {
     if (jj_scan_token(RETURN)) return true;
     if (jj_3R_9()) return true;
     if (jj_scan_token(SEMI)) return true;
     return false;
   }
 
-  static private boolean jj_3R_60() {
+  static private boolean jj_3R_62() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_scan_token(ID)) return true;
     return false;
   }
 
-  static private boolean jj_3R_55() {
+  static private boolean jj_3R_57() {
     if (jj_3R_7()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_8() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_19()) {
+    jj_scanpos = xsp;
+    if (jj_3R_29()) return true;
+    }
+    return false;
+  }
+
+  static private boolean jj_3_19() {
+    if (jj_3R_20()) return true;
+    if (jj_scan_token(DOT)) return true;
+    if (jj_3R_8()) return true;
     return false;
   }
 
@@ -1110,12 +1156,12 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_54() {
+  static private boolean jj_3R_49() {
     if (jj_3R_8()) return true;
     return false;
   }
 
-  static private boolean jj_3R_24() {
+  static private boolean jj_3R_25() {
     if (jj_scan_token(IF)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -1127,35 +1173,34 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_19() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3_19()) {
-    jj_scanpos = xsp;
-    if (jj_3R_54()) return true;
-    }
-    return false;
-  }
-
-  static private boolean jj_3_19() {
-    if (jj_3R_8()) return true;
-    if (jj_scan_token(DOT)) return true;
-    if (jj_3R_19()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_23() {
+  static private boolean jj_3R_24() {
     if (jj_scan_token(LBRACE)) return true;
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_55()) { jj_scanpos = xsp; break; }
+      if (jj_3R_57()) { jj_scanpos = xsp; break; }
     }
     if (jj_scan_token(RBRACE)) return true;
     return false;
   }
 
-  static private boolean jj_3R_22() {
+  static private boolean jj_3R_19() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3R_48()) {
+    jj_scanpos = xsp;
+    if (jj_3R_49()) return true;
+    }
+    return false;
+  }
+
+  static private boolean jj_3R_48() {
+    if (jj_scan_token(NOT)) return true;
+    if (jj_3R_19()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_23() {
     if (jj_scan_token(ISINT)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -1163,12 +1208,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_53() {
-    if (jj_3R_19()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_21() {
+  static private boolean jj_3R_22() {
     if (jj_scan_token(WHILE)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -1177,19 +1217,8 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_18() {
-    Token xsp;
-    xsp = jj_scanpos;
-    if (jj_3R_52()) {
-    jj_scanpos = xsp;
-    if (jj_3R_53()) return true;
-    }
-    return false;
-  }
-
-  static private boolean jj_3R_52() {
-    if (jj_scan_token(NOT)) return true;
-    if (jj_3R_18()) return true;
+  static private boolean jj_3R_47() {
+    if (jj_3R_19()) return true;
     return false;
   }
 
@@ -1201,7 +1230,24 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_20() {
+  static private boolean jj_3R_18() {
+    Token xsp;
+    xsp = jj_scanpos;
+    if (jj_3_18()) {
+    jj_scanpos = xsp;
+    if (jj_3R_47()) return true;
+    }
+    return false;
+  }
+
+  static private boolean jj_3_18() {
+    if (jj_3R_19()) return true;
+    if (jj_scan_token(MULT)) return true;
+    if (jj_3R_18()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_21() {
     if (jj_scan_token(VAR)) return true;
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(EQ)) return true;
@@ -1213,11 +1259,9 @@ public class Footle implements FootleConstants {
   static private boolean jj_3R_7() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_20()) {
+    if (jj_3R_21()) {
     jj_scanpos = xsp;
     if (jj_3_2()) {
-    jj_scanpos = xsp;
-    if (jj_3R_21()) {
     jj_scanpos = xsp;
     if (jj_3R_22()) {
     jj_scanpos = xsp;
@@ -1225,13 +1269,15 @@ public class Footle implements FootleConstants {
     jj_scanpos = xsp;
     if (jj_3R_24()) {
     jj_scanpos = xsp;
-    if (jj_3_3()) {
-    jj_scanpos = xsp;
     if (jj_3R_25()) {
+    jj_scanpos = xsp;
+    if (jj_3_3()) {
     jj_scanpos = xsp;
     if (jj_3R_26()) {
     jj_scanpos = xsp;
-    if (jj_3R_27()) return true;
+    if (jj_3R_27()) {
+    jj_scanpos = xsp;
+    if (jj_3R_28()) return true;
     }
     }
     }
@@ -1244,7 +1290,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_51() {
+  static private boolean jj_3R_46() {
     if (jj_3R_18()) return true;
     return false;
   }
@@ -1252,29 +1298,22 @@ public class Footle implements FootleConstants {
   static private boolean jj_3R_17() {
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3_18()) {
+    if (jj_3_17()) {
     jj_scanpos = xsp;
-    if (jj_3R_51()) return true;
+    if (jj_3R_46()) return true;
     }
     return false;
   }
 
-  static private boolean jj_3_18() {
-    if (jj_3R_18()) return true;
-    if (jj_scan_token(MULT)) return true;
-    if (jj_3R_17()) return true;
-    return false;
-  }
-
-  static private boolean jj_3R_50() {
-    if (jj_3R_17()) return true;
-    return false;
-  }
-
   static private boolean jj_3_17() {
+    if (jj_3R_18()) return true;
+    if (jj_scan_token(PLUS)) return true;
     if (jj_3R_17()) return true;
-    if (jj_scan_token(MINUS)) return true;
-    if (jj_3R_16()) return true;
+    return false;
+  }
+
+  static private boolean jj_3R_45() {
+    if (jj_3R_17()) return true;
     return false;
   }
 
@@ -1283,22 +1322,19 @@ public class Footle implements FootleConstants {
     xsp = jj_scanpos;
     if (jj_3_16()) {
     jj_scanpos = xsp;
-    if (jj_3_17()) {
-    jj_scanpos = xsp;
-    if (jj_3R_50()) return true;
-    }
+    if (jj_3R_45()) return true;
     }
     return false;
   }
 
   static private boolean jj_3_16() {
     if (jj_3R_17()) return true;
-    if (jj_scan_token(PLUS)) return true;
+    if (jj_scan_token(MINUS)) return true;
     if (jj_3R_16()) return true;
     return false;
   }
 
-  static private boolean jj_3R_49() {
+  static private boolean jj_3R_44() {
     if (jj_3R_16()) return true;
     return false;
   }
@@ -1308,7 +1344,7 @@ public class Footle implements FootleConstants {
     xsp = jj_scanpos;
     if (jj_3_15()) {
     jj_scanpos = xsp;
-    if (jj_3R_49()) return true;
+    if (jj_3R_44()) return true;
     }
     return false;
   }
@@ -1320,7 +1356,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_48() {
+  static private boolean jj_3R_43() {
     if (jj_3R_15()) return true;
     return false;
   }
@@ -1357,7 +1393,7 @@ public class Footle implements FootleConstants {
     jj_scanpos = xsp;
     if (jj_3_14()) {
     jj_scanpos = xsp;
-    if (jj_3R_48()) return true;
+    if (jj_3R_43()) return true;
     }
     }
     }
@@ -1372,7 +1408,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_47() {
+  static private boolean jj_3R_42() {
     if (jj_3R_14()) return true;
     return false;
   }
@@ -1391,7 +1427,7 @@ public class Footle implements FootleConstants {
     jj_scanpos = xsp;
     if (jj_3_10()) {
     jj_scanpos = xsp;
-    if (jj_3R_47()) return true;
+    if (jj_3R_42()) return true;
     }
     }
     return false;
@@ -1426,12 +1462,12 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_57() {
+  static private boolean jj_3R_59() {
     if (jj_3R_9()) return true;
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_59()) { jj_scanpos = xsp; break; }
+      if (jj_3R_61()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
@@ -1442,7 +1478,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_59() {
+  static private boolean jj_3R_61() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_9()) return true;
     return false;
@@ -1453,7 +1489,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_46() {
+  static private boolean jj_3R_41() {
     if (jj_scan_token(COMMA)) return true;
     if (jj_3R_9()) return true;
     return false;
@@ -1464,18 +1500,18 @@ public class Footle implements FootleConstants {
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_46()) { jj_scanpos = xsp; break; }
+      if (jj_3R_41()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
 
-  static private boolean jj_3R_45() {
+  static private boolean jj_3R_40() {
     if (jj_scan_token(NEW)) return true;
     if (jj_scan_token(ID)) return true;
     if (jj_scan_token(LPAREN)) return true;
     Token xsp;
     xsp = jj_scanpos;
-    if (jj_3R_57()) jj_scanpos = xsp;
+    if (jj_3R_59()) jj_scanpos = xsp;
     if (jj_scan_token(RPAREN)) return true;
     return false;
   }
@@ -1490,7 +1526,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_44() {
+  static private boolean jj_3R_39() {
     if (jj_scan_token(STRINGLESS)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -1500,7 +1536,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_43() {
+  static private boolean jj_3R_38() {
     if (jj_scan_token(STRINGEQUAL)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -1515,12 +1551,12 @@ public class Footle implements FootleConstants {
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_60()) { jj_scanpos = xsp; break; }
+      if (jj_3R_62()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
 
-  static private boolean jj_3R_42() {
+  static private boolean jj_3R_37() {
     if (jj_scan_token(SUBSTRING)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -1532,7 +1568,7 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_41() {
+  static private boolean jj_3R_36() {
     if (jj_scan_token(STRLEN)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -1540,17 +1576,17 @@ public class Footle implements FootleConstants {
     return false;
   }
 
-  static private boolean jj_3R_56() {
+  static private boolean jj_3R_58() {
     if (jj_scan_token(ID)) return true;
     Token xsp;
     while (true) {
       xsp = jj_scanpos;
-      if (jj_3R_58()) { jj_scanpos = xsp; break; }
+      if (jj_3R_60()) { jj_scanpos = xsp; break; }
     }
     return false;
   }
 
-  static private boolean jj_3R_40() {
+  static private boolean jj_3R_35() {
     if (jj_scan_token(ISPLAIN)) return true;
     if (jj_scan_token(LPAREN)) return true;
     if (jj_3R_9()) return true;
@@ -1570,7 +1606,7 @@ public class Footle implements FootleConstants {
   static private Token jj_scanpos, jj_lastpos;
   static private int jj_la;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[23];
+  static final private int[] jj_la1 = new int[24];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1578,10 +1614,10 @@ public class Footle implements FootleConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xcf9800a0,0xcf9800a0,0x400,0x0,0x80000,0x900020,0xcf000080,0x400,0x0,0x400,0xcb000080,0x400,0xcb000080,0x80000000,0x8000000,0x43000080,0x43000080,0x43000080,0x43000080,0x43000080,0x43000080,0x3000080,0x3000080,};
+      jj_la1_0 = new int[] {0xcf9800a0,0xcf9800a0,0x400,0x0,0x80000,0x900020,0xcf000080,0x400,0x0,0x400,0xcb000080,0x400,0xcb000080,0x80000000,0x8000000,0x43000080,0x43000080,0x43000080,0x43000080,0x43000080,0x43000080,0x43000080,0x3000080,0x3000080,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x1ffe7,0x1ffe7,0x0,0x2000,0x0,0x80,0x1ff67,0x0,0x2000,0x0,0x1ff63,0x0,0x1ff63,0x1f63,0x0,0x1e000,0x1e000,0x1e000,0x1e000,0x1e000,0x1e000,0x1e000,0x1e000,};
+      jj_la1_1 = new int[] {0x1ffe7,0x1ffe7,0x0,0x2000,0x0,0x80,0x1ff67,0x0,0x2000,0x0,0x1ff63,0x0,0x1ff63,0x1f63,0x0,0x1e000,0x1e000,0x1e000,0x1e000,0x1e000,0x1e000,0x1e000,0x1e000,0x1e000,};
    }
   static final private JJCalls[] jj_2_rtns = new JJCalls[19];
   static private boolean jj_rescan = false;
@@ -1605,7 +1641,7 @@ public class Footle implements FootleConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1620,7 +1656,7 @@ public class Footle implements FootleConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1638,7 +1674,7 @@ public class Footle implements FootleConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1649,7 +1685,7 @@ public class Footle implements FootleConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1666,7 +1702,7 @@ public class Footle implements FootleConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1676,7 +1712,7 @@ public class Footle implements FootleConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 23; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
     for (int i = 0; i < jj_2_rtns.length; i++) jj_2_rtns[i] = new JJCalls();
   }
 
@@ -1793,7 +1829,7 @@ public class Footle implements FootleConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 23; i++) {
+    for (int i = 0; i < 24; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
