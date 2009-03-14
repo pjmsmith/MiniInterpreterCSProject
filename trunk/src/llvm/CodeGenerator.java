@@ -470,9 +470,14 @@ public class CodeGenerator {
             /////////////End
             instructions.add(new LabelInstruction(nextReg, nextLabel));
             nextLabel++;
-            String valsAndLabels = "[%r"+thenResult+", %" + thenLabel  + "]" + ", [%r"+elseResult+", %" + elseLabel  + "]";
-            instructions.add(new PhiNodeInstruction(nextReg, "i32", valsAndLabels));
-            nextLabel++;
+            String valsAndLabels = "[%r"+(thenResult-1)+", %" + thenLabel  + "]" + ", [%r"+(elseResult-1)+", %" + elseLabel  + "]";
+            instructions.add(new PhiNodeInstruction(nextReg, "i32*", valsAndLabels));
+            nextReg++;
+            instructions.add(new LoadInstruction(nextReg, nextReg-1, "i32"));
+            nextReg++;
+            instructions.add(new MallocInstruction(nextReg, "i32", ""));
+            instructions.add(new StoreInstruction(nextReg, "i32", "%r"+(nextReg-1), ""));
+            nextReg++;
             /* phi node goes here? */
             return nextReg;
         }
@@ -637,10 +642,12 @@ public class CodeGenerator {
                 String idVal = ((IdValue)r.getExp()).getInternalValue();
                 //look up idVal in functions, if it's there, malloc a closure containing eframe, ptrtoint, return that
                 int i = 0;
+                boolean fun = false;
                 for(FunctionDeclarationInstruction f: functions)
                 {
                     if(f.getName().equals(idVal))
                     {
+                        fun = true;
                         instructions.add(new MallocInstruction(nextReg, "{%eframe*}", ""));
                         nextReg++;
                         instructions.add(new BitCastInstruction(nextReg, "{%eframe*}*", "%r"+(nextReg-1), "%closure*"));
@@ -657,6 +664,13 @@ public class CodeGenerator {
                         break;
                     }
                     i++;
+                }
+                if(!fun)
+                {
+                    res = generateCode(r.getExp());
+                    instructions.add(new LoadInstruction(nextReg, res-1, "i32"));
+                    nextReg++;
+                    instructions.add(new ReturnInstruction("i32", nextReg-1 ));   
                 }
             }
             else
