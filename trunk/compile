@@ -1,0 +1,1 @@
+java -classpath ./out mainpack.main $1 $2

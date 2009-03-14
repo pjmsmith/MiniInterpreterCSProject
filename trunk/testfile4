@@ -1,0 +1,7 @@
+function f(x) {
+  function g(y) {return x + y;}
+  return g;
+}
+
+var h = f(13);
+h(2);
