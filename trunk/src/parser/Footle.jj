@@ -133,7 +133,7 @@ Expression Statement() :
 {
    <VAR> idval = <ID> <EQ> retVal = Expression() <SEMI>
    { return new OpAssign(new OpVarDecl(idval.image), retVal); }
-|  LOOKAHEAD(3) retVal = Expr() <EQ> retVal1 = Expression() <SEMI>
+|  LOOKAHEAD(3) retVal = PrecedenceOne() <EQ> retVal1 = Expression() <SEMI>
    { return new OpAssign(retVal, retVal1); }
    
 |  <WHILE> <LPAREN> retVal = Expression() <RPAREN>
@@ -302,11 +302,19 @@ Expression PrecedenceFour() :
 {Expression retVal = null; Expression retVal2 = null;}
 {
    LOOKAHEAD(10)
-   retVal = PrecedenceThree() <PLUS> retVal2 = PrecedenceFour()
+   retVal = PrecedenceThreeFive() <MINUS> retVal2 = PrecedenceFour()
+   { return new OpSub(retVal, retVal2); }
+
+|  retVal= PrecedenceThreeFive()
+   { return retVal; }
+}
+
+Expression PrecedenceThreeFive() :
+{Expression retVal = null; Expression retVal2 = null;}
+{
+   LOOKAHEAD(10)
+   retVal = PrecedenceThree() <PLUS> retVal2 = PrecedenceThreeFive()
    { return new OpAdd(retVal, retVal2); }
-|  LOOKAHEAD(10)
-   retVal = PrecedenceThree() <MINUS> retVal2 = PrecedenceFour()
-   { return new OpSubt(retVal, retVal2); }
 
 |  retVal= PrecedenceThree()
    { return retVal; }
