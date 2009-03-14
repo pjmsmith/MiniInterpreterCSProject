@@ -99,4 +99,21 @@ public class EFrame {
     public void setNumScopesBack(int numScopesBack) {
         this.numScopesBack = numScopesBack;
     }
+
+    public String toString()
+    {
+        String s = "";
+        EFrame next = this;
+        int i = 0;
+        while(next != null)
+        {
+            for(String p: next.getElementNames())
+            {
+                s+= p + " ";
+            }
+            s+= ": " + i++ + "\n";
+            next = next.getPrevious();
+        }
+        return s;
+    }
 }

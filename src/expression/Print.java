@@ -17,6 +17,14 @@ public class Print implements Expression {
 		value = one;
 	}
 
+    public Expression getValue() {
+        return value;
+    }
+
+    public void setValue(Expression value) {
+        this.value = value;
+    }
+
     @Testable
 	public Environment getValue(Environment environment) throws ReturnException, 
 		TypeException, UnboundIdentifierException {

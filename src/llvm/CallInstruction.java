@@ -37,7 +37,16 @@ public class CallInstruction extends LLVMInstruction {
 
     public String toString()
     {
-        String s = "%r" + super.getTargetRegister() + " = call " + super.getType() + " @" + name + " (" + args + ")";
+        String s = "";
+        if(super.getType().equals("void"))
+        {
+           s+= "call " + super.getType() + " @" + name + " (" + args + ")";
+        }
+        else
+        {
+            s+= "%r" + super.getTargetRegister() + " = call " + super.getType() + " @" + name + " (" + args + ")";
+        }
+
         return s;
     }
 }

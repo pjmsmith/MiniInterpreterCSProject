@@ -628,7 +628,14 @@ public class CodeGenerator {
         }
 		else if (exp instanceof Print) {
             //call i32 (i8*, ...)* @printf(i8* noalias getelementptr ([4 x i8]* @.str, i32 0, i32 0), i32 %1) nounwind
-            return nextReg;
+            Print p = (Print)exp;
+            int ret = generateCode(p.getValue());
+            instructions.add(new LoadInstruction(nextReg, ret-1, "i32"));
+            nextReg++;
+            String args = "i32 %r"+(nextReg-1);
+            instructions.add(new CallInstruction(nextReg, "void", "print", args));
+            nextReg++;
+            return nextReg-1;
         }
 		else if (exp instanceof ReadLine) {
             //call i32 (i8*, ...)* @scanf(i8* noalias getelementptr ([4 x i8]* @.str, i32 0, i32 0), i32 %1) nounwind
@@ -840,6 +847,7 @@ public class CodeGenerator {
         s+= "%eframe = type {%eframe*, i32, [0 x i32]}\n";
         s+= "%closure = type {%eframe*}\n";
         s+= "@emptyframe = global %eframe undef\n";
+        s+= "declare void @print(i32)\n";
         for(FunctionDeclarationInstruction f: functions)
         {
             s+= f + "\n";
