@@ -8,3 +8,7 @@ default:
 	mv ./src/llvm/*.class ./out/llvm
 	mv ./src/value/*.class ./out/value
 	mv ./src/Interpreter/*.class ./out/Interpreter
+	llvm-gcc -c -emit-llvm runner.c
+
+clean:
+	rm ./out/*/*.class
