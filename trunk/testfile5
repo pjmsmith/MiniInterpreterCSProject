@@ -1,14 +1,2 @@
-function f(x)
-{
-    var r = x;
-    if(r==0)
-    {
-        r = 1;
-    }
-    else
-    {
-        r = 0;
-    }
-    return r;
-}
-f(1);
+print(3);
+4;
