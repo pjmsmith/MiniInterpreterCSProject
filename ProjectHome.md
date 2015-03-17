@@ -1,0 +1,1 @@
+This is a compiler for a footle language.
